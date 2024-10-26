@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { loginSchema } from "../../schema";
+import { loginSchema } from "../../../schema";
 
 export async function POST(req: Request) {
   const body = req.json();

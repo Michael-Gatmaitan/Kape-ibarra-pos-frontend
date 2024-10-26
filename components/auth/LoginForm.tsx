@@ -10,6 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, TLoginSchema } from "../../lib/types";
 import { Label } from "../ui/label";
 import { apiUrl } from "../../lib/apiUrl";
+// import { redirect } from "next/navigation";
 
 const LoginForm = () => {
 
@@ -71,12 +72,26 @@ const LoginForm = () => {
 
     const loginRes = await loginReq.json();
 
+    // redirect('/profile');
+
+    console.log(loginRes);
+
     if ('token' in loginRes) {
       console.log(loginRes.token);
 
       // If there's a token in response, set it to locatstorage
       const { token } = loginRes;
-      localStorage.setItem("session", token);
+
+      // Assign token
+      (async function () {
+        await fetch('/api/token', {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json',
+            'token': token
+          }
+        });
+      })();
 
     } else {
       console.log(loginRes.error)
