@@ -1,15 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
-// import jwt from "jsonwebtoken";
-
 import { jwtVerify } from "jose";
 
-// This middleware is for checking and validating user's token
-// for log in, automatic login & more.
+// This middleware is for checking and validating user's token for log in, automatic login & more.
 
 // ???: WTF COOKIES NOT FETHCING SESSION
 // !!!: JUST FIND OUT THAT im setting it in cookies hehe
-// * Set this to localstorage or find a way to get the cookie in either server-side or client-side
 
 export async function middleware(req: NextRequest) {
   const SECRET_KEY = process.env.SECRET_KEY;
@@ -29,8 +25,6 @@ export async function middleware(req: NextRequest) {
       return NextResponse.redirect(new URL("/login", req.url));
 
     console.log("Payload: ", payload);
-
-    // Validate all routes based on roleName
 
     return NextResponse.next();
   } catch (error) {
