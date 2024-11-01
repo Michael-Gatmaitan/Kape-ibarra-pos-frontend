@@ -6,42 +6,13 @@ import { createBranchAction } from './action';
 import { Input } from '../../components/ui/input';
 import { Button } from '../../components/ui/button';
 import { Label } from '../../components/ui/label';
-// import { useRouter, } from 'next/navigation';
-
-// interface Branch {
-//   id: number,
-//   streetAddress: string,
-//   barangay: string,
-//   city: string,
-//   zipCode: number
-// }
+// import { useBranch } from '../../lib/customHooks';
 
 const BranchComponent = () => {
-  // const router = useRouter();
-
-  // const [branches, setBranches] = useState<Branch[]>([]);
-
-  // useEffect(() => {
-  //   const getBranches = async () => {
-  //     const reqBranches = await fetch(`${apiUrl}/branch`, { cache: "no-cache" });
-  //     const resBranches: Branch[] = await reqBranches.json();
-
-  //     setBranches(resBranches);
-  //   }
-
-  //   getBranches();
-  // }, []);
+  // const branches = useBranch();
 
   return (
     <div className='grid gap-2'>
-
-      {/* {branches.map((branch) => <div key={branch.id} className='p-4 rounded-sm bg-slate-500'>
-        <div>{branch.streetAddress}</div>
-        <div>{branch.barangay}</div>
-        <div>{branch.city}</div>
-        <div>{branch.zipCode}</div>
-      </div>)} */}
-
 
       <form action={createBranchAction} className='p-4 m-4 grid gap-2 rounded-md bg-purple-500' onSubmit={() => {
         console.log("Submiitted");

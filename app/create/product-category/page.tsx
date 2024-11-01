@@ -1,8 +1,6 @@
 import React from 'react'
-import { apiUrl } from '../../../lib/apiUrl'
-import { Input } from '../../../components/ui/input';
-import { createCategory } from './action';
-import { Button } from '../../../components/ui/button';
+import DisplayCategories from './DisplayCategories';
+import { apiUrl } from '../../../lib/apiUrl';
 
 const page = async () => {
 
@@ -10,16 +8,7 @@ const page = async () => {
 
   return (
     <div>
-      {categories.map(category => (
-        <div key={category.id}>{category.categoryName}</div>
-      ))}
-
-
-      <form action={createCategory}>
-        <Input placeholder='Catergory name' name="category-name" />
-        <Button>Create</Button>
-      </form>
-
+      <DisplayCategories categories={categories} />
 
       Lets create some product category pffff
     </div>

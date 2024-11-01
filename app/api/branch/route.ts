@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
-import { loginSchema } from "../../../lib/types";
+import { branchSchema } from "../../../lib/types";
 
 export async function POST(req: Request) {
   const body = req.json();
-  const result = loginSchema.safeParse(body);
+  const result = branchSchema.safeParse(body);
 
   let zodErrors = {};
 

@@ -100,7 +100,7 @@ const LoginForm = () => {
   }
 
   return (
-    <AuthForm header="Log in" formType="login">
+    <AuthForm description="Login with your account" header="Log in">
       <form onSubmit={handleSubmit(onSubmit)} className="grid gap-2">
         <Input {...register("username")} type="text" placeholder="Username" />
         {errors.username && (<Label className="text-red-600">{errors.username.message}</Label>)}

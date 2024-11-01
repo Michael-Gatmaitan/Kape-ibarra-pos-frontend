@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react'
+import React, { useState } from 'react'
 import AuthForm from './auth-form'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
@@ -8,12 +8,23 @@ import { Label } from '../ui/label';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signupSchema, TSignupSchema } from '../../lib/types';
+import { ChevronDown } from 'lucide-react';
 
 import { useRouter } from 'next/navigation';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, DropdownMenuItem } from '../ui/dropdown-menu';
+import { useBranch, useRoles, useUserPayload } from '../../lib/customHooks';
 
 const SignupForm = () => {
-
+  const payload = useUserPayload();
+  const roles = useRoles();
   const router = useRouter();
+  const branches = useBranch();
+
+  // ?? Resolve using states here
+  const [roleId, setRoleId] = useState<number>();
+  const [roleText, setRoleText] = useState("Select Role");
+  const [branchId, setBranchId] = useState<number>();
+  const [branchText, setBranchText] = useState<string>("Select branch to assign");
 
   const { register,
     handleSubmit,
@@ -81,36 +92,109 @@ const SignupForm = () => {
     }
 
     // If there's no error, call an api to create a account
-
-
     // ... and navigate the user to login page
     router.replace("/login");
     // reset();
   }
 
   return (
-    <AuthForm header='Signup' formType='signup' showSocials>
-      <form onSubmit={handleSubmit(onSubmit)} className="grid gap-2">
+    <AuthForm header='Create user account' description='Create account for a new user'>
+      <form onSubmit={handleSubmit(onSubmit)} className="grid gap-3">
+        {roleId + branchId}
+        <div className="grid gap-2">
+          {/* Email */}
+          <Label>Firstname</Label>
+          <Input {...register("firstname")} type='text' placeholder='First name' />
+          {errors.firstname && (<Label className="text-red-600">{errors.firstname.message}</Label>)}
+        </div>
 
-        {/* Email */}
-        <Input {...register("firstname")} type='text' placeholder='First name' />
-        {errors.firstname && (<Label className="text-red-600">{errors.firstname.message}</Label>)}
+        <div className="grid gap-2">
+          <Label>Lastname</Label>
+          <Input {...register("lastname")} type='text' placeholder='Last name' />
+          {errors.lastname && (<Label className="text-red-600">{errors.lastname.message}</Label>)}
+        </div>
+        <div className="grid gap-2">
+          <Label>Username</Label>
+          <Input {...register("username")} type='text' placeholder='Username' />
+          {errors.username && (<Label className="text-red-600">{errors.username.message}</Label>)}
+        </div>
 
-        <Input {...register("lastname")} type='text' placeholder='Last name' />
-        {errors.lastname && (<Label className="text-red-600">{errors.lastname.message}</Label>)}
+        <div className="grid gap-2">
+          <Label>Password</Label>
+          {/* Password */}
+          <Input {...register("password")} type='password' placeholder='Password' />
+          {errors.password && (<Label className="text-red-600">{errors.password.message}</Label>)}
+        </div>
 
-        <Input {...register("username")} type='text' placeholder='Username' />
-        {errors.username && (<Label className="text-red-600">{errors.username.message}</Label>)}
+        <div className="grid gap-2">
+          <Label>Confirm password</Label>
+          {/* Confirm Password */}
+          <Input {...register("confirmPassword")} type='password' placeholder='Confirm password' />
+          {errors.confirmPassword && (<Label className="text-red-600">{errors.confirmPassword.message}</Label>)}
+        </div>
 
-        {/* Password */}
-        <Input {...register("password")} type='password' placeholder='Password' />
-        {errors.password && (<Label className="text-red-600">{errors.password.message}</Label>)}
+        <div className='grid gap-2'>
+          <Label>Select new user role</Label>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant='outline'>{roleText}
+                <ChevronDown />
+              </Button>
+            </DropdownMenuTrigger>
 
-        {/* Confirm Password */}
-        <Input {...register("confirmPassword")} type='password' placeholder='Confirm password' />
-        {errors.confirmPassword && (<Label className="text-red-600">{errors.confirmPassword.message}</Label>)}
+            <DropdownMenuContent className='w-56'>
+              <DropdownMenuLabel>Assign Role</DropdownMenuLabel>
 
-        <Button type='submit' disabled={isSubmitting}>Submit</Button>
+              <DropdownMenuSeparator />
+              <DropdownMenuGroup>
+                {roles.map(role => (
+                  <DropdownMenuItem key={role.id} onClick={
+                    () => {
+                      setRoleId(role.id)
+                      setRoleText(role.roleName)
+                    }
+                  }>
+                    {role.roleName}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+
+        {/* System Admin has the right to choose where to assign those users */}
+        {payload?.roleName !== undefined && payload.roleName === "System Admin" ?
+          (
+            <div className='grid gap-2'>
+              <Label>Select where branch to assign</Label>
+
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant='outline'>
+                    {branchText} <ChevronDown />
+                  </Button>
+                </DropdownMenuTrigger>
+
+                <DropdownMenuContent className='w-56'>
+                  <DropdownMenuLabel>Assign branch</DropdownMenuLabel>
+
+                  <DropdownMenuSeparator />
+                  <DropdownMenuGroup>
+                    {branches.map(branch => (
+                      <DropdownMenuItem key={branch.id} onClick={() => {
+                        setBranchId(branch.id)
+                        setBranchText(`${branch.streetAddress} ${branch.baranggay}`)
+                      }}>
+                        {branch.streetAddress} {branch.baranggay}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuGroup>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          ) : null}
+
+        <Button type='submit' disabled={isSubmitting}>Create account</Button>
       </form>
     </AuthForm>
   )

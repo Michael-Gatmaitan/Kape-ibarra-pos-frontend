@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { ThemeProvider } from "../components/theme-provider";
+// import StoreProvider from "./StoreProvider";
+import { SidebarProvider, SidebarTrigger } from "../components/ui/sidebar";
+import AppSidebar from "../components/AppSidebar";
+// import { ModeToggle } from "../components/toggler";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -26,9 +31,25 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased mx-4`}
       >
-        {children}
+        {/* Redux store provider */}
+        {/* <StoreProvider> */}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <SidebarProvider>
+            <AppSidebar />
+
+            {/* <ModeToggle /> */}
+            <SidebarTrigger />
+          </SidebarProvider>
+          {children}
+        </ThemeProvider>
+        {/* </StoreProvider> */}
       </body>
     </html>
   );
