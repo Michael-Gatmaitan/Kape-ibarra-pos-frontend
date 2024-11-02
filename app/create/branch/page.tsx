@@ -1,13 +1,12 @@
 import React from 'react';
-import FormContent from './FormContent'
-import { createBranchAction } from '../../branch/action';
-import { ModeToggle } from '../../../components/ModeToggle';
+import FormContent from './FormContent';
+import BackLink from '../../../components/BackLink';
 
 const page = () => {
   return (
     <div>
-      <ModeToggle />
-      <FormContent action={createBranchAction} />
+      <BackLink href="/branch" buttonTitle='Branch ' />
+      <FormContent />
     </div>
   )
 }

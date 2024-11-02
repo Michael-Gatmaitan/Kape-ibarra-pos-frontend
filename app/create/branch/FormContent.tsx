@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react'
+import React, { useState } from 'react'
 import CreateForm from '../CreateForm'
 import { Input } from '../../../components/ui/input'
 import { Label } from '../../../components/ui/label'
@@ -9,9 +9,10 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { branchSchema, TBranchSChema } from '../../../lib/types'
 import { Button } from '../../../components/ui/button'
+import { apiUrl } from '../../../lib/apiUrl';
+import CreateAlert from '../../../components/CreateAlert';
 
-const FormContent = (props: { action: (formData: FormData) => Promise<void> }) => {
-  const { action } = props;
+const FormContent = () => {
 
   const {
     register,
@@ -20,8 +21,11 @@ const FormContent = (props: { action: (formData: FormData) => Promise<void> }) =
       errors,
       isSubmitting
     },
+    reset,
     setError
   } = useForm<TBranchSChema>({ resolver: zodResolver(branchSchema) })
+
+  const [createSuccess, setCreateSuccess] = useState(true);
 
   const onSubmit = async (data: TBranchSChema) => {
     const response = await fetch('/api/branch', {
@@ -69,12 +73,23 @@ const FormContent = (props: { action: (formData: FormData) => Promise<void> }) =
         setError("contactNumber", { type: "server", message: errors.contactNumber });
       }
     }
+
+    const branchReq = await fetch(`${apiUrl}/branch`, {
+      method: 'POST',
+      body: JSON.stringify({ ...data, zipCode: parseInt(data.zipCode) }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(res => res.json());
+
+    if ('id' in branchReq) {
+      setCreateSuccess(true);
+    }
   }
 
-
   return (
-    <CreateForm cardTitle='Create Branch' cardDescription='Create new branch of store' onSubmit={handleSubmit(onSubmit)}>
-      <form action={action} className='grid gap-3'>
+    <CreateForm cardTitle='Create Branch' cardDescription='Create new branch of store'>
+      <form onSubmit={handleSubmit(onSubmit)} className='grid gap-4'>
         <div className='grid gap-2'>
           <Label>Region</Label>
           <Input required type='text' placeholder='Region' {...register('region')} />
@@ -120,9 +135,16 @@ const FormContent = (props: { action: (formData: FormData) => Promise<void> }) =
         </div>
 
         <div className="grid gap-2 grid-cols-2 w-full">
-          <Button variant='outline'>Cancel</Button>
+          <Button variant='outline' onClick={() => { reset(); setCreateSuccess(false) }}>Clear form</Button>
           <Button type="submit" disabled={isSubmitting}>Create</Button>
         </div>
+
+        {createSuccess ? (
+          <CreateAlert
+            title='Branch created successfully'
+            description='Browse branch page to see the list of branches'
+          />
+        ) : null}
       </form>
     </CreateForm>
   )

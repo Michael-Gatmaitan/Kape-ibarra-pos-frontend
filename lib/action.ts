@@ -1,7 +1,8 @@
 "use server";
-import { apiUrl } from "../../../lib/apiUrl";
+import { apiUrl } from "./apiUrl";
 
-export async function createCategory(formData: FormData) {
+// Create category
+export async function createCategoryAction(formData: FormData) {
   const categoryName = formData.get("category-name");
 
   const req = await fetch(`${apiUrl}/category`, {
@@ -14,3 +15,9 @@ export async function createCategory(formData: FormData) {
 
   console.log(req.ok);
 }
+
+// Create branch
+export const createBranchAction = async (formData: FormData) => {
+  console.log(formData);
+  console.log("Create branch action");
+};

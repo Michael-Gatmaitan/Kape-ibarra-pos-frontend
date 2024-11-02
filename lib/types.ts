@@ -37,3 +37,35 @@ export const branchSchema = z.object({
 });
 
 export type TBranchSChema = z.infer<typeof branchSchema>;
+
+// Product schema with RawMaterials
+const rawMaterialSchema = z.object({
+  materialName: z.string().min(1, "Raw material should have a name"),
+  quantityInUnitPerItem: z.number().min(1),
+});
+
+export const productSchema = z.object({
+  productName: z
+    .string()
+    .min(5, "Product name should have atleast 5 characters"),
+  price: z.string().min(1, "Product should have a price"),
+  description: z.string().optional(),
+  categoryId: z.string(),
+
+  // For raw materials
+  rawMaterials: z
+    .array(rawMaterialSchema)
+    .nonempty("At least one raw material is required"),
+});
+
+export type TProductSchema = z.infer<typeof productSchema>;
+
+// const productData = {
+//   productName: "Example Product",
+//   price: 20.0,
+//   productCategory: "A sample product",
+//   rawMaterials: [
+//     { id: 1, name: "Material A", quantity: 2 },
+//     { id: 2, name: "Material B", quantity: 3 },
+//   ],
+// };

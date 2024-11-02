@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import { Button } from '../../../components/ui/button';
 import { Input } from '../../../components/ui/input';
-import { createCategory } from './action';
+import { createCategoryAction } from '../../../lib/action';
 
 const DisplayCategories = (props: { categories: { id: number, categoryName: string }[] }) => {
   const { categories } = props;
@@ -16,7 +16,7 @@ const DisplayCategories = (props: { categories: { id: number, categoryName: stri
         <div key={category.id}>{category.categoryName}</div>
       ))}
 
-      <form action={createCategory}>
+      <form action={createCategoryAction}>
         <Input placeholder='Catergory name' name="category-name" />
         <Button>Create</Button>
       </form>

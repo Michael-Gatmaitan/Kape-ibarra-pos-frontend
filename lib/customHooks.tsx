@@ -69,3 +69,23 @@ export function useUserPayload() {
 
   return userPayload;
 }
+
+interface IRawMaterials {
+  materialName: string,
+  quantityInUnitPerItem: number
+}
+
+export function useRawMaterial() {
+  const [rawMaterials, setRawMaterials] = useState<IRawMaterials>();
+
+  useEffect(() => {
+    const getRawMaterials = async () => {
+      const result = await fetch(`${apiUrl}/rawMaterial`).then(res => res.json());
+      setRawMaterials(result);
+    }
+
+    getRawMaterials();
+  }, []);
+
+  return rawMaterials;
+}

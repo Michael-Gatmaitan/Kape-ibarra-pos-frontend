@@ -1,9 +1,10 @@
+import SignupForm from '../../../components/auth/SignupForm'
 import React from 'react'
 
 const page = () => {
   return (
-    <div>
-      Lets create some user
+    <div className='h-svh flex justify-center items-center'>
+      <SignupForm />
     </div>
   )
 }

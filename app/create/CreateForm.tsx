@@ -8,14 +8,13 @@ interface CreateFormProp {
   children: React.ReactNode,
   cardTitle: string,
   cardDescription?: string,
-  onSubmit: () => void;
 }
 
 const CreateForm = (props: CreateFormProp) => {
   const { children, cardTitle, cardDescription } = props;
 
   return (
-    <Card>
+    <Card className='w-full mx-auto max-w-lg'>
       <CardHeader>
         <CardTitle>{cardTitle}</CardTitle>
         {cardDescription && <CardDescription>{cardDescription}</CardDescription>}

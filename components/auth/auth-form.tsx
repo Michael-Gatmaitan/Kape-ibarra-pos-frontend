@@ -8,7 +8,7 @@ interface IAuthForm {
 
 const AuthForm = ({ header, description, children }: IAuthForm) => {
   return (
-    <Card className="w-full my-40 lg:mx-12">
+    <Card className="w-full my-40 mx-auto max-w-sm">
       <CardHeader>
         <CardTitle>{header}</CardTitle>
         <CardDescription>{description}</CardDescription>

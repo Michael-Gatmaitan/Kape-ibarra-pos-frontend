@@ -101,18 +101,25 @@ const LoginForm = () => {
 
   return (
     <AuthForm description="Login with your account" header="Log in">
-      <form onSubmit={handleSubmit(onSubmit)} className="grid gap-2">
-        <Input {...register("username")} type="text" placeholder="Username" />
-        {errors.username && (<Label className="text-red-600">{errors.username.message}</Label>)}
-        <Input {...register("password")}
-          type={showPassword ? "text" : "password"}
-          placeholder="Password"
-        />
-        {errors.password && (<Label className="text-red-600">{errors.password.message}</Label>)}
+      <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
+        <div className="grid gap-2">
+          <Label>Username</Label>
+          <Input {...register("username")} type="text" placeholder="Username" required />
+          {errors.username && (<Label className="text-red-600">{errors.username.message}</Label>)}
+        </div>
+        <div className="grid gap-2">
+          <Label>Password</Label>
+          <Input {...register("password")}
+            type={showPassword ? "text" : "password"}
+            placeholder="Password"
+            required
+          />
+          {errors.password && (<Label className="text-red-600">{errors.password.message}</Label>)}
 
-        <div className="flex items-center gap-2">
-          <Checkbox onCheckedChange={() => setShowPassword((prev) => !prev)} />
-          <label>Show password</label>
+          <div className="flex items-center gap-2">
+            <Checkbox onCheckedChange={() => setShowPassword((prev) => !prev)} />
+            <label>Show password</label>
+          </div>
         </div>
 
         <Button type="submit" disabled={isSubmitting}>Submit</Button>

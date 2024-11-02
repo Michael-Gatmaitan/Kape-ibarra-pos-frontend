@@ -3,7 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { ThemeProvider } from "../components/theme-provider";
 // import StoreProvider from "./StoreProvider";
-import { SidebarProvider, SidebarTrigger } from "../components/ui/sidebar";
+import { SidebarProvider } from "../components/ui/sidebar";
 import AppSidebar from "../components/AppSidebar";
 // import { ModeToggle } from "../components/toggler";
 
@@ -45,9 +45,8 @@ export default function RootLayout({
             <AppSidebar />
 
             {/* <ModeToggle /> */}
-            <SidebarTrigger />
+            {children}
           </SidebarProvider>
-          {children}
         </ThemeProvider>
         {/* </StoreProvider> */}
       </body>
