@@ -14,7 +14,7 @@ const CreateForm = (props: CreateFormProp) => {
   const { children, cardTitle, cardDescription } = props;
 
   return (
-    <Card className='w-full mx-auto max-w-lg'>
+    <Card className='w-full max-w-lg min-w-72'>
       <CardHeader>
         <CardTitle>{cardTitle}</CardTitle>
         {cardDescription && <CardDescription>{cardDescription}</CardDescription>}

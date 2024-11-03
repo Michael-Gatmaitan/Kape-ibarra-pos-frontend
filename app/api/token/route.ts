@@ -18,7 +18,7 @@ export async function GET() {
   const payload = await verifySession(session);
 
   if (!payload.id) {
-    return Response.json({ error: "No use found" });
+    return Response.json({ error: "No user found" });
   }
 
   console.log(payload);

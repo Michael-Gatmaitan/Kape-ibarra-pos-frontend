@@ -8,22 +8,21 @@ import { Checkbox } from "../ui/checkbox";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, TLoginSchema } from "../../lib/types";
-import { Label } from "../ui/label";
 import { apiUrl } from "../../lib/apiUrl";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 // import { redirect } from "next/navigation";
 
 const LoginForm = () => {
 
   const [showPassword, setShowPassword] = useState(false);
 
-  const {
-    register,
-    handleSubmit,
-    formState: {
-      errors,
-      isSubmitting
-    }, setError
-  } = useForm<TLoginSchema>({ resolver: zodResolver(loginSchema) });
+  const form = useForm<TLoginSchema>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      username: "",
+      password: ""
+    }
+  });
 
   const [loginErr, setLoginErr] = useState<string>("");
 
@@ -48,13 +47,13 @@ const LoginForm = () => {
       const errors = responseData.errors
 
       if (errors.username) {
-        setError("username", {
+        form.setError("username", {
           type: "server",
           message: errors.username
         })
       }
       if (errors.password) {
-        setError("password", {
+        form.setError("password", {
           type: "server",
           message: errors.password
         })
@@ -101,31 +100,45 @@ const LoginForm = () => {
 
   return (
     <AuthForm description="Login with your account" header="Log in">
-      <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
-        <div className="grid gap-2">
-          <Label>Username</Label>
-          <Input {...register("username")} type="text" placeholder="Username" required />
-          {errors.username && (<Label className="text-red-600">{errors.username.message}</Label>)}
-        </div>
-        <div className="grid gap-2">
-          <Label>Password</Label>
-          <Input {...register("password")}
-            type={showPassword ? "text" : "password"}
-            placeholder="Password"
-            required
-          />
-          {errors.password && (<Label className="text-red-600">{errors.password.message}</Label>)}
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
+
+          {/* USERNAME */}
+          <FormField control={form.control} name="username" render={({ field }) => (
+            <FormItem>
+              <FormLabel>Username</FormLabel>
+              <FormControl>
+                <Input placeholder="Username" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )} />
+
+          {/* PASSWORD */}
+          <FormField control={form.control} name="password" render={({ field }) => (
+            <FormItem>
+              <FormLabel>Password</FormLabel>
+              <FormControl>
+                <Input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Password"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )} />
 
           <div className="flex items-center gap-2">
             <Checkbox onCheckedChange={() => setShowPassword((prev) => !prev)} />
             <label>Show password</label>
           </div>
-        </div>
 
-        <Button type="submit" disabled={isSubmitting}>Submit</Button>
-      </form>
+          <Button type="submit" disabled={form.formState.isSubmitting}>Submit</Button>
+        </form>
 
-      {loginErr}
+        {loginErr}
+      </Form>
     </AuthForm>
   );
 };

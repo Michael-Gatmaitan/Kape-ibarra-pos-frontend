@@ -3,7 +3,6 @@
 import React, { useState } from 'react'
 import CreateForm from '../CreateForm'
 import { Input } from '../../../components/ui/input'
-import { Label } from '../../../components/ui/label'
 
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -11,19 +10,22 @@ import { branchSchema, TBranchSChema } from '../../../lib/types'
 import { Button } from '../../../components/ui/button'
 import { apiUrl } from '../../../lib/apiUrl';
 import CreateAlert from '../../../components/CreateAlert';
+import { Form, FormField, FormControl, FormMessage, FormItem, FormLabel } from '../../../components/ui/form';
 
 const FormContent = () => {
 
-  const {
-    register,
-    handleSubmit,
-    formState: {
-      errors,
-      isSubmitting
-    },
-    reset,
-    setError
-  } = useForm<TBranchSChema>({ resolver: zodResolver(branchSchema) })
+  const form = useForm<TBranchSChema>({
+    resolver: zodResolver(branchSchema),
+    defaultValues: {
+      region: "",
+      province: "",
+      city: "",
+      zipCode: "",
+      baranggay: "",
+      streetAddress: "",
+      contactNumber: ""
+    }
+  })
 
   const [createSuccess, setCreateSuccess] = useState(true);
 
@@ -46,31 +48,31 @@ const FormContent = () => {
       const errors = responseData.errors;
 
       if (errors.region) {
-        setError("region", { type: "server", message: errors.region });
+        form.setError("region", { type: "server", message: errors.region });
       }
 
       if (errors.province) {
-        setError("province", { type: "server", message: errors.province });
+        form.setError("province", { type: "server", message: errors.province });
       }
 
       if (errors.city) {
-        setError("city", { type: "server", message: errors.city });
+        form.setError("city", { type: "server", message: errors.city });
       }
 
       if (errors.zipCode) {
-        setError("zipCode", { type: "server", message: errors.zipCode });
+        form.setError("zipCode", { type: "server", message: errors.zipCode });
       }
 
       if (errors.baranggay) {
-        setError("baranggay", { type: "server", message: errors.baranggay });
+        form.setError("baranggay", { type: "server", message: errors.baranggay });
       }
 
       if (errors.streetAddress) {
-        setError("streetAddress", { type: "server", message: errors.streetAddress });
+        form.setError("streetAddress", { type: "server", message: errors.streetAddress });
       }
 
       if (errors.contactNUmber) {
-        setError("contactNumber", { type: "server", message: errors.contactNumber });
+        form.setError("contactNumber", { type: "server", message: errors.contactNumber });
       }
     }
 
@@ -89,63 +91,101 @@ const FormContent = () => {
 
   return (
     <CreateForm cardTitle='Create Branch' cardDescription='Create new branch of store'>
-      <form onSubmit={handleSubmit(onSubmit)} className='grid gap-4'>
-        <div className='grid gap-2'>
-          <Label>Region</Label>
-          <Input required type='text' placeholder='Region' {...register('region')} />
-          {errors.region && <Label className='text-red-600'>{errors.region.message}</Label>}
-        </div>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className='grid gap-4'>
 
-        <div className='grid gap-2'>
-          <Label>Province</Label>
-          <Input required type='text' placeholder='Province' {...register('province')} />
-          {errors.province && <Label className='text-red-600'>{errors.province.message}</Label>}
-        </div>
+          {/* REGION */}
+          <FormField control={form.control} name="region" render={({ field }) => (
+            <FormItem>
+              <FormLabel>Region</FormLabel>
+              <FormControl>
+                <Input placeholder='Branch region' {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )} />
 
-        <div className='grid gap-2 grid-cols-2'>
-          <div className="grid gap-2">
-            <Label>City</Label>
-            <Input required type='text' placeholder='City' {...register('city')} />
-            {errors.city && <Label className='text-red-600'>{errors.city.message}</Label>}
+          {/* PROVINCE */}
+          <FormField control={form.control} name="province" render={({ field }) => (
+            <FormItem>
+              <FormLabel>Province</FormLabel>
+              <FormControl>
+                <Input placeholder='Branch province' {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )} />
+
+          <div className='grid gap-2 grid-cols-2'>
+            {/* CITY */}
+            <FormField control={form.control} name="city" render={({ field }) => (
+              <FormItem>
+                <FormLabel>City</FormLabel>
+                <FormControl>
+                  <Input placeholder='Branch city' {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )} />
+
+            {/* ZIPCODE */}
+            <FormField control={form.control} name="zipCode" render={({ field }) => (
+              <FormItem>
+                <FormLabel>Zip code</FormLabel>
+                <FormControl>
+                  <Input type="number" placeholder='Branch zip code' {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )} />
           </div>
 
-          <div className="grid gap-2">
-            <Label>Zip Code</Label>
-            <Input required type='number' placeholder='ZipCode' {...register('zipCode')} />
-            {errors.zipCode && <Label className='text-red-600'>{errors.zipCode.message}</Label>}
+          {/* BARANGGAY */}
+          <FormField control={form.control} name="baranggay" render={({ field }) => (
+            <FormItem>
+              <FormLabel>Baranggay</FormLabel>
+              <FormControl>
+                <Input placeholder='Branch baranggay' {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )} />
+
+          {/* STREETADDRESS */}
+          <FormField control={form.control} name="streetAddress" render={({ field }) => (
+            <FormItem>
+              <FormLabel>Street address</FormLabel>
+              <FormControl>
+                <Input placeholder='Branch street address' {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )} />
+
+          {/* CONTACT NUMBER */}
+          <FormField control={form.control} name="contactNumber" render={({ field }) => (
+            <FormItem>
+              <FormLabel>Contact number</FormLabel>
+              <FormControl>
+                <Input placeholder='Branch contact number' {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )} />
+
+          <div className="grid gap-2 grid-cols-2 w-full">
+            <Button variant='outline' onClick={() => { form.reset(); setCreateSuccess(false) }}>Clear form</Button>
+            <Button type="submit" disabled={form.formState.isSubmitting}>Create</Button>
           </div>
-        </div>
 
-        <div className='grid gap-2'>
-          <Label>Baranggay</Label>
-          <Input required type='text' placeholder='Baranggay' {...register('baranggay')} />
-          {errors.baranggay && <Label className='text-red-600'>{errors.baranggay.message}</Label>}
-        </div>
-
-        <div className='grid gap-2'>
-          <Label>Street Address</Label>
-          <Input required type='text' placeholder='Street Address' {...register('streetAddress')} />
-          {errors.streetAddress && <Label className='text-red-600'>{errors.streetAddress.message}</Label>}
-        </div>
-
-        <div className='grid gap-2'>
-          <Label>Contact number</Label>
-          <Input required type='text' placeholder='Contact number' {...register('contactNumber')} />
-          {errors.contactNumber && <Label className='text-red-600'>{errors.contactNumber.message}</Label>}
-        </div>
-
-        <div className="grid gap-2 grid-cols-2 w-full">
-          <Button variant='outline' onClick={() => { reset(); setCreateSuccess(false) }}>Clear form</Button>
-          <Button type="submit" disabled={isSubmitting}>Create</Button>
-        </div>
-
-        {createSuccess ? (
-          <CreateAlert
-            title='Branch created successfully'
-            description='Browse branch page to see the list of branches'
-          />
-        ) : null}
-      </form>
+          {createSuccess ? (
+            <CreateAlert
+              title='Branch created successfully'
+              description='Browse branch page to see the list of branches'
+            />
+          ) : null}
+        </form>
+      </Form>
     </CreateForm>
   )
 }

@@ -7,8 +7,10 @@ export const signupSchema = z
     lastname: z.string().min(1, "Lastname required."),
     username: z.string().min(5, "Username must be at least 5 characters"),
     password: z.string().min(10, "Password is must be at least 10 characters"),
-    roleName: z.string(),
     confirmPassword: z.string().min(10, "Please confirm your password"),
+    cpNum: z.string().min(11, "Minimum of 11 characters required"),
+    roleId: z.string().min(1, "RoleId is required"),
+    branchId: z.string().min(1, "BranchId is required"),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Password must match",
@@ -40,7 +42,7 @@ export type TBranchSChema = z.infer<typeof branchSchema>;
 
 // Product schema with RawMaterials
 const rawMaterialSchema = z.object({
-  materialName: z.string().min(1, "Raw material should have a name"),
+  rawMaterialId: z.string().min(1, "Raw material should have a name"),
   quantityInUnitPerItem: z.number().min(1),
 });
 
@@ -69,3 +71,9 @@ export type TProductSchema = z.infer<typeof productSchema>;
 //     { id: 2, name: "Material B", quantity: 3 },
 //   ],
 // };
+
+export const categorySchema = z.object({
+  categoryName: z.string().min(1, "Category name required"),
+});
+
+export type TCategorySchema = z.infer<typeof categorySchema>;

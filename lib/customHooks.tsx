@@ -59,7 +59,11 @@ export function useUserPayload() {
 
   useEffect(() => {
     const getUserPayload = async () => {
-      const result = await fetch(`api/token`).then(res => res.json());
+      const result = await fetch(`/api/token`).then(res => res.json());
+
+      if ('error' in result) {
+        console.error("No user found in token");
+      }
       console.log(result);
       setUserPayload(result);
     }
@@ -71,12 +75,13 @@ export function useUserPayload() {
 }
 
 interface IRawMaterials {
+  id: number,
   materialName: string,
   quantityInUnitPerItem: number
 }
 
 export function useRawMaterial() {
-  const [rawMaterials, setRawMaterials] = useState<IRawMaterials>();
+  const [rawMaterials, setRawMaterials] = useState<IRawMaterials[]>();
 
   useEffect(() => {
     const getRawMaterials = async () => {
@@ -88,4 +93,20 @@ export function useRawMaterial() {
   }, []);
 
   return rawMaterials;
+}
+
+export function useCategories() {
+  const [categories, setCategories] = useState<{ id: number, categoryName: string }[]>();
+
+  useEffect(() => {
+    const getCategories = async () => {
+      const result = await fetch(`${apiUrl}/category`).then(res => res.json());
+
+      console.log("Categories: ", result);
+      setCategories(result);
+    }
+    getCategories();
+  }, []);
+
+  return categories;
 }
