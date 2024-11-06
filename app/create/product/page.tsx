@@ -6,7 +6,7 @@ const page = () => {
   return (
     <div>
       <BackLink href="/product" buttonTitle='Product list' />
-      <FormContent />
+      <FormContent type='create' />
     </div>
   )
 }

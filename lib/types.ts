@@ -41,26 +41,39 @@ export const branchSchema = z.object({
 export type TBranchSChema = z.infer<typeof branchSchema>;
 
 // Product schema with RawMaterials
-const rawMaterialSchema = z.object({
-  rawMaterialId: z.string().min(1, "Raw material should have a name"),
-  quantityInUnitPerItem: z.number().min(1),
+const recipeSchema = z.object({
+  id: z.string(),
+  rawMaterialId: z
+    .string()
+    .min(1, "Raw material should have a name")
+    .default(""),
+  quantityInUnitPcsNeeded: z.string().default(""),
 });
 
 export const productSchema = z.object({
   productName: z
     .string()
-    .min(5, "Product name should have atleast 5 characters"),
-  price: z.string().min(1, "Product should have a price"),
-  description: z.string().optional(),
-  categoryId: z.string(),
+    .min(5, "Product name should have atleast 5 characters")
+    .default(""),
+  price: z.string().min(1, "Product should have a price").default(""),
+  description: z.string().optional().default(""),
+  categoryId: z.string().default(""),
 
   // For raw materials
-  rawMaterials: z
-    .array(rawMaterialSchema)
+  recipes: z
+    .array(recipeSchema)
     .nonempty("At least one raw material is required"),
 });
 
 export type TProductSchema = z.infer<typeof productSchema>;
+
+export const rawMaterialSchema = z.object({
+  rawMaterialName: z.string().min(1, "Raw material name required"),
+  quantityInUnitPerItem: z.string(),
+  rawPrice: z.string(),
+});
+
+export type TRawMaterialSchema = z.infer<typeof rawMaterialSchema>;
 
 // const productData = {
 //   productName: "Example Product",

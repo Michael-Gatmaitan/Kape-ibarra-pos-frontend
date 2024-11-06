@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from 'react'
+import React from 'react'
 import AuthForm from './auth-form'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
@@ -97,6 +97,10 @@ const SignupForm = () => {
       },
       body: JSON.stringify(dataWOConfirmPassword)
     })
+      .then(res => res.json())
+      .catch(err => console.log("There was an error creating user", err))
+
+    console.log(createAccountReq, confirmPassword)
 
     router.replace("/login");
     // reset();

@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { MiddlewareConfig, NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifySession } from "./lib/session";
 
@@ -29,6 +29,6 @@ export async function middleware(req: NextRequest) {
   }
 }
 
-export const config = {
-  matcher: ["/profile"],
+export const config: MiddlewareConfig = {
+  matcher: ["/create"],
 };
