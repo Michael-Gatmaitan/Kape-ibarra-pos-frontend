@@ -127,11 +127,12 @@ const FormContent = ({
   }
 
   const deleteProduct = async (productId: string) => {
-    const deleteReq = await fetch(
-      `${apiUrl}/product/${productId}`,
-      {
-        method: "DELETE",
-      },
+    const deleteReq = await fetch(`${apiUrl}/product/${productId}`, {
+      method: "DELETE",
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    },
     );
 
     const res = await deleteReq.json();
@@ -380,6 +381,7 @@ const FormContent = ({
 
           <div className="grid gap-2 grid-cols-2 w-full">
             <Button
+              type="button"
               variant="outline"
               onClick={() => {
                 if (type === "create") {

@@ -4,6 +4,7 @@ import AuthForm from "./auth-form";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Checkbox } from "../ui/checkbox";
+import { useRouter } from "next/navigation";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -20,6 +21,7 @@ import {
 // import { redirect } from "next/navigation";
 
 const LoginForm = () => {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
 
   const form = useForm<TLoginSchema>({
@@ -65,11 +67,6 @@ const LoginForm = () => {
       }
     }
 
-    // Call login api on server and store localstorage of token
-    // const headers = new Headers();
-    // headers.append('Content-Type', 'application/json');
-    // headers.append('Accept', 'application/json');
-
     const loginReq = await fetch(`${apiUrl}/login`, {
       method: "POST",
       headers: {
@@ -103,6 +100,10 @@ const LoginForm = () => {
           },
         });
       })();
+
+      // Route to login section base on role
+      // for now for dev
+      router.replace('create/product-category');
     } else {
       console.log(loginRes.error);
       setLoginErr(loginRes.error);
