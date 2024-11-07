@@ -8,13 +8,13 @@ import { verifySession } from "./lib/session";
 // !!!: JUST FIND OUT THAT im setting it in cookies hehe
 
 export async function middleware(req: NextRequest) {
-  const session = cookies().get("session")?.value;
+  const token = cookies().get("token")?.value;
 
   // If there's no token, redirect to login
-  if (!session) return NextResponse.redirect(new URL("/login", req.url));
+  if (!token) return NextResponse.redirect(new URL("/login", req.url));
 
   try {
-    const payload = await verifySession(session);
+    const payload = await verifySession(token);
 
     // If there's no roleId in payload decrypted
     if (!payload.roleName)

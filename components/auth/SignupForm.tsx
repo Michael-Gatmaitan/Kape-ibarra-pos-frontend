@@ -35,7 +35,7 @@ const SignupForm = () => {
   const onSubmit = async (data: TSignupSchema) => {
     console.log(data);
 
-    const response = await fetch('/api/signup', {
+    const validationRequest = await fetch('/api/schema/signup', {
       method: "POST",
       body: JSON.stringify(data),
       headers: {
@@ -43,42 +43,27 @@ const SignupForm = () => {
       }
     });
 
-    const responseData = await response.json();
+    const validationData = await validationRequest.json();
 
-    console.log(responseData)
+    console.log(validationData)
 
-    if (responseData.ok === false) {
-      console.error("Submit form failed")
+    if (validationRequest.ok === false) {
+      console.error("Submit form failed");
     }
 
-    if (responseData.errors) {
-      const errors = responseData.errors;
+    if (validationData.errors) {
+      const errors = validationData.errors;
 
       if (errors.firstname) {
-        form.setError("firstname", {
-          type: 'server',
-          message: errors.firstname
-        })
+        form.setError("firstname", { type: 'server', message: errors.firstname });
       } else if (errors.lastname) {
-        form.setError("lastname", {
-          type: 'server',
-          message: errors.lastname
-        })
+        form.setError("lastname", { type: 'server', message: errors.lastname });
       } else if (errors.username) {
-        form.setError("username", {
-          type: 'server',
-          message: errors.username
-        })
+        form.setError("username", { type: 'server', message: errors.username });
       } else if (errors.password) {
-        form.setError("password", {
-          type: 'server',
-          message: errors.password
-        })
+        form.setError("password", { type: 'server', message: errors.password });
       } else if (errors.confirmPassword) {
-        form.setError("confirmPassword", {
-          type: 'server',
-          message: errors.confirmPassword
-        })
+        form.setError("confirmPassword", { type: 'server', message: errors.confirmPassword });
       } else {
         console.error("something went wrong!")
       }

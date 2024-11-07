@@ -1,7 +1,8 @@
 import React from 'react'
-import DisplayCategories from './DisplayCategories';
-import { apiUrl } from '../../../lib/apiUrl';
+// import DisplayCategories from './DisplayCategories';
+// import { apiUrl } from '../../../lib/apiUrl';
 import FormContent from './FormContent';
+// import { getSessionToken } from '../../../actions/loginAction';
 
 const page = async () => {
 
@@ -11,7 +12,7 @@ const page = async () => {
     <div>
       {/* <DisplayCategories categories={categories} /> */}
 
-      <FormContent />
+      <FormContent type='create' />
     </div>
   )
 }

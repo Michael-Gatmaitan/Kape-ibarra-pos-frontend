@@ -34,7 +34,7 @@ const LoginForm = () => {
 
   const onSubmit = async (data: TLoginSchema) => {
     // Just validate the schema on backend lol
-    const response = await fetch("/api/login", {
+    const response = await fetch("/api/schema/login", {
       method: "POST",
       body: JSON.stringify(data),
       headers: {
@@ -66,15 +66,19 @@ const LoginForm = () => {
     }
 
     // Call login api on server and store localstorage of token
+    // const headers = new Headers();
+    // headers.append('Content-Type', 'application/json');
+    // headers.append('Accept', 'application/json');
+
     const loginReq = await fetch(`${apiUrl}/login`, {
       method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({
         username: data.username,
         password: data.password,
       }),
-      headers: {
-        "Content-Type": "application/json",
-      },
     });
 
     const loginRes = await loginReq.json();

@@ -30,7 +30,7 @@ const FormContent = () => {
   const [createSuccess, setCreateSuccess] = useState(true);
 
   const onSubmit = async (data: TBranchSChema) => {
-    const response = await fetch('/api/branch', {
+    const response = await fetch('/api/schema/branch', {
       method: "POST",
       body: JSON.stringify(data),
       headers: {

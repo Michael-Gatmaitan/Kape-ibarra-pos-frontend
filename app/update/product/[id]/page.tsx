@@ -5,15 +5,6 @@ import FormContent from "../../../create/product/FormContent";
 import { TProductSchema } from "../../../../lib/types";
 import { IProduct } from "../../../..";
 
-// interface IProduct {
-//   id: number;
-//   categoryId: number;
-//   productName: string;
-//   price: number;
-//   description: string | null;
-//   createdAt: string;
-// }
-
 const page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const id = (await params).id;
 
@@ -26,7 +17,7 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const recipes = res.recipes.map((recipe) => {
     return {
       ...recipe,
-      rawMaterialId: recipe.rawMaterialId.toString(),
+      rawMaterialId: recipe.rawMaterialId,
       quantityInUnitPcsNeeded: recipe.quantityInUnitPcsNeeded.toString(),
     };
   });

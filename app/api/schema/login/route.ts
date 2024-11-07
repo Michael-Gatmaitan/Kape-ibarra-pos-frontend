@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
-import { signupSchema } from "../../../lib/types";
+import { loginSchema } from "../../../../lib/types";
 
 export async function POST(req: Request) {
   const body = req.json();
-  const result = signupSchema.safeParse(body);
+  const result = loginSchema.safeParse(body);
 
   let zodErrors = {};
 
@@ -12,8 +12,6 @@ export async function POST(req: Request) {
       zodErrors = { ...zodErrors, [issue.path[0]]: issue.message };
     });
   }
-
-  // Poceed for creating account
 
   return NextResponse.json(
     Object.keys(zodErrors).length > 0

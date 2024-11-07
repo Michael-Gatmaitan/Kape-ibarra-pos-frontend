@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
-import { loginSchema } from "../../../lib/types";
+import { productSchema } from "../../../../lib/types";
 
 export async function POST(req: Request) {
-  const body = req.json();
-  const result = loginSchema.safeParse(body);
+  const body = await req.json();
+  const result = productSchema.safeParse(body);
 
   let zodErrors = {};
 

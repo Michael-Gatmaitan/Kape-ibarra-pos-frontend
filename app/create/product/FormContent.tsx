@@ -71,6 +71,8 @@ const FormContent = ({
   const rawMaterials = useRawMaterial();
   const categories = useCategories();
 
+  // States for confirmation of CREATED & UPDATED
+
   const form = useForm<TProductSchema>({
     resolver: zodResolver(productSchema),
     defaultValues: {
@@ -83,20 +85,56 @@ const FormContent = ({
           : "",
       categoryId: type === "update" ? `${productDefaultValues.categoryId}` : "",
       recipes: type === "update" ? recipesDefaultValues : [],
-      // recipes: [{ rawMaterialId: "2", quantityInUnitPcsNeeded: "200" }],
     },
   });
 
-  const deleteProduct = async () => {
+  const createProduct = async (createProductReqBody: ICreateProductBody) => {
+    try {
+      const createProductReq = await fetch(`${apiUrl}/product`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(createProductReqBody),
+      });
+
+      console.log(createProductReq.status);
+
+      const res = await createProductReq.json();
+      console.log(res);
+
+      if ("error" in res) {
+        form.setError("productName", { message: res.error });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  const updateProduct = async (productId: string, updateProductReqBody: ICreateProductBody) => {
+    console.log("Update product");
+
+    const updateProductReq = await fetch(
+      `${apiUrl}/product/${productId}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updateProductReqBody),
+      },
+    ).then((res) => res.json());
+
+    console.log("Updated product: ", updateProductReq);
+  }
+
+  const deleteProduct = async (productId: string) => {
     const deleteReq = await fetch(
-      `${apiUrl}/product/${productDefaultValues.id}`,
+      `${apiUrl}/product/${productId}`,
       {
         method: "DELETE",
       },
     );
 
     const res = await deleteReq.json();
-
     console.log(res);
   };
 
@@ -121,42 +159,46 @@ const FormContent = ({
       recipeBody: recipes,
     };
 
-    if (type === "create") {
-      try {
-        const createProductReq = await fetch(`${apiUrl}/product`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(createProductReqBody),
-        });
-
-        console.log(createProductReq.status);
-
-        const res = await createProductReq.json();
-        console.log(res);
-
-        if ("error" in res) {
-          form.setError("productName", { message: res.error });
-        }
-      } catch (err) {
-        console.log(err);
+    // Validate in api the data before creating it
+    const validationRequest = await fetch('/api/schema/product', {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json'
       }
+    });
+
+    const validationData = await validationRequest.json();
+
+    if (validationData.errors) {
+      const errors = validationData.errors;
+
+      console.log(errors);
+
+      if (errors.productName) {
+        form.setError("productName", { type: 'server', message: errors.productName });
+      } else if (errors.price) {
+        form.setError("price", { type: 'server', message: errors.price });
+      } else if (errors.description) {
+        form.setError("description", { type: 'server', message: errors.description });
+      } else if (errors.categoryId) {
+        form.setError("categoryId", { type: 'server', message: errors.categoryId });
+      } else if (errors.recipes) {
+        console.log("Something in recipe");
+
+      } else {
+        console.log("something went wrong!");
+      }
+
+      return;
+    }
+
+    if (type === "create") {
+      // Create our product
+      await createProduct(createProductReqBody);
     } else if (type === "update") {
-      console.log("Update product");
-
-      const updateProductReq = await fetch(
-        `${apiUrl}/product/${productDefaultValues.id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(createProductReqBody),
-        },
-      ).then((res) => res.json());
-
-      console.log("Updated product: ", updateProductReq);
+      // Update our product
+      await updateProduct(productDefaultValues.id, createProductReqBody);
     }
   };
 
@@ -323,7 +365,7 @@ const FormContent = ({
                   )}
                 />
 
-                <Button onClick={() => remove(index)}>Remove</Button>
+                <Button onClick={() => remove(index)}>Remove {index}</Button>
               </CardContent>
             </Card>
           ))}
@@ -345,7 +387,7 @@ const FormContent = ({
                   setCreateSuccess(false);
                 } else if (type === "update") {
                   // delete
-                  deleteProduct();
+                  deleteProduct(productDefaultValues.id);
                 }
               }}
             >
@@ -356,11 +398,15 @@ const FormContent = ({
                   : null}
             </Button>
             <Button type="submit" disabled={form.formState.isSubmitting}>
-              {type === "create"
-                ? "Create"
-                : type === "update"
-                  ? "Update"
-                  : null}
+              {form.formState.isSubmitting && type === "create" ?
+                "Creating"
+                : form.formState.isSubmitting && type === "update" ?
+                  "Updating"
+                  : type === "create" ?
+                    "Create"
+                    : type === "update" ?
+                      "Update"
+                      : null}
             </Button>
           </div>
 

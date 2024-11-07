@@ -14,10 +14,10 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET() {
-  const session = cookies().get("session")?.value;
-  const payload = await verifySession(session);
+  const token = cookies().get("token")?.value;
+  const payload = await verifySession(token);
 
-  if (!payload.id) {
+  if (!payload.user.id) {
     return Response.json({ error: "No user found" });
   }
 
