@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 import { apiUrl } from "./apiUrl";
 
 interface IRole {
-  id: number,
-  roleName: string
+  id: number;
+  roleName: string;
 }
 
 export function useRoles() {
@@ -13,9 +13,11 @@ export function useRoles() {
 
   useEffect(() => {
     const getRoles = async () => {
-      const result: IRole[] = await fetch(`${apiUrl}/role`).then(res => res.json());
+      const result: IRole[] = await fetch(`${apiUrl}/role`).then((res) =>
+        res.json(),
+      );
       setRoles(result);
-    }
+    };
     getRoles();
   }, []);
 
@@ -38,10 +40,12 @@ export function useBranch() {
 
   useEffect(() => {
     const getBranches = async () => {
-      const result: IBranch[] = await fetch(`${apiUrl}/branch`).then(res => res.json());
+      const result: IBranch[] = await fetch(`${apiUrl}/branch`).then((res) =>
+        res.json(),
+      );
       console.log("Branches in hook: ", result);
       setBranches(result);
-    }
+    };
 
     getBranches();
   }, []);
@@ -59,14 +63,14 @@ export function useUserPayload() {
 
   useEffect(() => {
     const getUserPayload = async () => {
-      const result = await fetch(`/api/token`).then(res => res.json());
+      const result = await fetch(`/api/token`).then((res) => res.json());
 
-      if ('error' in result) {
+      if ("error" in result) {
         console.error("No user found in token");
       }
       console.log(result);
       setUserPayload(result);
-    }
+    };
 
     getUserPayload();
   }, []);
@@ -75,9 +79,9 @@ export function useUserPayload() {
 }
 
 interface IRawMaterials {
-  id: number,
-  materialName: string,
-  quantityInUnitPerItem: number
+  id: number;
+  materialName: string;
+  quantityInUnitPerItem: number;
 }
 
 export function useRawMaterial() {
@@ -85,9 +89,11 @@ export function useRawMaterial() {
 
   useEffect(() => {
     const getRawMaterials = async () => {
-      const result = await fetch(`${apiUrl}/rawMaterial`).then(res => res.json());
+      const result = await fetch(`${apiUrl}/raw-material`).then((res) =>
+        res.json(),
+      );
       setRawMaterials(result);
-    }
+    };
 
     getRawMaterials();
   }, []);
@@ -96,17 +102,21 @@ export function useRawMaterial() {
 }
 
 export function useCategories() {
-  const [categories, setCategories] = useState<{ id: number, categoryName: string }[]>();
+  const [categories, setCategories] =
+    useState<{ id: number; categoryName: string }[]>();
 
   useEffect(() => {
     const getCategories = async () => {
-      const result = await fetch(`${apiUrl}/category`).then(res => res.json());
+      const result = await fetch(`${apiUrl}/category`).then((res) =>
+        res.json(),
+      );
 
       console.log("Categories: ", result);
       setCategories(result);
-    }
+    };
     getCategories();
   }, []);
 
   return categories;
 }
+

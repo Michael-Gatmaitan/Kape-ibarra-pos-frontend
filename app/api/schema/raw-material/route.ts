@@ -1,11 +1,9 @@
 import { NextResponse } from "next/server";
-import { productSchema } from "../../../../lib/types";
+import { rawMaterialSchema } from "../../../../lib/types";
 
 export async function POST(req: Request) {
   const body = await req.json();
-  const result = productSchema.safeParse(body);
-
-  console.log("Dvhema for asdflaskdf");
+  const result = rawMaterialSchema.safeParse(body);
 
   let zodErrors = {};
 
@@ -18,6 +16,6 @@ export async function POST(req: Request) {
   return NextResponse.json(
     Object.keys(zodErrors).length > 0
       ? { errors: zodErrors }
-      : { success: true }
+      : { success: true },
   );
 }

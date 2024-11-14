@@ -5,6 +5,7 @@ import { ThemeProvider } from "../components/theme-provider";
 // import StoreProvider from "./StoreProvider";
 import { SidebarProvider } from "../components/ui/sidebar";
 import AppSidebar from "../components/AppSidebar";
+import AppNavbar from "../components/AppNavbar";
 // import { ModeToggle } from "../components/toggler";
 
 const geistSans = localFont({
@@ -31,7 +32,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased mx-4`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased my-40 mx-4 lg:mx-12 xl:mx-40`}
       >
         {/* Redux store provider */}
         {/* <StoreProvider> */}
@@ -45,7 +46,10 @@ export default function RootLayout({
             <AppSidebar />
 
             {/* <ModeToggle /> */}
-            {children}
+            <div className="w-full">
+              <AppNavbar />
+              {children}
+            </div>
           </SidebarProvider>
         </ThemeProvider>
         {/* </StoreProvider> */}

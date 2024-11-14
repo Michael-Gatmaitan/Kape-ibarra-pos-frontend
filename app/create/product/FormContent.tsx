@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { SyntheticEvent, useState } from "react";
 import CreateForm from "../CreateForm";
+import Image from "next/image";
 
 import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -35,14 +36,16 @@ import {
 import { apiUrl } from "../../../lib/apiUrl";
 import { IProduct } from "../../..";
 
+
 // UUID
-import { v4 as uuidv4 } from 'uuid';
+// import { v4 as uuidv4 } from "uuid";
 
 interface IProductBody {
   productName: string;
   price: string;
   description?: string;
-  categoryId: string;
+  categoryId: string,
+  imagePath: string
 }
 
 interface IRecipeBody {
@@ -83,10 +86,14 @@ const FormContent = ({
         type === "update" && productDefaultValues.description !== null
           ? `${productDefaultValues.description}`
           : "",
-      categoryId: type === "update" ? `${productDefaultValues.categoryId}` : "",
       recipes: type === "update" ? recipesDefaultValues : [],
+      categoryId: type === "update" ? productDefaultValues.categoryId : ""
     },
   });
+
+  const [imageUrl, setImageUrl] = useState<string>('');
+
+  console.log(categories);
 
   const createProduct = async (createProductReqBody: ICreateProductBody) => {
     try {
@@ -103,37 +110,40 @@ const FormContent = ({
 
       if ("error" in res) {
         form.setError("productName", { message: res.error });
+        return;
       }
+
+      // successfully
+      form.reset();
     } catch (err) {
       console.log(err);
     }
-  }
+  };
 
-  const updateProduct = async (productId: string, updateProductReqBody: ICreateProductBody) => {
+  const updateProduct = async (
+    productId: string,
+    updateProductReqBody: ICreateProductBody,
+  ) => {
     console.log("Update product");
 
-    const updateProductReq = await fetch(
-      `${apiUrl}/product/${productId}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updateProductReqBody),
+    const updateProductReq = await fetch(`${apiUrl}/product/${productId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
       },
-    ).then((res) => res.json());
+      body: JSON.stringify(updateProductReqBody),
+    }).then((res) => res.json());
 
     console.log("Updated product: ", updateProductReq);
-  }
+  };
 
   const deleteProduct = async (productId: string) => {
     const deleteReq = await fetch(`${apiUrl}/product/${productId}`, {
       method: "DELETE",
       headers: {
-        'Content-Type': 'application/json'
-      }
-    },
-    );
+        "Content-Type": "application/json",
+      },
+    });
 
     const res = await deleteReq.json();
     console.log(res);
@@ -150,23 +160,13 @@ const FormContent = ({
   const onSubmit = async (data: TProductSchema) => {
     const { productName, price, description, categoryId, recipes } = data;
 
-    const createProductReqBody: ICreateProductBody = {
-      productBody: {
-        productName,
-        price,
-        description,
-        categoryId,
-      },
-      recipeBody: recipes,
-    };
-
     // Validate in api the data before creating it
-    const validationRequest = await fetch('/api/schema/product', {
+    const validationRequest = await fetch("/api/schema/product", {
       method: "POST",
       body: JSON.stringify(data),
       headers: {
-        'Content-Type': 'application/json'
-      }
+        "Content-Type": "application/json",
+      },
     });
 
     const validationData = await validationRequest.json();
@@ -177,16 +177,24 @@ const FormContent = ({
       console.log(errors);
 
       if (errors.productName) {
-        form.setError("productName", { type: 'server', message: errors.productName });
+        form.setError("productName", {
+          type: "server",
+          message: errors.productName,
+        });
       } else if (errors.price) {
-        form.setError("price", { type: 'server', message: errors.price });
-      } else if (errors.description) {
-        form.setError("description", { type: 'server', message: errors.description });
+        form.setError("price", { type: "server", message: errors.price });
       } else if (errors.categoryId) {
-        form.setError("categoryId", { type: 'server', message: errors.categoryId });
+        form.setError("categoryId", {
+          type: "server",
+          message: errors.categoryId,
+        });
+      } else if (errors.description) {
+        form.setError("description", {
+          type: "server",
+          message: errors.description,
+        });
       } else if (errors.recipes) {
         console.log("Something in recipe");
-
       } else {
         console.log("something went wrong!");
       }
@@ -194,8 +202,20 @@ const FormContent = ({
       return;
     }
 
-    if (type === "create") {
+    const createProductReqBody: ICreateProductBody = {
+      productBody: {
+        productName,
+        price,
+        description,
+        categoryId,
+        imagePath: imageUrl
+      },
+      recipeBody: recipes,
+    };
+
+    if (type === "create" && uploaded) {
       // Create our product
+      console.log(categoryId);
       await createProduct(createProductReqBody);
     } else if (type === "update") {
       // Update our product
@@ -203,14 +223,83 @@ const FormContent = ({
     }
   };
 
+
+
+  const handleUploadImage = async (e: SyntheticEvent) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    console.log(file, formData);
+
+    const response = await fetch("/api/upload", {
+      method: "POST",
+      body: formData,
+    });
+
+    if (response.ok) {
+      console.log("File uploaded successfully!");
+      setUploaded(true);
+    } else {
+      console.error("File upload failed");
+    }
+
+    const result = await response.json();
+    console.log(result);
+
+    if (result.imagePath) {
+      setUploaded(true);
+      setImageUrl(result.imagePath);
+    } else {
+      alert("Something went wrong uplodaing image");
+    }
+  };
+
+  const [file, setFile] = useState(null);
+  const [uploaded, setUploaded] = useState(false);
+
   return (
     <CreateForm
-      cardTitle="Create Product"
-      cardDescription="Create product with category"
+      cardTitle={`${type === "create" ? "Create" : "Update"} Product`}
+      cardDescription={`${type === "create" ? "Create" : "Update"} Product`}
     >
+
+      <Image src="/uploads/1731163041423IMG_20240302_111608.jpg" alt="AS" width={50} height={50} />
+
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
+
           {/* PRODUCT NAME */}
+
+          <FormField
+            // control={form.control}
+            name="productImage"
+            render={({ field: { onChange, ...fieldProps } }) => (
+              <FormItem>
+                <FormLabel>Product image</FormLabel>
+                <FormControl>
+                  <Input
+                    // className="bg-neutral-900"
+                    type="file"
+                    {...fieldProps}
+                    accept="image/png, image/jpeg, image/jpg"
+
+                    onChange={(event) => {
+                      onChange(event.target.files && event.target.files[0])
+                      console.log(event.target.files && event.target.files[0]);
+                      setFile(event.target.files && event.target.files[0])
+                    }
+                    }
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <Button type="button" onClick={handleUploadImage} disabled={type === "create" && uploaded || !file}>Upload</Button>
+
           <FormField
             control={form.control}
             name="productName"
@@ -300,19 +389,19 @@ const FormContent = ({
               </CardHeader>
               <CardContent className="grid gap-4">
                 {/* ID */}
-                <FormField
-                  control={form.control}
-                  name={`recipes.${index}.id`}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>ID</FormLabel>
-                      <FormControl>
-                        <Input {...field} disabled />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                {/* <FormField */}
+                {/*   control={form.control} */}
+                {/*   name={`recipes.${index}.id`} */}
+                {/*   render={({ field }) => ( */}
+                {/*     <FormItem> */}
+                {/*       <FormLabel>ID</FormLabel> */}
+                {/*       <FormControl> */}
+                {/*         <Input {...field} disabled /> */}
+                {/*       </FormControl> */}
+                {/*       <FormMessage /> */}
+                {/*     </FormItem> */}
+                {/*   )} */}
+                {/* /> */}
 
                 {/* RAW MATERIAL ID OR NAME */}
                 <FormField
@@ -373,7 +462,10 @@ const FormContent = ({
 
           <Button
             onClick={() =>
-              append({ id: uuidv4(), rawMaterialId: "", quantityInUnitPcsNeeded: "1" })
+              append({
+                rawMaterialId: "",
+                quantityInUnitPcsNeeded: "1",
+              })
             }
           >
             Add raw material
@@ -399,15 +491,15 @@ const FormContent = ({
                   ? "Delete"
                   : null}
             </Button>
-            <Button type="submit" disabled={form.formState.isSubmitting}>
-              {form.formState.isSubmitting && type === "create" ?
-                "Creating"
-                : form.formState.isSubmitting && type === "update" ?
-                  "Updating"
-                  : type === "create" ?
-                    "Create"
-                    : type === "update" ?
-                      "Update"
+            <Button type="submit" disabled={form.formState.isSubmitting || (type === "create" && !uploaded)}>
+              {form.formState.isSubmitting && type === "create"
+                ? "Creating"
+                : form.formState.isSubmitting && type === "update"
+                  ? "Updating"
+                  : type === "create"
+                    ? "Create"
+                    : type === "update"
+                      ? "Update"
                       : null}
             </Button>
           </div>

@@ -1,11 +1,10 @@
 import React from "react";
-import FormContent from "./FormContent";
 import BackLink from "../../../components/BackLink";
-
-const page = () => {
+import FormContent from "./FormContent";
+const page = async () => {
   return (
     <div>
-      <BackLink href="/branch" buttonTitle="Branch " />
+      <BackLink href="/rawMaterials" buttonTitle="Raw material list" />
       <FormContent type="create" />
     </div>
   );

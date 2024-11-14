@@ -1,7 +1,5 @@
-export default function Home() {
+// import { SidebarTrigger } from "../components/ui/sidebar";
 
-  return (
-    <div>
-    </div>
-  );
+export default function Home() {
+  return <div>{/* <SidebarTrigger /> */}</div>;
 }

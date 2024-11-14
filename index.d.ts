@@ -51,6 +51,7 @@ export interface ICategory {
 
 export interface IProduct {
   id: string;
+  imagePath: string;
   catergoryId: string;
   productName: string;
   price: number;
@@ -71,6 +72,7 @@ export interface IProfit {
 export interface IRawMaterial {
   id: string;
   materialName: string;
+  rawPrice: number;
   quantityInUnitPerItem: number;
 }
 

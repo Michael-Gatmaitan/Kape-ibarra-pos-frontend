@@ -8,16 +8,16 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signupSchema, TSignupSchema } from '../../lib/types';
 import { useRouter } from 'next/navigation';
-import { useBranch, useRoles, useUserPayload } from '../../lib/customHooks';
+// import { useRoles, useUserPayload } from '../../lib/customHooks';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
-import { Select, SelectContent, SelectTrigger, SelectItem, SelectValue } from '../ui/select';
+// import { Select, SelectContent, SelectTrigger, SelectItem, SelectValue } from '../ui/select';
 import { apiUrl } from '../../lib/apiUrl';
 
 const SignupForm = () => {
-  const payload = useUserPayload();
-  const roles = useRoles();
+  // const payload = useUserPayload();
+  // const roles = useRoles();
   const router = useRouter();
-  const branches = useBranch();
+  // const branches = useBranch();
 
   const form = useForm<TSignupSchema>({
     resolver: zodResolver(signupSchema),
@@ -27,8 +27,7 @@ const SignupForm = () => {
       username: "",
       password: "",
       confirmPassword: "",
-      roleId: "",
-      branchId: ""
+      roleId: ""
     }
   });
 
@@ -162,7 +161,7 @@ const SignupForm = () => {
           )} />
 
           {/* ROLE */}
-          {payload?.roleName !== undefined && (payload.roleName === "System Admin" || payload.roleName === "Branch Admin") ? (
+          {/* {payload?.roleName !== undefined && (payload.roleName === "System Admin" || payload.roleName === "Branch Admin") ? (
             <React.Fragment>
               <FormField control={form.control} name="roleId" render={({ field }) => (
                 <FormItem>
@@ -190,7 +189,7 @@ const SignupForm = () => {
                 </FormItem>
               )} />
 
-              {/* Only the SYSTEM ADMIN have a right to choose where branch to assign the new user */}
+              /* Only the SYSTEM ADMIN have a right to choose where branch to assign the new user *
               {payload.roleName === "System Admin" ? (
                 <FormField control={form.control} name="branchId" render={({ field }) => (
                   <FormItem>
@@ -215,7 +214,7 @@ const SignupForm = () => {
                 )} />
               ) : null}
             </React.Fragment>
-          ) : null}
+          ) : null} */}
 
           {/* System Admin has the right to choose where to assign those users */}
 

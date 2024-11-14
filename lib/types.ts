@@ -10,7 +10,7 @@ export const signupSchema = z
     confirmPassword: z.string().min(10, "Please confirm your password"),
     cpNum: z.string().min(11, "Minimum of 11 characters required"),
     roleId: z.string().min(1, "RoleId is required"),
-    branchId: z.string().min(1, "BranchId is required"),
+    // branchId: z.string().min(1, "BranchId is required"),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Password must match",
@@ -29,12 +29,12 @@ export type TLoginSchema = z.infer<typeof loginSchema>;
 
 // Branch schema
 export const branchSchema = z.object({
-  region: z.string(),
-  province: z.string(),
-  city: z.string(),
-  zipCode: z.string(),
-  baranggay: z.string(),
-  streetAddress: z.string(),
+  region: z.string().min(1, "Region are required."),
+  province: z.string().min(1, "Province are required."),
+  city: z.string().min(1, "City required."),
+  zipCode: z.string().min(1, "Zip code required."),
+  baranggay: z.string().min(1, "Baranggay required."),
+  streetAddress: z.string().min(1, "Street address required."),
   contactNumber: z.string().min(11, "Minimum number length is 11 characters."),
 });
 
@@ -42,7 +42,7 @@ export type TBranchSChema = z.infer<typeof branchSchema>;
 
 // Product schema with RawMaterials
 const recipeSchema = z.object({
-  id: z.string(),
+  // id: z.string(),
   rawMaterialId: z
     .string()
     .min(1, "Raw material should have a name")
@@ -51,15 +51,16 @@ const recipeSchema = z.object({
 });
 
 export const productSchema = z.object({
+  // imagePath: z.string().min(1),
   productName: z
     .string()
     .min(5, "Product name should have atleast 5 characters")
     .default(""),
   price: z.string().min(1, "Product should have a price").default(""),
   description: z.string().optional().default(""),
-  categoryId: z.string().default(""),
+  categoryId: z.string().min(1, "Category required").default(""),
 
-  // For raw materials
+  //   // For raw materials
   recipes: z
     .array(recipeSchema)
     .nonempty("At least one raw material is required"),
@@ -68,9 +69,12 @@ export const productSchema = z.object({
 export type TProductSchema = z.infer<typeof productSchema>;
 
 export const rawMaterialSchema = z.object({
-  rawMaterialName: z.string().min(1, "Raw material name required"),
-  quantityInUnitPerItem: z.string(),
-  rawPrice: z.string(),
+  materialName: z.string().min(1, "Raw material name required").default(""),
+  quantityInUnitPerItem: z
+    .string()
+    .min(1, "Raw material should have quantity")
+    .default(""),
+  rawPrice: z.string().min(1, "Raw material should have a price").default(""),
 });
 
 export type TRawMaterialSchema = z.infer<typeof rawMaterialSchema>;
