@@ -5,7 +5,7 @@ import FormContent from './FormContent'
 const page = () => {
   return (
     <div>
-      <BackLink href="/product" buttonTitle='Product list' />
+      <BackLink href="/view/products" buttonTitle='Product list' />
       <FormContent type='create' />
     </div>
   )

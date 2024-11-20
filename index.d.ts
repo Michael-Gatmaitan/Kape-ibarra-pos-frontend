@@ -1,11 +1,3 @@
-export interface IBranch {
-  id: string;
-  streetAddress: string;
-  baranggay: string;
-  city: string;
-  zipCode: number;
-}
-
 export interface IExpense {
   id: string;
   totalExpensesPerDayId: string;
@@ -14,7 +6,6 @@ export interface IExpense {
 
 export interface IInventory {
   id: string;
-  branchId: string;
   rawMaterialId: string;
   quantityInUnit: number;
   stockQuantity: number;
@@ -24,7 +15,6 @@ export interface IInventory {
 export interface IOrder {
   id: string;
   orderedAt: string;
-  branchId: string;
   userId: string;
   customerId: string;
   userNumber: string;
@@ -32,7 +22,7 @@ export interface IOrder {
   orderStatus: boolean;
 }
 
-export type OrderCreate = Pick<IOrder, "branchId" | "userId">;
+export type OrderCreate = Pick<IOrder, "userId">;
 
 export interface IOrderItem {
   id: string;
@@ -88,7 +78,6 @@ export interface IRole {
 }
 export interface ITotalExpensesPerDay {
   id: string;
-  branchId: string;
   days: number;
   date: string;
   totalExpenses: number;
@@ -96,14 +85,12 @@ export interface ITotalExpensesPerDay {
 export interface ITransaction {
   id: string;
   orderId: string;
-  branchId: string;
   paymentMethod: string;
   amountPaid: string;
 }
 export interface IUser {
   id: string;
   roleId: string;
-  branchId: string;
   firstname: string;
   lastname: string;
   cpNum: string;

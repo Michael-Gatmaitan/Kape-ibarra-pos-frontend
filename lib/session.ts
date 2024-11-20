@@ -22,3 +22,7 @@ export const verifySession = async (session: string) => {
 
   return payload;
 };
+
+export const logout = async () => {
+  cookies().delete("token");
+};

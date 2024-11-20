@@ -1,9 +1,9 @@
-// "use server";
-import { cookies } from "next/headers";
+// // "use server";
+// import { cookies } from "next/headers";
 
-export const getSessionToken = () => {
-  const token = cookies().get("token")?.value;
+// export const getSessionToken = () => {
+//   const token = cookies().get("token")?.value;
 
-  if (!token) return "No token";
-  return token;
-};
+//   if (!token) return "No token";
+//   return token;
+// };

@@ -2,7 +2,7 @@
 
 import React, { SyntheticEvent, useState } from "react";
 import CreateForm from "../CreateForm";
-import Image from "next/image";
+// import Image from "next/image";
 
 import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -35,7 +35,8 @@ import {
 } from "../../../components/ui/form";
 import { apiUrl } from "../../../lib/apiUrl";
 import { IProduct } from "../../..";
-
+import { revalidateViewsProduct } from "../../../actions/revalidate";
+// import { useToast } from "../../../@/hooks/use-toast";
 
 // UUID
 // import { v4 as uuidv4 } from "uuid";
@@ -74,6 +75,8 @@ const FormContent = ({
   const rawMaterials = useRawMaterial();
   const categories = useCategories();
 
+  // const toast = useToast();
+
   // States for confirmation of CREATED & UPDATED
 
   const form = useForm<TProductSchema>({
@@ -92,8 +95,6 @@ const FormContent = ({
   });
 
   const [imageUrl, setImageUrl] = useState<string>('');
-
-  console.log(categories);
 
   const createProduct = async (createProductReqBody: ICreateProductBody) => {
     try {
@@ -115,6 +116,8 @@ const FormContent = ({
 
       // successfully
       form.reset();
+      // router.back();
+      revalidateViewsProduct('/view/products');
     } catch (err) {
       console.log(err);
     }
@@ -135,6 +138,8 @@ const FormContent = ({
     }).then((res) => res.json());
 
     console.log("Updated product: ", updateProductReq);
+    // revalidatePath('/views/product');
+    revalidateViewsProduct('/view/products');
   };
 
   const deleteProduct = async (productId: string) => {
@@ -147,6 +152,7 @@ const FormContent = ({
 
     const res = await deleteReq.json();
     console.log(res);
+    revalidateViewsProduct('/view/products');
   };
 
   const [createSuccess, setCreateSuccess] = useState(false);
@@ -223,8 +229,7 @@ const FormContent = ({
     }
   };
 
-
-
+  // Handle uploading image
   const handleUploadImage = async (e: SyntheticEvent) => {
     e.preventDefault();
 
@@ -265,7 +270,7 @@ const FormContent = ({
       cardDescription={`${type === "create" ? "Create" : "Update"} Product`}
     >
 
-      <Image src="/uploads/1731163041423IMG_20240302_111608.jpg" alt="AS" width={50} height={50} />
+      {/* <Image src="/uploads/1731163041423IMG_20240302_111608.jpg" alt="AS" width={50} height={50} /> */}
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
@@ -275,14 +280,14 @@ const FormContent = ({
           <FormField
             // control={form.control}
             name="productImage"
-            render={({ field: { onChange, ...fieldProps } }) => (
+            render={({ field: { onChange } }) => (
               <FormItem>
                 <FormLabel>Product image</FormLabel>
                 <FormControl>
                   <Input
                     // className="bg-neutral-900"
                     type="file"
-                    {...fieldProps}
+                    // {...fieldProps}
                     accept="image/png, image/jpeg, image/jpg"
 
                     onChange={(event) => {

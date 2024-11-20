@@ -2,6 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { apiUrl } from "./apiUrl";
+import { ICategory } from "..";
+import { useAppSelector } from "./hooks";
+import { selectIsLoggedIn } from "./features/auth/authSlice";
 
 interface IRole {
   id: number;
@@ -23,36 +26,6 @@ export function useRoles() {
 
   return roles;
 }
-
-interface IBranch {
-  id: number;
-  region: string;
-  province: string;
-  city: string;
-  baranggay: string;
-  zipCode: string;
-  streetAddress: string;
-  contactNumber: string;
-}
-
-export function useBranch() {
-  const [branches, setBranches] = useState<IBranch[]>([]);
-
-  useEffect(() => {
-    const getBranches = async () => {
-      const result: IBranch[] = await fetch(`${apiUrl}/branch`).then((res) =>
-        res.json(),
-      );
-      console.log("Branches in hook: ", result);
-      setBranches(result);
-    };
-
-    getBranches();
-  }, []);
-
-  return branches;
-}
-
 interface IUserPayload {
   id: number;
   roleName: string;
@@ -103,7 +76,7 @@ export function useRawMaterial() {
 
 export function useCategories() {
   const [categories, setCategories] =
-    useState<{ id: number; categoryName: string }[]>();
+    useState<ICategory[]>();
 
   useEffect(() => {
     const getCategories = async () => {
@@ -119,4 +92,3 @@ export function useCategories() {
 
   return categories;
 }
-

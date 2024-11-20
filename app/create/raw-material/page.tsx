@@ -4,7 +4,7 @@ import FormContent from "./FormContent";
 const page = async () => {
   return (
     <div>
-      <BackLink href="/rawMaterials" buttonTitle="Raw material list" />
+      <BackLink href="/view/raw-materials" buttonTitle="Raw material list" />
       <FormContent type="create" />
     </div>
   );

@@ -18,6 +18,9 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
+import { useAppDispatch } from "../../lib/hooks";
+import { setLoggedIn, setUserData } from "../../lib/features/auth/authSlice";
+import { verifySession } from "../../lib/session";
 // import { redirect } from "next/navigation";
 
 const LoginForm = () => {
@@ -31,6 +34,8 @@ const LoginForm = () => {
       password: "",
     },
   });
+
+  const dispatch = useAppDispatch();
 
   const [loginErr, setLoginErr] = useState<string>("");
 
@@ -85,10 +90,18 @@ const LoginForm = () => {
     console.log(loginRes);
 
     if ("token" in loginRes) {
-      console.log(loginRes.token);
+      console.log("Loginres: ", loginRes.token);
+      const payload = await verifySession(loginRes.token);
+
+      if (payload.user.id && payload.roleName) {
+        dispatch(setLoggedIn(true));
+        dispatch(setUserData({ user: payload.user, roleName: payload.roleName }));
+        console.log('redux all set');
+      }
 
       // If there's a token in response, set it to locatstorage
       const { token } = loginRes;
+      console.log("Login token:", token);
 
       // Assign token
       (async function () {
@@ -103,7 +116,7 @@ const LoginForm = () => {
 
       // Route to login section base on role
       // for now for dev
-      router.replace('create/product-category');
+      router.push('/');
     } else {
       console.log(loginRes.error);
       setLoginErr(loginRes.error);

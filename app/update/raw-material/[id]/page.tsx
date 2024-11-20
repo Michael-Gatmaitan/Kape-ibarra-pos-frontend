@@ -19,7 +19,7 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
   return (
     <div>
       {id}
-      <BackLink href="/raw-material" buttonTitle="Raw material list" />
+      <BackLink href="/view/raw-materials" buttonTitle="Raw material list" />
 
       <FormContent type="update" rawMaterialDefaultValues={res} />
     </div>

@@ -22,6 +22,21 @@ export async function middleware(req: NextRequest) {
 
     console.log("Payload: ", payload);
 
+    // Validate all roles here
+    const url = req.url;
+
+    if (
+      url.includes("/view/") &&
+      ["Cashier", "Barista"].includes(payload.roleName)
+    ) {
+      console.log("hes a: ", payload.roleName);
+      if (payload.roleName === "Cashier") {
+        return NextResponse.redirect(new URL("/u/cashier/counter", req.url));
+      } else if (payload.roleName === "Barista") {
+        return NextResponse.redirect(new URL("/u/barista/orders", req.url));
+      }
+    }
+
     return NextResponse.next();
   } catch (error) {
     console.log(error);
@@ -30,5 +45,9 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config: MiddlewareConfig = {
-  matcher: ["/create"],
+  matcher: [
+    "/create/((?!general).*)",
+    "/view/((?!general).*)",
+    "/update/((?!general).*)",
+  ],
 };

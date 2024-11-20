@@ -16,6 +16,7 @@ import {
 import { Input } from "../../../components/ui/input";
 import { Button } from "../../../components/ui/button";
 import { apiUrl } from "../../../lib/apiUrl";
+import { revalidateViewsProduct } from "../../../actions/revalidate";
 
 interface IRawMaterialBody {
   materialName: string;
@@ -69,6 +70,7 @@ const FormContent = ({
         form.setError("materialName", { message: res.error });
       }
       console.log("Raw material created successfully");
+      revalidateViewsProduct('/view/raw-materials');
     } catch (err) {
       console.log(err);
     }
@@ -96,6 +98,7 @@ const FormContent = ({
     if (updateRawMaterialReq?.id) {
       console.log("Raw material updated successfully");
     }
+    revalidateViewsProduct('/view/raw-materials');
   };
 
   const deleteRawMaterial = async (rawMaterialId: string) => {
@@ -109,6 +112,7 @@ const FormContent = ({
       },
     );
     console.log(deletedRawMaterial);
+    revalidateViewsProduct('/view/raw-materials');
   };
 
   const onSubmit = async (data: TRawMaterialSchema) => {
