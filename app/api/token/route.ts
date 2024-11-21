@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
 
   if (!token) return Response.json({ error: "Invalid token" });
 
-  console.log("setting token");
+  console.log("setting token", token);
   await createSession(token);
 
   return Response.json({ message: "Token set successfully" });
@@ -17,7 +17,7 @@ export async function GET() {
   const token = cookies().get("token")?.value;
   const payload = await verifySession(token);
 
-  if (!payload.user.id) {
+  if (!payload.employee.id) {
     return Response.json({ error: "No user found" });
   }
 

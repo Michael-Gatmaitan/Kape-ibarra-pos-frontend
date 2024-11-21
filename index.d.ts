@@ -86,9 +86,15 @@ export interface ITransaction {
   id: string;
   orderId: string;
   paymentMethod: string;
-  amountPaid: string;
+  amountPaid: number;
+  change: number;
+  totalTendered: number;
+  paymentMethod: string;
+  totalAmount: number;
+  vatAmount?: number;
+  vatableSales: number;
 }
-export interface IUser {
+export interface IEmployee {
   id: string;
   roleId: string;
   firstname: string;

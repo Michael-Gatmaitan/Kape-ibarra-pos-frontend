@@ -1,7 +1,7 @@
 "use server";
 import { cookies } from "next/headers";
 import { jwtVerify } from "jose";
-import { IUser } from "..";
+import { IEmployee } from "..";
 
 export const createSession = async (token: string) => {
   cookies().set("token", token, {
@@ -17,7 +17,7 @@ export const createSession = async (token: string) => {
 export const verifySession = async (session: string) => {
   const SECRET_KEY = process.env.SECRET_KEY;
   const encodeKey = new TextEncoder().encode(SECRET_KEY);
-  const { payload }: { payload: { user: IUser; roleName: string } } =
+  const { payload }: { payload: { employee: IEmployee; roleName: string } } =
     await jwtVerify(session, encodeKey);
 
   return payload;

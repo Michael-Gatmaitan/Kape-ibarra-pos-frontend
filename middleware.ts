@@ -16,6 +16,8 @@ export async function middleware(req: NextRequest) {
   try {
     const payload = await verifySession(token);
 
+    console.log(payload.roleName);
+
     // If there's no roleId in payload decrypted
     if (!payload.roleName)
       return NextResponse.redirect(new URL("/login", req.url));
@@ -47,7 +49,8 @@ export async function middleware(req: NextRequest) {
 export const config: MiddlewareConfig = {
   matcher: [
     "/create/((?!general).*)",
-    "/view/((?!general).*)",
     "/update/((?!general).*)",
+    "/view/((?!general).*)",
+    "/u/((?!general).*)",
   ],
 };

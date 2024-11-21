@@ -9,7 +9,7 @@ export const signupSchema = z
     password: z.string().min(10, "Password is must be at least 10 characters"),
     confirmPassword: z.string().min(10, "Please confirm your password"),
     cpNum: z.string().min(11, "Minimum of 11 characters required"),
-    roleId: z.string().min(1, "RoleId is required"),
+    // roleId: z.string().min(1, "RoleId is required").optional(),
     // branchId: z.string().min(1, "BranchId is required"),
   })
   .refine((data) => data.password === data.confirmPassword, {
@@ -26,19 +26,6 @@ export const loginSchema = z.object({
 });
 
 export type TLoginSchema = z.infer<typeof loginSchema>;
-
-// Branch schema
-export const branchSchema = z.object({
-  region: z.string().min(1, "Region are required."),
-  province: z.string().min(1, "Province are required."),
-  city: z.string().min(1, "City required."),
-  zipCode: z.string().min(1, "Zip code required."),
-  baranggay: z.string().min(1, "Baranggay required."),
-  streetAddress: z.string().min(1, "Street address required."),
-  contactNumber: z.string().min(11, "Minimum number length is 11 characters."),
-});
-
-export type TBranchSChema = z.infer<typeof branchSchema>;
 
 // Product schema with RawMaterials
 const recipeSchema = z.object({

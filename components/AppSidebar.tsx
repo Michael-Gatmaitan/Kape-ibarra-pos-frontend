@@ -1,5 +1,5 @@
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarSeparator } from './ui/sidebar'
-import { ChartBarStacked, Home, Logs, LucideProps, Milk, Monitor, ShoppingBasket, User, Users } from 'lucide-react'
+import { ChartBarStacked, Home, Logs, LucideProps, Milk, Monitor, NotebookPen, ShoppingBasket, User, Users } from 'lucide-react'
 import Link from 'next/link'
 
 import SwitchMode from './SwitchMode'
@@ -44,6 +44,10 @@ const items: ISidebarItems = {
     title: "Customer accounts",
     url: "/view/customers",
     icon: Users
+  }, {
+    title: "Transaction",
+    url: "/view/transactions",
+    icon: NotebookPen
   }],
 
   cashier: [{
@@ -63,7 +67,7 @@ const AppSidebar = async () => {
   const payload = await getUserPayloadServer();
   console.log("Sidebar: payload checked");
 
-  if (!payload?.user?.id) {
+  if (!payload?.employee?.id) {
     return (
       <nav>Nav for not logged in</nav>
     )
@@ -101,7 +105,7 @@ const AppSidebar = async () => {
       <SidebarContent>
 
         {/* Group for track / ADMIN */}
-        {payload.roleName === "System Admin" &&
+        {payload.roleName === "Admin" &&
           <CustomSidebarGroup
             label="Admin / Track"
             items={items.admin}
@@ -111,7 +115,7 @@ const AppSidebar = async () => {
         <SidebarSeparator />
 
         {/* Group for CASHIER */}
-        {(payload.roleName === "System Admin" || payload.roleName === "Cashier") &&
+        {(payload.roleName === "Admin" || payload.roleName === "Cashier") &&
           <CustomSidebarGroup label='Cashier' items={items.cashier} />
         }
 

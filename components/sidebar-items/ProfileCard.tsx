@@ -12,11 +12,11 @@ const ProfileCard = async () => {
     <Card className='p-2 flex gap-2 items-center'>
       <Avatar>
         <AvatarImage src='/img/remvo.png' alt="mama_mo" />
-        <AvatarFallback>{payload.user.lastname}</AvatarFallback>
+        <AvatarFallback>{payload.employee.lastname}</AvatarFallback>
       </Avatar>
 
       <div className="infos">
-        <div className="name font-bold">{payload.user.firstname}</div>
+        <div className="name font-bold">{payload.employee.firstname}</div>
         <Label className="font-medium text">{payload.roleName}</Label>
       </div>
     </Card>

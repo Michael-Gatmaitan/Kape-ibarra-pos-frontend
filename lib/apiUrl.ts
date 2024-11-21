@@ -1,1 +1,1 @@
-export const apiUrl = "http://localhost:9999";
+export const apiUrl = process.env.MYAPIURL || "http://localhost:9999";

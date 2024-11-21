@@ -27,9 +27,10 @@ const SignupForm = () => {
       username: "",
       password: "",
       confirmPassword: "",
-      roleId: ""
     }
   });
+
+  console.log('wtf')
 
   const onSubmit = async (data: TSignupSchema) => {
     console.log(data);
@@ -63,6 +64,8 @@ const SignupForm = () => {
         form.setError("password", { type: 'server', message: errors.password });
       } else if (errors.confirmPassword) {
         form.setError("confirmPassword", { type: 'server', message: errors.confirmPassword });
+      } else if (errors.cpNum) {
+        form.setError("cpNum", { type: 'server', message: errors.cpNum });
       } else {
         console.error("something went wrong!")
       }
@@ -70,7 +73,6 @@ const SignupForm = () => {
 
     // If there's no error, call an api to create a account
     // ... and navigate the user to login page
-
 
     const { confirmPassword, ...dataWOConfirmPassword } = data;
 
@@ -132,7 +134,7 @@ const SignupForm = () => {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input type="password" placeholder='Password' {...field} />
+                <Input type="password" placeholder='Password' autoComplete='on' {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -141,9 +143,9 @@ const SignupForm = () => {
           {/* CONFIRM PASSWORD */}
           <FormField control={form.control} name="confirmPassword" render={({ field }) => (
             <FormItem>
-              <FormLabel>Conform password</FormLabel>
+              <FormLabel>Confirm password</FormLabel>
               <FormControl>
-                <Input type="password" placeholder='Confirm password' {...field} />
+                <Input type="password" placeholder='Confirm password' autoComplete='on' {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -217,7 +219,12 @@ const SignupForm = () => {
           ) : null} */}
 
           {/* System Admin has the right to choose where to assign those users */}
-
+          {/* {form.formState.errors.firstname}
+          {form.formState.errors.lastname}
+          {form.formState.errors.username}
+          {form.formState.errors.password}
+          {form.formState.errors.confirmPassword}
+          {form.formState.errors.roleId} */}
           <Button type='submit' disabled={form.formState.isSubmitting}>Create account</Button>
         </form>
       </Form>

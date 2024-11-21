@@ -12,8 +12,12 @@ const config: Config = {
       gridTemplateColumns: {
         // 'order': 'minmax(600px, 1fr)'
         order: "60% 40%",
-        orderItem: "repeat(2, minmax(50px, 1fr))",
+        // orderItem: "repeat(2, minmax(100px, auto))",
+        orderItem: "minmax(auto, 100px) auto",
         autoFitProduct: "repeat(auto-fill, minmax(200px, 1fr))",
+      },
+      gridTemplateRows: {
+        orderSection: "1fr auto",
       },
       colors: {
         background: "hsl(var(--background))",

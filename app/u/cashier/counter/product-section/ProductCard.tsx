@@ -27,16 +27,15 @@ const ProductCard = (props: IProductCardProps) => {
 
   const handleProductSelect = () => {
     // check if order is already in cart
-
     dispatch(handleOrderItem({ productId: id, categoryName, imagePath, productName, price }));
     setSelected(!selected);
   }
 
 
   return (
-    <Card onClick={handleProductSelect} className={`${selected ? "bg-red-600" : ''}`}>
+    <Card onClick={handleProductSelect} className={`${selected ? "bg-secondary" : ''}`}>
       <CardHeader className='p-2'>
-        <AspectRatio ratio={1 / 1} className='bg-primary rounded-md'>
+        <AspectRatio ratio={1 / 1} className='bg-[#D5DAE0] rounded-md'>
           <Image src={imagePath} alt={id} fill className="h-full w-full rounded-md object-cover" />
         </AspectRatio>
       </CardHeader>
@@ -50,7 +49,7 @@ const ProductCard = (props: IProductCardProps) => {
           <div className="text-sm font-medium">₱ {price}</div>
         </div>
       </CardContent>
-    </Card >
+    </Card>
   )
 }
 

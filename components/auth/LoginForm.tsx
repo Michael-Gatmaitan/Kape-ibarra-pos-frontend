@@ -21,6 +21,7 @@ import {
 import { useAppDispatch } from "../../lib/hooks";
 import { setLoggedIn, setUserData } from "../../lib/features/auth/authSlice";
 import { verifySession } from "../../lib/session";
+import Link from "next/link";
 // import { redirect } from "next/navigation";
 
 const LoginForm = () => {
@@ -93,9 +94,9 @@ const LoginForm = () => {
       console.log("Loginres: ", loginRes.token);
       const payload = await verifySession(loginRes.token);
 
-      if (payload.user.id && payload.roleName) {
+      if (payload.employee.id && payload.roleName) {
         dispatch(setLoggedIn(true));
-        dispatch(setUserData({ user: payload.user, roleName: payload.roleName }));
+        dispatch(setUserData({ employee: payload.employee, roleName: payload.roleName }));
         console.log('redux all set');
       }
 
@@ -175,6 +176,12 @@ const LoginForm = () => {
 
         {loginErr}
       </Form>
+
+      <Button type="button" variant="ghost" className="mt-2 w-full" asChild>
+        <Link href="/signup">
+          Dont have account? Sign up here!
+        </Link>
+      </Button>
     </AuthForm>
   );
 };

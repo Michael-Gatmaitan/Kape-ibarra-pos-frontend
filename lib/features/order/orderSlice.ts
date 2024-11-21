@@ -17,6 +17,11 @@ interface OrderState {
   orderBody: {
     userId: string;
   };
+
+  totalAmount: number;
+  totalTendered: number;
+  change: number;
+
   orderItemsBody: {
     [key: string]: OrderItems;
   };
@@ -31,12 +36,12 @@ const initialState = {
   orderBody: {
     userId: "",
   },
+
+  totalAmount: 0,
+  totalTendered: 0,
+  change: 0,
+
   orderItemsBody: {},
-  // transactionBody: {
-  //   amountPaid: undefined,
-  //   paymentMethod: undefined,
-  //   branchId: undefined,
-  // },
 } satisfies OrderState as OrderState;
 
 const orderSlice = createSlice({
@@ -67,9 +72,12 @@ const orderSlice = createSlice({
           productName,
           price,
         };
+
+        state.totalAmount += price;
       } else {
         delete state.orderItemsBody[productId];
         console.log("Order item removed successfully");
+        state.totalAmount -= price;
       }
     },
     handleOrderItemQuantity(
@@ -80,8 +88,10 @@ const orderSlice = createSlice({
 
       if (type === "inc") {
         state.orderItemsBody[productId].quantity += 1;
+        state.totalAmount += state.orderItemsBody[productId].price;
       } else {
         state.orderItemsBody[productId].quantity -= 1;
+        state.totalAmount -= state.orderItemsBody[productId].price;
       }
 
       const { price, quantity } = state.orderItemsBody[productId];
@@ -96,17 +106,37 @@ const orderSlice = createSlice({
     clearOrderItems(state: OrderState) {
       state.orderItemsBody = {};
     },
+
+    setTotalTendered(state: OrderState, action: PayloadAction<number>) {
+      state.totalTendered = action.payload;
+    },
+
+    deleteOrderItem(
+      state: OrderState,
+      action: PayloadAction<{ productId: string }>
+    ) {
+      const { productId } = action.payload;
+      delete state.orderItemsBody[productId];
+    },
   },
 });
 
 export const selectOrderItemsBody = (state: RootState) =>
   state.orderReducer.orderItemsBody;
 
+export const selectTotalAmount = (state: RootState) =>
+  state.orderReducer.totalAmount;
+
+export const selectTotalTendered = (state: RootState) =>
+  state.orderReducer.totalTendered;
+
 export const {
   handleOrderItem,
   handleOrderItemQuantity,
   setQuantityAmount,
   clearOrderItems,
+  setTotalTendered,
+  deleteOrderItem,
 } = orderSlice.actions;
 
 export default orderSlice.reducer;

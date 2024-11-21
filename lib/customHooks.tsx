@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { apiUrl } from "./apiUrl";
-import { ICategory } from "..";
+import { ICategory, IEmployee } from "..";
 
 interface IRole {
   id: number;
@@ -25,7 +25,7 @@ export function useRoles() {
   return roles;
 }
 interface IUserPayload {
-  id: number;
+  employee: IEmployee,
   roleName: string;
 }
 
