@@ -3,8 +3,6 @@
 import { useEffect, useState } from "react";
 import { apiUrl } from "./apiUrl";
 import { ICategory } from "..";
-import { useAppSelector } from "./hooks";
-import { selectIsLoggedIn } from "./features/auth/authSlice";
 
 interface IRole {
   id: number;

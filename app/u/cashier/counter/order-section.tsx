@@ -26,7 +26,7 @@ const OrderSection = () => {
 
       <CardContent className='p-0 grid gap-2  '>
         {Object.keys(orderItems).map(productId => (
-          <OrderItem orderItem={orderItems[productId]} />
+          <OrderItem orderItem={orderItems[productId]} key={productId} />
         ))}
       </CardContent>
 

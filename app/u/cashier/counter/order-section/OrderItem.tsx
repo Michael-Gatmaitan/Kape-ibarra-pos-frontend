@@ -10,7 +10,7 @@ import { useAppDispatch } from '../../../../../lib/hooks';
 
 const OrderItem = (props: { orderItem: OrderItems }) => {
   const { orderItem } = props;
-  const { productId, productName, quantity, quantityAmount, price, categoryName, imagePath } = orderItem;
+  const { productId, productName, quantity, quantityAmount, categoryName, imagePath } = orderItem;
 
   const dispatch = useAppDispatch();
 
