@@ -3,6 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { ITransaction } from "../../..";
 import Link from "next/link";
+import { Button } from "../../../components/ui/button";
 
 export const columns: ColumnDef<ITransaction>[] = [
   {
@@ -16,18 +17,22 @@ export const columns: ColumnDef<ITransaction>[] = [
     header: "Order id",
     cell: ({ row }) => {
       const value = row.getValue('orderId').toString();
-      return (<Link href={`/order?id=${value}`}>
-        {value}
-      </Link>)
+      return (
+        <Button variant="outline">
+          <Link href={`/u/cashier/orders/${value}`}>
+            <span className="w-16 overflow-hidden whitespace-nowrap block text-ellipsis">{value}</span>
+          </Link>
+        </Button>
+      )
     }
   }, {
     accessorKey: 'paymentMethod',
     header: "Payment method",
     cell: ({ row }) => <div>{row.getValue('paymentMethod')}</div>
   }, {
-    accessorKey: 'amountPaid',
+    accessorKey: 'totalAmount',
     header: "Amount paid",
-    cell: ({ row }) => <div>{row.getValue('amountPaid')}</div>
+    cell: ({ row }) => <div>{row.getValue('totalAmount')}</div>
   }, {
     accessorKey: 'change',
     header: "Change",
@@ -35,7 +40,7 @@ export const columns: ColumnDef<ITransaction>[] = [
   }, {
     accessorKey: 'totalTendered',
     header: "Total tendered",
-    cell: ({ row }) => <div>{row.getValue('change')}</div>
+    cell: ({ row }) => <div>{row.getValue('totalTendered')}</div>
   }
   // }, {
   //   accessorKey: 'vatAmount',

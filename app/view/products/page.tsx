@@ -16,7 +16,6 @@ const page = async () => {
   }
 
   const products: IProduct[] & { category: ICategory } = await productsReq.json();
-
   return (
     <div>
       <Head>

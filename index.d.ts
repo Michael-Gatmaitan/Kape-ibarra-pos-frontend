@@ -19,7 +19,9 @@ export interface IOrder {
   customerId: string;
   userNumber: string;
   totalPrice: number;
-  orderStatus: boolean;
+  proofOfPaymentImg?: string;
+  orderType: "walk-in" | "online";
+  orderStatus: "preparing" | "payment pending" | "ready to pickup" | "rejected";
 }
 
 export type OrderCreate = Pick<IOrder, "userId">;
@@ -86,7 +88,6 @@ export interface ITransaction {
   id: string;
   orderId: string;
   paymentMethod: string;
-  amountPaid: number;
   change: number;
   totalTendered: number;
   paymentMethod: string;

@@ -273,37 +273,40 @@ const FormContent = ({
       {/* <Image src="/uploads/1731163041423IMG_20240302_111608.jpg" alt="AS" width={50} height={50} /> */}
 
       <Form {...form}>
+        {/* <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4 grid-cols-2"> */}
         <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
 
           {/* PRODUCT NAME */}
 
-          <FormField
-            // control={form.control}
-            name="productImage"
-            render={({ field: { onChange } }) => (
-              <FormItem>
-                <FormLabel>Product image</FormLabel>
-                <FormControl>
-                  <Input
-                    // className="bg-neutral-900"
-                    type="file"
-                    // {...fieldProps}
-                    accept="image/png, image/jpeg, image/jpg"
+          <div className="w-full grid gap-2">
+            <FormField
+              // control={form.control}
+              name="productImage"
+              render={({ field: { onChange } }) => (
+                <FormItem>
+                  <FormLabel>Product image</FormLabel>
+                  <FormControl>
+                    <Input
+                      // className="bg-neutral-900"
+                      type="file"
+                      // {...fieldProps}
+                      accept="image/png, image/jpeg, image/jpg"
 
-                    onChange={(event) => {
-                      onChange(event.target.files && event.target.files[0])
-                      console.log(event.target.files && event.target.files[0]);
-                      setFile(event.target.files && event.target.files[0])
-                    }
-                    }
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+                      onChange={(event) => {
+                        onChange(event.target.files && event.target.files[0])
+                        console.log(event.target.files && event.target.files[0]);
+                        setFile(event.target.files && event.target.files[0])
+                      }
+                      }
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <Button type="button" onClick={handleUploadImage} disabled={type === "create" && uploaded || !file}>Upload</Button>
+            <Button type="button" onClick={handleUploadImage} disabled={type === "create" && uploaded || !file}>Upload</Button>
+          </div>
 
           <FormField
             control={form.control}
@@ -385,7 +388,6 @@ const FormContent = ({
 
           {/* {errors.root && <Label>{errors.root.message}</Label>}
           {errors.rawMaterials && <Label className="text-red-500">{errors.rawMaterials.message}</Label>} */}
-
           {/* Raw materials */}
           {fields.map((item, index) => (
             <Card key={index}>

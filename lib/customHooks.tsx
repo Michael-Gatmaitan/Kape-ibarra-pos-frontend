@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { apiUrl } from "./apiUrl";
 import { ICategory, IEmployee } from "..";
+import { useToast } from "../@/hooks/use-toast";
 
 interface IRole {
   id: number;
@@ -89,4 +90,13 @@ export function useCategories() {
   }, []);
 
   return categories;
+}
+
+export function useCreateToast(title: string, description: string) {
+  const { toast } = useToast();
+
+  return toast({
+    title,
+    description
+  })
 }

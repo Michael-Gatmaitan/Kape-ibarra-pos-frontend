@@ -1,12 +1,15 @@
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarSeparator } from './ui/sidebar'
-import { ChartBarStacked, Home, Logs, LucideProps, Milk, Monitor, NotebookPen, ShoppingBasket, User, Users } from 'lucide-react'
+import { ChartBarStacked, Home, Logs, LucideProps, Milk, Monitor, NotebookPen, Plus, ShoppingBasket, User, Users } from 'lucide-react'
 import Link from 'next/link'
 
 import SwitchMode from './SwitchMode'
 import LogoutButton from './sidebar-items/LogoutButton'
-import { ForwardRefExoticComponent, RefAttributes } from 'react'
+import React, { ForwardRefExoticComponent, RefAttributes } from 'react'
 import ProfileCard from './sidebar-items/ProfileCard'
 import { getUserPayloadServer } from '../actions/serverActions';
+import { ScrollArea } from './ui/scroll-area'
+// import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu'
+// import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './ui/collapsible'
 
 interface IItem {
   title: string,
@@ -15,6 +18,7 @@ interface IItem {
 }
 interface ISidebarItems {
   admin: IItem[],
+  create: IItem[],
   cashier: IItem[],
 }
 
@@ -50,13 +54,27 @@ const items: ISidebarItems = {
     icon: NotebookPen
   }],
 
+  create: [{
+    title: "Create product",
+    url: "/create/product",
+    icon: Plus
+  }, {
+    title: "Create category",
+    url: "/create/category",
+    icon: Plus
+  }, {
+    title: "Create raw materials",
+    url: "/create/raw-material",
+    icon: Plus
+  }],
+
   cashier: [{
     title: "Counter",
     url: "/u/cashier/counter",
     icon: Monitor
   }, {
     title: "List of orders",
-    url: "/u/orders",
+    url: "/u/cashier/orders",
     icon: Logs
   }]
 }
@@ -103,22 +121,30 @@ const AppSidebar = async () => {
       </SidebarHeader>
 
       <SidebarContent>
+        <ScrollArea>
 
-        {/* Group for track / ADMIN */}
-        {payload.roleName === "Admin" &&
-          <CustomSidebarGroup
-            label="Admin / Track"
-            items={items.admin}
-          />
-        }
+          {/* Group for track / ADMIN */}
+          {payload.roleName === "Admin" &&
+            (
+              <React.Fragment>
+                <CustomSidebarGroup
+                  label="Admin / Track"
+                  items={items.admin}
+                />
+                <CustomSidebarGroup label='Create' items={items.create} />
+              </React.Fragment>)
+          }
 
-        <SidebarSeparator />
+          {/* Section for creating */}
 
-        {/* Group for CASHIER */}
-        {(payload.roleName === "Admin" || payload.roleName === "Cashier") &&
-          <CustomSidebarGroup label='Cashier' items={items.cashier} />
-        }
+          <SidebarSeparator />
 
+          {/* Group for CASHIER */}
+          {(payload.roleName === "Admin" || payload.roleName === "Cashier") &&
+            <CustomSidebarGroup label='Cashier' items={items.cashier} />
+          }
+
+        </ScrollArea>
       </SidebarContent>
 
       <SidebarFooter>

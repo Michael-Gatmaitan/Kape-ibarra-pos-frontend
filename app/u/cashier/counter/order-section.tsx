@@ -10,7 +10,7 @@ import { clearOrderItems, selectOrderItemsBody, selectTotalAmount, selectTotalTe
 import { Separator } from '../../../../components/ui/separator';
 import { Input } from '../../../../components/ui/input';
 import { apiUrl } from '../../../../lib/apiUrl';
-import { getUserPayloadServer } from '../../../../actions/serverActions';
+// import { getUserPayloadServer } from '../../../../actions/serverActions';
 import { useUserPayload } from '../../../../lib/customHooks';
 
 const OrderSection = () => {
@@ -56,7 +56,7 @@ const OrderSection = () => {
 
     const reqBody = {
       orderBody: {
-        employeeId: payload.employee.id
+        employeeId: payload.employee.id,
       },
       orderItemsBody: mappedOrderItems,
       transactionBody: {

@@ -9,6 +9,7 @@ export const createSession = async (token: string) => {
     secure: true,
     sameSite: "lax",
     path: "/",
+    expires: 3600000 * 24 * 14,
   });
 
   console.log("token set successfully");

@@ -16,6 +16,9 @@ export interface OrderItems {
 interface OrderState {
   orderBody: {
     userId: string;
+    status: "" | "preparing" | "payment_pending" | "rejected";
+    orderType: "walk-in" | "online";
+    customerId?: string;
   };
 
   totalAmount: number;
@@ -25,16 +28,26 @@ interface OrderState {
   orderItemsBody: {
     [key: string]: OrderItems;
   };
-  // transactionBody: {
-  //   amountPaid: number | undefined;
-  //   paymentMethod: string | undefined;
-  //   branchId: number | undefined;
-  // };
+}
+
+interface OrderItemPayload {
+  productId: string;
+  categoryName: string;
+  imagePath: string;
+  productName: string;
+  price: number;
+}
+
+interface OrderItemQuantityPayload {
+  productId: string;
+  type: "inc" | "dec";
 }
 
 const initialState = {
   orderBody: {
     userId: "",
+    status: "",
+    orderType: "walk-in",
   },
 
   totalAmount: 0,
@@ -50,27 +63,16 @@ const orderSlice = createSlice({
   reducers: {
     handleOrderItem(
       state: OrderState,
-      action: PayloadAction<{
-        productId: string;
-        categoryName: string;
-        imagePath: string;
-        productName: string;
-        price: number;
-      }>
+      action: PayloadAction<OrderItemPayload>
     ) {
-      const { productId, categoryName, imagePath, productName, price } =
-        action.payload;
+      const { productId, price } = action.payload;
       const orderItem: OrderItems | null = state.orderItemsBody[productId];
 
       if (!orderItem) {
         state.orderItemsBody[productId] = {
-          productId,
           quantity: 1,
           quantityAmount: 1 * price,
-          categoryName,
-          imagePath,
-          productName,
-          price,
+          ...action.payload,
         };
 
         state.totalAmount += price;
@@ -82,7 +84,7 @@ const orderSlice = createSlice({
     },
     handleOrderItemQuantity(
       state: OrderState,
-      action: PayloadAction<{ productId: string; type: "inc" | "dec" }>
+      action: PayloadAction<OrderItemQuantityPayload>
     ) {
       const { productId, type } = action.payload;
 
@@ -106,17 +108,19 @@ const orderSlice = createSlice({
     clearOrderItems(state: OrderState) {
       state.orderItemsBody = {};
     },
-
     setTotalTendered(state: OrderState, action: PayloadAction<number>) {
       state.totalTendered = action.payload;
     },
-
     deleteOrderItem(
       state: OrderState,
       action: PayloadAction<{ productId: string }>
     ) {
       const { productId } = action.payload;
       delete state.orderItemsBody[productId];
+    },
+
+    setCustomerId(state: OrderState, action: PayloadAction<string>) {
+      state.orderBody.customerId = action.payload;
     },
   },
 });
@@ -137,6 +141,7 @@ export const {
   clearOrderItems,
   setTotalTendered,
   deleteOrderItem,
+  setCustomerId,
 } = orderSlice.actions;
 
 export default orderSlice.reducer;

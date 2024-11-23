@@ -81,3 +81,19 @@ export const categorySchema = z.object({
 });
 
 export type TCategorySchema = z.infer<typeof categorySchema>;
+
+export const customerSchema = z.object({
+  email: z.string().min(1, "Email required").email(),
+  firstname: z.string().min(1, "Username required"),
+  lastname: z.string().min(1, "Lastname required"),
+  phoneNumber: z.string().min(1, "Phone number required or optional"),
+  username: z.string().min(5, "Minimum of 5 characters required"),
+  password: z.string().min(8, "Minimum of 8 characters"),
+});
+
+export type TCustomerSchema = z.infer<typeof customerSchema>;
+
+type IErr = { message: string };
+export function isErrorMessage<T>(res: T | IErr): res is IErr {
+  return (res as IErr).message !== undefined;
+}
