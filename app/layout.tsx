@@ -9,7 +9,7 @@ import AppNavbar from "../components/AppNavbar";
 // import AppNavbar from "../components/AppNavbar";
 // import { ModeToggle } from "../components/toggler";
 import { Poppins } from 'next/font/google';
-import { ScrollArea } from "../components/ui/scroll-area";
+import { Toaster } from "../components/ui/toaster";
 
 const poppins = Poppins({ subsets: ['latin'], weight: ["400", "500", "600", "700", "800", "900"] });
 
@@ -57,9 +57,11 @@ export default async function RootLayout({
               {/* <ModeToggle /> */}
               <AppNavbar />
               {/* my-9 mx-4 lg:mx-12 xl:mx-40 */}
-              <ScrollArea className="w-full px-4 my-4 lg:px-10 xl:px-14 2xl:px-20">
+              <div className="w-full px-4 my-4 lg:px-10 xl:px-14 2xl:px-20">
                 {children}
-              </ScrollArea>
+              </div>
+
+              <Toaster />
             </SidebarProvider>
           </ThemeProvider>
         </StoreProvider>

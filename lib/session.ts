@@ -4,12 +4,14 @@ import { jwtVerify } from "jose";
 import { IEmployee } from "..";
 
 export const createSession = async (token: string) => {
+  const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+
   cookies().set("token", token, {
     httpOnly: true,
     secure: true,
     sameSite: "lax",
     path: "/",
-    expires: 3600000 * 24 * 14,
+    expires: expiresAt,
   });
 
   console.log("token set successfully");

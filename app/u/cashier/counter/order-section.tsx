@@ -1,6 +1,6 @@
 "use client";
 import { EyeClosed } from 'lucide-react';
-import React, { FormEvent, useDeferredValue, useEffect, useState } from 'react'
+import React, { FormEvent, SetStateAction, useDeferredValue, useEffect, useState } from 'react'
 import { Button } from '../../../../components/ui/button';
 import { useAppDispatch, useAppSelector } from '../../../../lib/hooks';
 import { selectShowOrderSection, toggleShowOrderSection } from '../../../../lib/features/state/stateSlice';
@@ -12,11 +12,14 @@ import { Input } from '../../../../components/ui/input';
 import { apiUrl } from '../../../../lib/apiUrl';
 // import { getUserPayloadServer } from '../../../../actions/serverActions';
 import { useUserPayload } from '../../../../lib/customHooks';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '../../../../components/ui/select';
+import { useToast } from '../../../../@/hooks/use-toast';
 
 const OrderSection = () => {
   const showOrderSection = useAppSelector(selectShowOrderSection);
   const orderItems = useAppSelector(selectOrderItemsBody);
   const dispatch = useAppDispatch();
+  const { toast } = useToast();
 
   const payload = useUserPayload();
 
@@ -57,6 +60,8 @@ const OrderSection = () => {
     const reqBody = {
       orderBody: {
         employeeId: payload.employee.id,
+        orderStatus: "preparing",
+        orderType: "walk-in"
       },
       orderItemsBody: mappedOrderItems,
       transactionBody: {
@@ -77,13 +82,28 @@ const OrderSection = () => {
       body: JSON.stringify(reqBody)
     });
 
+    if (!req.ok) {
+      console.log("There was a problem submitting order");
+      toast({ title: "Order failed", description: "Kindly call the developers for reports.", })
+      return;
+    }
+
     const result = await req.json();
     console.log("Order in client: ", result);
+
+    // Toast for submitting order
+    toast({
+      title: "Order successful",
+      description: "New order has been recorded.",
+    });
+    dispatch(clearOrderItems());
   }
 
   return (
     // className='absolute md:static top-0 l-0 w-screen h-screen bg-black'
-    <Card className={`w-full h-screen md:w-full md:h-auto md:static fixed z-50 p-4 top-0 left-0 rounded-none ${showOrderSection ? "grid" : "hidden"} grid-rows-orderSection overflow-auto`}>
+    <Card className={`
+      w-full h-screen z-50 p-4 top-0 left-0 rounded-none ${showOrderSection ? "grid" : "hidden"} fixed
+      md:w-full md:h-auto md:min-h-full md:static md:grid md:rounded-md grid-rows-orderSection overflow-auto`}>
 
       {/* <header className='flex w-full'>
         <div className=""></div>
@@ -92,8 +112,14 @@ const OrderSection = () => {
         </Button>
       </header> */}
 
-      <CardContent className='p-0 grid gap-2'>
-        {Object.keys(orderItems).map(productId => (
+      {/* <header className="w-full py-4 bg-red-500">
+        Hello
+      </header> */}
+
+      <CardContent className='p-0 flex flex-col gap-2'>
+        {Object.keys(orderItems).length <= 0 ? (
+          <div>No product selected.</div>
+        ) : Object.keys(orderItems).map(productId => (
           <OrderItem orderItem={orderItems[productId]} key={productId} />
         ))}
       </CardContent>
@@ -131,32 +157,38 @@ const OrderSection = () => {
 
         <Separator />
 
-        <div className="grid gap-2 py-4">
-          <div className="text-lg">Payment method</div>
-          <div className="grid grid-cols-2 gap-2">
-            <Button variant={paymentMethod === "cash" ? 'default' : 'outline'} onClick={() => setPaymentMethod('cash')}>Cash</Button>
-            <Button variant={paymentMethod === "gcash" ? 'default' : 'outline'} onClick={() => setPaymentMethod('gcash')}>GCash</Button>
-          </div>
+        <div className="w-full flex gap-2 justify-between py-4">
+          <Select onValueChange={(e: typeof paymentMethod) => setPaymentMethod(e)} defaultValue={paymentMethod}>
+            <SelectTrigger>
+              <SelectValue placeholder="Select payment method" />
+            </SelectTrigger>
+
+            <SelectContent>
+              <SelectItem defaultChecked value="cash">Cash</SelectItem>
+              <SelectItem value="gcash">Gcash</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <Select onValueChange={(e: typeof diningOption) => setDiningOption(e)} defaultValue={diningOption} >
+            <SelectTrigger>
+              <SelectValue placeholder="Select dining option" />
+            </SelectTrigger>
+
+            <SelectContent>
+              <SelectItem defaultChecked value="dine-in">Dine in</SelectItem>
+              <SelectItem value="take-out">Take out</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
 
-        <Separator />
-
-        <div className="grid gap-2 py-4">
-          <div className="text-lg">Dining options</div>
-          <div className="grid grid-cols-2 gap-2">
-            <Button variant={diningOption === "dine-in" ? 'default' : 'outline'} onClick={() => setDiningOption('dine-in')}>Dine-in</Button>
-            <Button variant={diningOption === "take-out" ? 'default' : 'outline'} onClick={() => setDiningOption('take-out')}>Take-out</Button>
-          </div>
+        <div className="grid grid-cols-2 gap-2">
+          <Button variant='outline' onClick={() => dispatch(clearOrderItems())}>Cancel</Button>
+          <Button disabled={Object.keys(orderItems).length <= 0 || defferedTenderedAmount <= 0 || defferedTenderedAmount < totalAmount}
+            onClick={handleCreateOrder}
+          >Place order</Button>
         </div>
-
       </CardFooter>
 
-      <div className="grid grid-cols-2 gap-2">
-        <Button variant='outline' onClick={() => dispatch(clearOrderItems())}>Cancel</Button>
-        <Button disabled={defferedTenderedAmount <= 0 || defferedTenderedAmount < totalAmount}
-          onClick={handleCreateOrder}
-        >Place order</Button>
-      </div>
 
     </Card>
   )

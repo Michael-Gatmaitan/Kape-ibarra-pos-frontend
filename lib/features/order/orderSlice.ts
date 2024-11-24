@@ -16,7 +16,7 @@ export interface OrderItems {
 interface OrderState {
   orderBody: {
     userId: string;
-    status: "" | "preparing" | "payment_pending" | "rejected";
+    orderStatus: "" | "preparing" | "payment_pending" | "rejected";
     orderType: "walk-in" | "online";
     customerId?: string;
   };
@@ -45,9 +45,9 @@ interface OrderItemQuantityPayload {
 
 const initialState = {
   orderBody: {
-    userId: "",
-    status: "",
-    orderType: "walk-in",
+    userId: null,
+    orderStatus: null,
+    orderType: null,
   },
 
   totalAmount: 0,
@@ -106,7 +106,14 @@ const orderSlice = createSlice({
       });
     },
     clearOrderItems(state: OrderState) {
+      state.orderBody.orderStatus = null;
+      state.orderBody.orderType = null;
+      state.orderBody.userId = null;
+
       state.orderItemsBody = {};
+      state.totalAmount = 0;
+      state.totalTendered = 0;
+      state.change = 0;
     },
     setTotalTendered(state: OrderState, action: PayloadAction<number>) {
       state.totalTendered = action.payload;
@@ -116,6 +123,7 @@ const orderSlice = createSlice({
       action: PayloadAction<{ productId: string }>
     ) {
       const { productId } = action.payload;
+      state.totalAmount -= state.orderItemsBody[productId].quantityAmount;
       delete state.orderItemsBody[productId];
     },
 

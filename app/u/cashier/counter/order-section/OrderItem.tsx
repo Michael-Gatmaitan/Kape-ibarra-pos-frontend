@@ -16,7 +16,7 @@ const OrderItem = (props: { orderItem: OrderItems }) => {
 
   return (
     <div className='border rounded-md p-2 grid w-full h-min gap-2'>
-      <div className='grid grid-cols-orderItem gap-2' >
+      <div className='grid grid-cols-orderItem gap-2'>
         <AspectRatio >
           <Image src={imagePath} alt={productId} fill className="h-full w-full rounded-md object-cover min-h-[100px] min-w-[100px]" />
         </AspectRatio>

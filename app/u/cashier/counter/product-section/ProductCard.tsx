@@ -19,9 +19,10 @@ const ProductCard = (props: IProductCardProps) => {
   const [selected, setSelected] = useState<boolean>(false);
 
   useEffect(() => {
-    if (orderItems[id]) {
-      console.log(orderItems, id);
+    if (orderItems[id]?.productId) {
       setSelected(true);
+    } else {
+      setSelected(false);
     }
   }, [orderItems, id]);
 

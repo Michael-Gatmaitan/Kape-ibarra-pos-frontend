@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { apiUrl } from "./apiUrl";
-import { ICategory, IEmployee } from "..";
+import { ICategory, IEmployee, IOrder } from "..";
 import { useToast } from "../@/hooks/use-toast";
 
 interface IRole {
@@ -99,4 +99,20 @@ export function useCreateToast(title: string, description: string) {
     title,
     description
   })
+}
+
+export function useGetOrders({ orderStatus }: { orderStatus: string }) {
+  const [orders, setOrders] = useState<IOrder[]>([]);
+
+  useEffect(() => {
+    const getOrderByStatus = async () => {
+      const req = await fetch(`${apiUrl}/order?orderStatus=${orderStatus}`);
+      const result: IOrder[] = await req.json();
+      setOrders(result);
+    }
+
+    getOrderByStatus();
+  }, [orderStatus]);
+
+  return orders;
 }

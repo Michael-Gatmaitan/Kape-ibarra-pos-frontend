@@ -14,7 +14,7 @@ const config: Config = {
         order: "60% 40%",
         // orderItem: "repeat(2, minmax(100px, auto))",
         orderItem: "minmax(auto, 100px) auto",
-        autoFitProduct: "repeat(auto-fill, minmax(200px, 1fr))",
+        autoFitProduct: "repeat(auto-fill, minmax(150px, 1fr))",
       },
       gridTemplateRows: {
         orderSection: "1fr auto",

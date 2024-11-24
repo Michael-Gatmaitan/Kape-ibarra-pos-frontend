@@ -7,7 +7,8 @@ import { ICategory } from '../../../..';
 const ProductSection = ({ categories }: { categories: ICategory[] }) => {
   const [active, setActive] = useState<string>('all');
   return (
-    <div>
+    // <div>
+    <div className='md:max-h-screen overflow-auto'>
       <div className="text-2xl">Categories</div>
       <DisplayCategories active={active} setActive={setActive} categories={categories} />
       <DisplayProducts active={active} />

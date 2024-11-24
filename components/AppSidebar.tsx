@@ -83,7 +83,6 @@ const items: ISidebarItems = {
 const AppSidebar = async () => {
 
   const payload = await getUserPayloadServer();
-  console.log("Sidebar: payload checked");
 
   if (!payload?.employee?.id) {
     return (

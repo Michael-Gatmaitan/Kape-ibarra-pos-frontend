@@ -9,8 +9,6 @@ import { verifySession } from "../lib/session";
 // >
 export const getUserPayloadServer = async () => {
   const token = cookies().get("token")?.value;
-
-  console.log("token");
   if (!token) {
     console.log("no token found");
     // return { error: "no token found" };

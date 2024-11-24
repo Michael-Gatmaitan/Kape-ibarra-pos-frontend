@@ -34,13 +34,13 @@ const page = async () => {
   const categories: ICategory[] = await categoriesReq.json();
 
   return (
-    // md:grid-cols-order md:gap-4
-    <div className='block md:grid min-h-full'>
+    // <div className="md:grid-cols-order md:gap-4">
+    <div className='block md:grid min-h-svh grid-cols-2 gap-4'>
       <ProductSection categories={categories} />
       <OrderSection />
 
       <ShowOrderSectionButton />
-    </div>
+    </div >
   )
 }
 
