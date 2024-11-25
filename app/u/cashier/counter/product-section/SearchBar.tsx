@@ -15,7 +15,7 @@ const SearchBar = (props: ISearchBarProps) => {
   }
 
   return (
-    <div className="relative">
+    <div className="relative fixed-0">
       <Input
         type="text"
         value={keyword}

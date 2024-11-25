@@ -64,8 +64,10 @@ const SignupForm = () => {
         form.setError("password", { type: 'server', message: errors.password });
       } else if (errors.confirmPassword) {
         form.setError("confirmPassword", { type: 'server', message: errors.confirmPassword });
-      } else if (errors.cpNum) {
-        form.setError("cpNum", { type: 'server', message: errors.cpNum });
+      } else if (errors.phoneNumber) {
+        form.setError("phoneNumber", { type: 'server', message: errors.phoneNumber });
+      } else if (errors.gender) {
+        form.setError("gender", { type: 'server', message: errors.gender });
       } else {
         console.error("something went wrong!")
       }
@@ -152,7 +154,7 @@ const SignupForm = () => {
           )} />
 
           {/* CP_NUM */}
-          <FormField control={form.control} name="cpNum" render={({ field }) => (
+          <FormField control={form.control} name="phoneNumber" render={({ field }) => (
             <FormItem>
               <FormLabel>Contact number</FormLabel>
               <FormControl>

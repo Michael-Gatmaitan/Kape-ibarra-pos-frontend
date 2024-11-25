@@ -5,12 +5,15 @@ export const signupSchema = z
   .object({
     firstname: z.string().min(1, "Firstname required."),
     lastname: z.string().min(1, "Lastname required."),
-    username: z.string().min(5, "Username must be at least 5 characters"),
-    password: z.string().min(10, "Password is must be at least 10 characters"),
-    confirmPassword: z.string().min(10, "Please confirm your password"),
-    cpNum: z.string().min(11, "Minimum of 11 characters required"),
-    // roleId: z.string().min(1, "RoleId is required").optional(),
-    // branchId: z.string().min(1, "BranchId is required"),
+    username: z.string().min(5, "Username must be at least 5 characters."),
+    password: z.string().min(10, "Password is must be at least 10 characters."),
+    confirmPassword: z.string().min(10, "Please confirm your password."),
+    gender: z.string().min(1, "Gender required"),
+    phoneNumber: z
+      .string()
+      .min(11, "Phone number must be 11 characters long.")
+      .max(11, "Phone number must be 11 characters long.")
+      .optional(),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Password must match",
@@ -18,6 +21,27 @@ export const signupSchema = z
   });
 
 export type TSignupSchema = z.infer<typeof signupSchema>;
+
+export const createEmployeeSchema = z
+  .object({
+    firstname: z.string().min(1, "Firstname required."),
+    lastname: z.string().min(1, "Lastname required."),
+    username: z.string().min(1, "Username required."),
+    password: z.string().min(8, "Password must be at least 8 characters."),
+    email: z.string().email().optional(),
+    confirmPassword: z.string().min(8, "Please confirm your password."),
+    roleId: z.string().min(1, "RoleId is required."),
+    phoneNumber: z
+      .string()
+      .min(11, "Phone number must be 11 characters long.")
+      .max(11, "Phone number must be 11 characters long."),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Password must match",
+    path: ["confirmPassword"],
+  });
+
+export type TCreateEmployeeSchema = z.infer<typeof createEmployeeSchema>;
 
 // Login shcema
 export const loginSchema = z.object({
