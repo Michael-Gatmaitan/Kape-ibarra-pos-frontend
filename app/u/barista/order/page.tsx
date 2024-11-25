@@ -1,12 +1,31 @@
 import React from 'react'
-import OrderStack from './OrderStack'
+import { apiUrl } from '../../../../lib/apiUrl'
+import { IOrder, IOrderItem, IProduct, ITransaction } from '../../../..'
+import TransactionBody from './TransactionBody';
 
-const page = () => {
+// export type ITransactionWithOrderAndOrderItems = ITransaction & {
+//   order: IOrder & { orderItems: IOrderItem & { products: IProduct[] }[] }
+// };
+
+export type ITransactionWithOrderAndOrderItems = ITransaction & {
+  order: IOrder & { orderItems: (IOrderItem & { product: IProduct })[]; }
+};
+
+const page = async () => {
+
+  const req = await fetch(`${apiUrl}/transaction?order=true`, { cache: "no-cache" });
+
+  if (!req.ok) {
+    return <div>There was a problem getting transaction</div>
+  }
+
+  const result: ITransactionWithOrderAndOrderItems[] = await req.json();
+
+  console.log(result);
   return (
-    <div>
-      page for viewing stack or orders
+    <div className='w-full h-[calc(100%)]'>
 
-      <OrderStack />
+      <TransactionBody transactions={result} />
     </div>
   )
 }

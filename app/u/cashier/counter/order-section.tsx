@@ -1,25 +1,37 @@
 "use client";
-import { EyeClosed } from 'lucide-react';
-import React, { FormEvent, SetStateAction, useDeferredValue, useEffect, useState } from 'react'
+import React, { useDeferredValue, useEffect, useState } from 'react'
 import { Button } from '../../../../components/ui/button';
 import { useAppDispatch, useAppSelector } from '../../../../lib/hooks';
 import { selectShowOrderSection, toggleShowOrderSection } from '../../../../lib/features/state/stateSlice';
 import { Card, CardContent, CardFooter } from '../../../../components/ui/card';
 import OrderItem from './order-section/OrderItem';
-import { clearOrderItems, selectOrderItemsBody, selectTotalAmount, selectTotalTendered, setTotalTendered } from '../../../../lib/features/order/orderSlice';
+import { clearOrderItems, selectOrderItemsBody, selectTotalAmount } from '../../../../lib/features/order/orderSlice';
 import { Separator } from '../../../../components/ui/separator';
 import { Input } from '../../../../components/ui/input';
 import { apiUrl } from '../../../../lib/apiUrl';
-// import { getUserPayloadServer } from '../../../../actions/serverActions';
 import { useUserPayload } from '../../../../lib/customHooks';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '../../../../components/ui/select';
 import { useToast } from '../../../../@/hooks/use-toast';
+import { X } from 'lucide-react';
 
 const OrderSection = () => {
   const showOrderSection = useAppSelector(selectShowOrderSection);
   const orderItems = useAppSelector(selectOrderItemsBody);
   const dispatch = useAppDispatch();
   const { toast } = useToast();
+
+  const [lastCustomerNumber, setLastCustomerNumber] = useState(0);
+
+  useEffect(() => {
+    const getLastCustomerNumber = async () => {
+      const req = await fetch(`${apiUrl}/order?lastOrder=true`);
+      const result = await req.json();
+
+      if (result !== null)
+        setLastCustomerNumber(result[0].customerNumber + 1);
+    }
+    getLastCustomerNumber();
+  });
 
   const payload = useUserPayload();
 
@@ -46,15 +58,13 @@ const OrderSection = () => {
   const totalAmount = useAppSelector(selectTotalAmount);
 
   const handleCreateOrder = async () => {
-
     const mappedOrderItems = Object.keys(orderItems).map(key => {
       const { quantity, quantityAmount, productId } = orderItems[key];
-      const orderBody = {
+      return {
         productId,
         quantity,
         quantityAmount
-      }
-      return orderBody;
+      };
     });
 
     const reqBody = {
@@ -102,8 +112,16 @@ const OrderSection = () => {
   return (
     // className='absolute md:static top-0 l-0 w-screen h-screen bg-black'
     <Card className={`
-      w-full h-screen z-50 p-4 top-0 left-0 rounded-none ${showOrderSection ? "grid" : "hidden"} fixed
-      md:w-full md:h-auto md:min-h-full md:static md:grid md:rounded-md grid-rows-orderSection overflow-auto`}>
+      w-full h-full z-50 p-4 top-0 left-0 rounded-none ${showOrderSection ? "grid" : "hidden"} fixed
+      md:w-full md:h-auto md:min-h-full md:static md:grid md:rounded-md grid-rows-orderSection overflow-auto no-scrollbar`}>
+
+      <div className="mb-2 flex justify-between md:justify-center items-center text-center text-xl font-bold md:text-2xl">
+        <Button variant='outline' className="w-10 h-10 md:hidden" onClick={() => dispatch(toggleShowOrderSection())}>
+          <X />
+        </Button>
+        <div>No. #{lastCustomerNumber}</div>
+        <div className="w-10 h-10 md:hidden"></div>
+      </div>
 
       {/* <header className='flex w-full'>
         <div className=""></div>
@@ -118,7 +136,7 @@ const OrderSection = () => {
 
       <CardContent className='p-0 flex flex-col gap-2'>
         {Object.keys(orderItems).length <= 0 ? (
-          <div>No product selected.</div>
+          <div className='pt-4 text-center'>No product selected.</div>
         ) : Object.keys(orderItems).map(productId => (
           <OrderItem orderItem={orderItems[productId]} key={productId} />
         ))}
@@ -182,10 +200,14 @@ const OrderSection = () => {
         </div>
 
         <div className="grid grid-cols-2 gap-2">
-          <Button variant='outline' onClick={() => dispatch(clearOrderItems())}>Cancel</Button>
+          <Button variant='outline' onClick={() => dispatch(clearOrderItems())}>
+            Clear list
+          </Button>
           <Button disabled={Object.keys(orderItems).length <= 0 || defferedTenderedAmount <= 0 || defferedTenderedAmount < totalAmount}
             onClick={handleCreateOrder}
-          >Place order</Button>
+          >
+            Place order
+          </Button>
         </div>
       </CardFooter>
 

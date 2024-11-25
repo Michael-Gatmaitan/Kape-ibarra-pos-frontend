@@ -35,7 +35,7 @@ const page = async () => {
 
   return (
     // <div className="md:grid-cols-order md:gap-4">
-    <div className='block md:grid min-h-svh grid-cols-2 gap-4'>
+    <div className='block md:grid h-[calc(100vh-16px)] grid-cols-order gap-4'>
       <ProductSection categories={categories} />
       <OrderSection />
 

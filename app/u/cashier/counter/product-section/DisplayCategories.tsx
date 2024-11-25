@@ -11,9 +11,9 @@ const DisplayCategories = (props: { active: string, setActive: React.Dispatch<Se
 
   return (
     <ScrollArea>
-      <div className='w-full rounded-md py-4 max-w-full overflow-x-auto flex gap-4'>
+      <div className='w-full rounded-md max-w-full overflow-x-auto flex gap-4'>
 
-        <Button className='p-14' variant={active === 'all' ? 'default' : 'outline'} onClick={() => setActive("all")}>
+        <Button className='p-14' variant={active === '' ? 'default' : 'outline'} onClick={() => setActive("")}>
           All
         </Button>
         {categories?.map(category => (

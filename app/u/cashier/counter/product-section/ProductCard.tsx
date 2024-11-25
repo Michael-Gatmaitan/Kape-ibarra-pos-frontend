@@ -34,7 +34,7 @@ const ProductCard = (props: IProductCardProps) => {
 
 
   return (
-    <Card onClick={handleProductSelect} className={`${selected ? "bg-secondary" : ''}`}>
+    <Card onClick={handleProductSelect} className={`${selected ? "bg-secondary hover:bg-secondary" : 'hover:bg-popover'}`}>
       <CardHeader className='p-2'>
         <AspectRatio ratio={1 / 1} className='bg-[#D5DAE0] rounded-md'>
           <Image src={imagePath} alt={id} fill className="h-full w-full rounded-md object-cover" />

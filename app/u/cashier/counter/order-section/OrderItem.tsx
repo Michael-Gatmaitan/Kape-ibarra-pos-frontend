@@ -1,7 +1,7 @@
 "use client";
 import React from 'react'
 import { Button } from '../../../../../components/ui/button';
-import { Minus, Plus, Trash } from 'lucide-react';
+import { Minus, Plus, TrashIcon } from 'lucide-react';
 import { Badge } from '../../../../../components/ui/badge';
 import { deleteOrderItem, handleOrderItemQuantity, OrderItems } from '../../../../../lib/features/order/orderSlice';
 import { AspectRatio } from '../../../../../components/ui/aspect-ratio';
@@ -34,6 +34,10 @@ const OrderItem = (props: { orderItem: OrderItems }) => {
                 {categoryName}
               </Badge>
             </div>
+
+            <Button variant="destructive" className='w-9 h-9' onClick={() => dispatch(deleteOrderItem({ productId }))}>
+              <TrashIcon />
+            </Button>
           </div>
 
           {/* Price and quantity */}
@@ -59,10 +63,10 @@ const OrderItem = (props: { orderItem: OrderItems }) => {
         </div>
       </div>
 
-      <Button variant='destructive' onClick={() => dispatch(deleteOrderItem({ productId }))}>
+      {/* <Button variant='destructive'>
         <Trash />
         <span>Delete</span>
-      </Button>
+      </Button> */}
     </div>
   )
 }

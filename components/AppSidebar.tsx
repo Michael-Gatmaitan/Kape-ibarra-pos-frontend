@@ -20,6 +20,7 @@ interface ISidebarItems {
   admin: IItem[],
   create: IItem[],
   cashier: IItem[],
+  barista: IItem[],
 }
 
 
@@ -75,6 +76,12 @@ const items: ISidebarItems = {
   }, {
     title: "List of orders",
     url: "/u/cashier/orders",
+    icon: Logs
+  }],
+
+  barista: [{
+    title: "Manage orders",
+    url: '/u/barista/order',
     icon: Logs
   }]
 }
@@ -141,6 +148,12 @@ const AppSidebar = async () => {
           {/* Group for CASHIER */}
           {(payload.roleName === "Admin" || payload.roleName === "Cashier") &&
             <CustomSidebarGroup label='Cashier' items={items.cashier} />
+          }
+
+          <SidebarSeparator />
+
+          {(payload.roleName === "Admin" || payload.roleName === "Barista") &&
+            <CustomSidebarGroup label='Barista' items={items.barista} />
           }
 
         </ScrollArea>

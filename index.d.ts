@@ -15,13 +15,14 @@ export interface IInventory {
 export interface IOrder {
   id: string;
   orderedAt: string;
-  userId: string;
   customerId: string;
-  userNumber: string;
+  customerNumber: number;
   totalPrice: number;
   proofOfPaymentImg?: string;
   orderType: "walk-in" | "online";
   orderStatus: "preparing" | "payment pending" | "ready to pickup" | "rejected";
+  employeeId: string;
+  baristaId?: string;
 }
 
 export type OrderCreate = Pick<IOrder, "userId">;
@@ -30,6 +31,7 @@ export interface IOrderItem {
   id: string;
   orderId: string;
   productId: string;
+  recordedProductPrice: number;
   quantity: number;
   quantityAmount: number;
 }
@@ -43,8 +45,8 @@ export interface ICategory {
 
 export interface IProduct {
   id: string;
+  categoryId: string;
   imagePath: string;
-  catergoryId: string;
   productName: string;
   price: number;
   description?: string;
@@ -88,12 +90,12 @@ export interface ITransaction {
   id: string;
   orderId: string;
   paymentMethod: string;
-  change: number;
-  totalTendered: number;
-  paymentMethod: string;
   totalAmount: number;
+  totalTendered: number;
+  change: number;
   vatAmount?: number;
   vatableSales: number;
+  transactionDate: string;
 }
 export interface IEmployee {
   id: string;

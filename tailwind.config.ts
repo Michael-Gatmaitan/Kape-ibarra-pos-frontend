@@ -11,13 +11,14 @@ const config: Config = {
     extend: {
       gridTemplateColumns: {
         // 'order': 'minmax(600px, 1fr)'
-        order: "60% 40%",
+        order: "60% 1fr",
         // orderItem: "repeat(2, minmax(100px, auto))",
         orderItem: "minmax(auto, 100px) auto",
         autoFitProduct: "repeat(auto-fill, minmax(150px, 1fr))",
+        autoFitTransaction: "repeat(auto-fill, minmax(250px, 1fr))",
       },
       gridTemplateRows: {
-        orderSection: "1fr auto",
+        orderSection: "auto 1fr auto",
       },
       colors: {
         background: "hsl(var(--background))",
