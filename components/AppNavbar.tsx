@@ -1,14 +1,12 @@
 "use client";
 import React from 'react'
-import { useSidebar } from './ui/sidebar'
-import { Menu, X } from 'lucide-react';
-import Image from 'next/image';
+// import { useSidebar } from './ui/sidebar'
 import Link from 'next/link';
 import { Button } from './ui/button';
 
 
 const AppNavbar = () => {
-  const { toggleSidebar, open } = useSidebar();
+  // const { toggleSidebar, open } = useSidebar();
 
   return (
     <nav className="fixed inset-x-0 top-0 z-50 bg-white shadow-sm dark:bg-slate-900 md:hidden">
@@ -49,10 +47,17 @@ const AppNavbar = () => {
             </Link>
           </nav>
           <div className="flex items-center gap-4">
-            <Button variant="outline" size="sm">
-              Sign in
+
+            <Button variant="outline" size="sm" asChild>
+              <Link href='/'>
+                Log in
+              </Link>
             </Button>
-            <Button size="sm">Sign up</Button>
+            <Button size="sm" asChild>
+              <Link href='/'>
+                Sign up
+              </Link>
+            </Button>
           </div>
         </div>
       </div>

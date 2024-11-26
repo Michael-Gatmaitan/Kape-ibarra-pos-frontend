@@ -25,7 +25,7 @@ export const getUserPayloadServer = async () => {
       return;
     }
 
-    console.log("Payload: ", payload);
+    // console.log("Payload: ", payload);
     return payload;
 
     // return NextResponse.next();

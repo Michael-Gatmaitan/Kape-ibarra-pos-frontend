@@ -7,6 +7,7 @@ export const signupSchema = z
     lastname: z.string().min(1, "Lastname required."),
     username: z.string().min(5, "Username must be at least 5 characters."),
     password: z.string().min(10, "Password is must be at least 10 characters."),
+    email: z.string().optional(),
     confirmPassword: z.string().min(10, "Please confirm your password."),
     gender: z.string().min(1, "Gender required"),
     phoneNumber: z
@@ -21,27 +22,6 @@ export const signupSchema = z
   });
 
 export type TSignupSchema = z.infer<typeof signupSchema>;
-
-export const createEmployeeSchema = z
-  .object({
-    firstname: z.string().min(1, "Firstname required."),
-    lastname: z.string().min(1, "Lastname required."),
-    username: z.string().min(1, "Username required."),
-    password: z.string().min(8, "Password must be at least 8 characters."),
-    email: z.string().email().optional(),
-    confirmPassword: z.string().min(8, "Please confirm your password."),
-    roleId: z.string().min(1, "RoleId is required."),
-    phoneNumber: z
-      .string()
-      .min(11, "Phone number must be 11 characters long.")
-      .max(11, "Phone number must be 11 characters long."),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Password must match",
-    path: ["confirmPassword"],
-  });
-
-export type TCreateEmployeeSchema = z.infer<typeof createEmployeeSchema>;
 
 // Login shcema
 export const loginSchema = z.object({
@@ -106,18 +86,29 @@ export const categorySchema = z.object({
 
 export type TCategorySchema = z.infer<typeof categorySchema>;
 
-export const customerSchema = z.object({
-  email: z.string().min(1, "Email required").email(),
-  firstname: z.string().min(1, "Username required"),
-  lastname: z.string().min(1, "Lastname required"),
-  phoneNumber: z.string().min(1, "Phone number required or optional"),
-  username: z.string().min(5, "Minimum of 5 characters required"),
-  password: z.string().min(8, "Minimum of 8 characters"),
-});
-
-export type TCustomerSchema = z.infer<typeof customerSchema>;
-
 type IErr = { message: string };
 export function isErrorMessage<T>(res: T | IErr): res is IErr {
   return (res as IErr).message !== undefined;
 }
+
+// Employee schema
+
+export const createEmployeeSchema = z
+  .object({
+    firstname: z.string().min(1, "Firstname required."),
+    lastname: z.string().min(1, "Lastname required."),
+    username: z.string().min(5, "Username required."),
+    password: z.string().min(10, "Password must be at least 10 characters."),
+    confirmPassword: z.string().min(10, "Please confirm your password."),
+    phoneNumber: z
+      .string()
+      .min(11, "Phone number must be 11 characters long.")
+      .max(11, "Phone number must be 11 characters long."),
+    roleId: z.string().min(1, "RoleId is required."),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Password must match",
+    path: ["confirmPassword"],
+  });
+
+export type TCreateEmployeeSchema = z.infer<typeof createEmployeeSchema>;

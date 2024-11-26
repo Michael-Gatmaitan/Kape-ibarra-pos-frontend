@@ -124,3 +124,15 @@ export interface ISystemNotification {
   stauts: string;
   isSolved: boolean;
 }
+
+export interface ICustomer {
+  id: string;
+  firstname: string;
+  lastname: string;
+  username: string;
+  password: string;
+  email: string | null;
+  gender: string;
+  phoneNumber: string | null;
+  createdAt: Date;
+}

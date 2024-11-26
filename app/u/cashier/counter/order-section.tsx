@@ -27,11 +27,18 @@ const OrderSection = () => {
       const req = await fetch(`${apiUrl}/order?lastOrder=true`);
       const result = await req.json();
 
-      if (result !== null)
-        setLastCustomerNumber(result[0].customerNumber + 1);
+      if (result) {
+        setLastCustomerNumber(prev => {
+          if (prev !== result[0].customerNumber) {
+            return result[0].customerNumber + 1;
+          }
+        });
+      } else {
+        console.error("Error getting last order");
+      }
     }
     getLastCustomerNumber();
-  });
+  }, [orderItems]);
 
   const payload = useUserPayload();
 

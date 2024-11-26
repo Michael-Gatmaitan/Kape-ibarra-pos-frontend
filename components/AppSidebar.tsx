@@ -91,9 +91,10 @@ const AppSidebar = async () => {
 
   const payload = await getUserPayloadServer();
 
-  if (!payload?.employee?.id) {
+  if (!payload?.person?.id) {
     return (
-      <nav>Nav for not logged in</nav>
+      // <nav>Nav for not logged in</nav>
+      null
     )
   }
 

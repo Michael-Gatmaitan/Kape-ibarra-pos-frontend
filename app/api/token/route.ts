@@ -17,7 +17,7 @@ export async function GET() {
   const token = cookies().get("token")?.value;
   const payload = await verifySession(token);
 
-  if (!payload.employee.id) {
+  if (!payload.person.id) {
     return Response.json({ error: "No user found" });
   }
 

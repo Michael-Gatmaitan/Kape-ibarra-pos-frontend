@@ -6,33 +6,32 @@ import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { signupSchema, TSignupSchema } from '../../lib/types';
+import { createEmployeeSchema, TCreateEmployeeSchema } from '../../lib/types';
 import { useRouter } from 'next/navigation';
-// import { useRoles, useUserPayload } from '../../lib/customHooks';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
-// import { Select, SelectContent, SelectTrigger, SelectItem, SelectValue } from '../ui/select';
+import { Select, SelectContent, SelectTrigger, SelectItem, SelectValue } from '../ui/select';
 import { apiUrl } from '../../lib/apiUrl';
+import { useRoles, useUserPayload } from '../../lib/customHooks';
 
 const SignupForm = () => {
-  // const payload = useUserPayload();
-  // const roles = useRoles();
+  const payload = useUserPayload();
+  const roles = useRoles();
   const router = useRouter();
-  // const branches = useBranch();
 
-  const form = useForm<TSignupSchema>({
-    resolver: zodResolver(signupSchema),
+  const form = useForm<TCreateEmployeeSchema>({
+    resolver: zodResolver(createEmployeeSchema),
     defaultValues: {
       firstname: "",
       lastname: "",
       username: "",
       password: "",
       confirmPassword: "",
+      phoneNumber: "",
+      roleId: "",
     }
   });
 
-  console.log('wtf')
-
-  const onSubmit = async (data: TSignupSchema) => {
+  const onSubmit = async (data: TCreateEmployeeSchema) => {
     console.log(data);
 
     const validationRequest = await fetch('/api/schema/signup', {
@@ -66,10 +65,10 @@ const SignupForm = () => {
         form.setError("confirmPassword", { type: 'server', message: errors.confirmPassword });
       } else if (errors.phoneNumber) {
         form.setError("phoneNumber", { type: 'server', message: errors.phoneNumber });
-      } else if (errors.gender) {
-        form.setError("gender", { type: 'server', message: errors.gender });
+      } else if (errors.roleId) {
+        form.setError("roleId", { type: 'server', message: errors.roleId });
       } else {
-        console.error("something went wrong!")
+        console.error(errors, "something went wrong!")
       }
     }
 
@@ -86,9 +85,9 @@ const SignupForm = () => {
       body: JSON.stringify(dataWOConfirmPassword)
     })
       .then(res => res.json())
-      .catch(err => console.log("There was an error creating user", err))
+      .catch(err => console.log("There was an error creating user", err));
 
-    console.log(createAccountReq, confirmPassword)
+    console.log(createAccountReq, confirmPassword);
 
     router.replace("/login");
     // reset();
@@ -165,7 +164,7 @@ const SignupForm = () => {
           )} />
 
           {/* ROLE */}
-          {/* {payload?.roleName !== undefined && (payload.roleName === "System Admin" || payload.roleName === "Branch Admin") ? (
+          {payload?.roleName !== undefined && (payload.roleName === "Admin") ? (
             <React.Fragment>
               <FormField control={form.control} name="roleId" render={({ field }) => (
                 <FormItem>
@@ -192,41 +191,9 @@ const SignupForm = () => {
                   <FormMessage />
                 </FormItem>
               )} />
-
-              /* Only the SYSTEM ADMIN have a right to choose where branch to assign the new user *
-              {payload.roleName === "System Admin" ? (
-                <FormField control={form.control} name="branchId" render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Select branch</FormLabel>
-
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select role" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {branches?.map(branch => (
-                          <SelectItem key={branch.id} value={`${branch.id}`}>
-                            {branch.streetAddress}, {branch.baranggay}, {branch.city}, {branch.province}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )} />
-              ) : null}
             </React.Fragment>
-          ) : null} */}
+          ) : null}
 
-          {/* System Admin has the right to choose where to assign those users */}
-          {/* {form.formState.errors.firstname}
-          {form.formState.errors.lastname}
-          {form.formState.errors.username}
-          {form.formState.errors.password}
-          {form.formState.errors.confirmPassword}
-          {form.formState.errors.roleId} */}
           <Button type='submit' disabled={form.formState.isSubmitting}>Create account</Button>
         </form>
       </Form>

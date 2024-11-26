@@ -1,17 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
-import { IEmployee } from "../../..";
+import { ICustomer, IEmployee } from "../../..";
 
 interface AuthState {
   isLoggedIn: boolean;
-  employee: IEmployee;
+  person: IEmployee | ICustomer;
   roleName: string;
 }
 
 const initialState = {
   isLoggedIn: false,
-  employee: {
+  person: {
     id: null,
     cpNum: null,
     firstname: null,
@@ -32,9 +32,9 @@ const authSlice = createSlice({
     },
     setUserData(
       state: AuthState,
-      action: PayloadAction<{ employee: IEmployee; roleName: string }>
+      action: PayloadAction<{ person: IEmployee | ICustomer; roleName: string }>
     ) {
-      state.employee = action.payload.employee;
+      state.person = action.payload.person;
       state.roleName = action.payload.roleName;
     },
   },
@@ -44,7 +44,7 @@ export const selectIsLoggedIn = (state: RootState) =>
   state.authReducer.isLoggedIn;
 export const selectUserData = (state: RootState) => {
   return {
-    employee: state.authReducer.employee,
+    person: state.authReducer.person,
     roleName: state.authReducer.roleName,
   };
 };

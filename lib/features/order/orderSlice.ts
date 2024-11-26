@@ -47,7 +47,7 @@ const initialState = {
   orderBody: {
     userId: null,
     orderStatus: null,
-    orderType: null,
+    orderType: "walk-in",
   },
 
   totalAmount: 0,

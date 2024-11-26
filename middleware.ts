@@ -22,7 +22,7 @@ export async function middleware(req: NextRequest) {
     if (!payload.roleName)
       return NextResponse.redirect(new URL("/login", req.url));
 
-    console.log("Payload: ", payload);
+    // console.log("Payload: ", payload);
 
     // Validate all roles here
     const url = req.url;
@@ -52,5 +52,6 @@ export const config: MiddlewareConfig = {
     "/update/((?!general).*)",
     "/view/((?!general).*)",
     "/u/((?!general).*)",
+    // "/auth/((?!general).*)",
   ],
 };

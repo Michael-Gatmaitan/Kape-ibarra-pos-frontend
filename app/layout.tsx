@@ -6,8 +6,6 @@ import StoreProvider from "./StoreProvider";
 import { SidebarProvider } from "../components/ui/sidebar";
 import AppSidebar from "../components/AppSidebar";
 // import AppNavbar from "../components/AppNavbar";
-// import AppNavbar from "../components/AppNavbar";
-// import { ModeToggle } from "../components/toggler";
 import { Poppins } from 'next/font/google';
 import { Toaster } from "../components/ui/toaster";
 

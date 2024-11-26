@@ -24,7 +24,9 @@ import { verifySession } from "../../lib/session";
 import Link from "next/link";
 // import { redirect } from "next/navigation";
 
-const LoginForm = () => {
+const LoginForm = (props: { loginType: "employee" | "customer", children?: React.ReactNode }) => {
+  const { loginType } = props;
+
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
 
@@ -73,7 +75,7 @@ const LoginForm = () => {
       }
     }
 
-    const loginReq = await fetch(`${apiUrl}/login`, {
+    const loginReq = await fetch(`${apiUrl}/login?loginType=${loginType}`, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
@@ -91,33 +93,58 @@ const LoginForm = () => {
     console.log(loginRes);
 
     if ("token" in loginRes) {
-      console.log("Loginres: ", loginRes.token);
-      const payload = await verifySession(loginRes.token);
 
-      if (payload.employee.id && payload.roleName) {
-        dispatch(setLoggedIn(true));
-        dispatch(setUserData({ employee: payload.employee, roleName: payload.roleName }));
-        console.log('redux all set');
+      if (loginType === "customer") {
+        const payload = await verifySession(loginRes.token);
+
+        if (payload.person.id) {
+
+        }
+
+        const { token } = loginRes;
+        console.log("Login token:", token);
+
+        (async function () {
+          await fetch("/api/token", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              token: token,
+            },
+          });
+        })();
+
+      } else if (loginType === "employee") {
+        console.log("Loginres: ", loginRes.token);
+        const payload = await verifySession(loginRes.token);
+
+        if (payload.person.id && payload.roleName) {
+          dispatch(setLoggedIn(true));
+          dispatch(setUserData({ person: payload.person, roleName: payload.roleName }));
+          console.log('redux all set');
+        }
+
+        // If there's a token in response, set it to locatstorage
+        const { token } = loginRes;
+        console.log("Login token:", token);
+
+        // Assign token
+        (async function () {
+          await fetch("/api/token", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              token: token,
+            },
+          });
+        })();
+
       }
-
-      // If there's a token in response, set it to locatstorage
-      const { token } = loginRes;
-      console.log("Login token:", token);
-
-      // Assign token
-      (async function () {
-        await fetch("/api/token", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            token: token,
-          },
-        });
-      })();
 
       // Route to login section base on role
       // for now for dev
       router.push('/');
+      router.refresh();
     } else {
       console.log(loginRes.error);
       setLoginErr(loginRes.error);
@@ -125,7 +152,7 @@ const LoginForm = () => {
   };
 
   return (
-    <AuthForm description="Login with your account" header="Log in">
+    <AuthForm description={`${loginType === "customer" ? "Login with your account" : "Login as employee"}`} header="Log in">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
           {/* USERNAME */}
@@ -182,6 +209,7 @@ const LoginForm = () => {
           Dont have account? Sign up here!
         </Link>
       </Button>
+      {props.children}
     </AuthForm>
   );
 };
