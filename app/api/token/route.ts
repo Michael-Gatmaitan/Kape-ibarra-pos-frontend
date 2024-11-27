@@ -13,15 +13,21 @@ export async function POST(req: NextRequest) {
   return Response.json({ message: "Token set successfully" });
 }
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   const token = cookies().get("token")?.value;
-  const payload = await verifySession(token);
 
-  if (!payload.person.id) {
-    return Response.json({ error: "No user found" });
+  // const getType = req.query.getType;
+  const getType = req.nextUrl.searchParams.get("getType");
+
+  if (getType === "payload") {
+    const payload = await verifySession(token);
+    if (!payload.person.id) {
+      return Response.json({ error: "No user found" });
+    }
+
+    console.log(payload);
+    return Response.json(payload);
+  } else if (getType === "token") {
+    return Response.json({ token });
   }
-
-  console.log(payload);
-
-  return Response.json(payload);
 }

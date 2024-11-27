@@ -8,11 +8,13 @@ export const createSession = async (token: string) => {
 
   cookies().set("token", token, {
     httpOnly: true,
-    secure: true,
+    secure: false,
     sameSite: "lax",
     path: "/",
     expires: expiresAt,
   });
+
+  // console.log(cookies)
 
   console.log("token set successfully");
 };

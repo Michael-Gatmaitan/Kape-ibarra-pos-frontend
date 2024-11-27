@@ -4,11 +4,20 @@ import { apiUrl } from "../../../../lib/apiUrl";
 import FormContent from "../../../create/product/FormContent";
 import { TProductSchema } from "../../../../lib/types";
 import { IProduct } from "../../../..";
+import { cookies } from "next/headers";
 
 const page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const id = (await params).id;
+  const token = cookies().get('token')?.value;
 
-  const productToEdit = await fetch(`${apiUrl}/product/${id}?mode=edit`);
+  const productToEdit = await fetch(`${apiUrl}/product/${id}?mode=edit`, {
+    method: 'GET',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+      authorization: token
+    }
+  });
 
   if (!productToEdit.ok) return <div>Something went wrong</div>;
 

@@ -18,6 +18,7 @@ interface OrderState {
     userId: string;
     orderStatus: "" | "preparing" | "payment_pending" | "rejected";
     orderType: "walk-in" | "online";
+    diningOption: "" | "dine-in" | "take-out";
     customerId?: string;
   };
 
@@ -48,6 +49,7 @@ const initialState = {
     userId: null,
     orderStatus: null,
     orderType: "walk-in",
+    diningOption: "",
   },
 
   totalAmount: 0,

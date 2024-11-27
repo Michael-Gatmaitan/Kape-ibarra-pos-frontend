@@ -17,6 +17,7 @@ import { Input } from "../../../components/ui/input";
 import { Button } from "../../../components/ui/button";
 import { apiUrl } from "../../../lib/apiUrl";
 import { revalidateViewsProduct } from "../../../actions/revalidate";
+import { getTokenClient } from "../../../lib/tokenAPI";
 
 interface IRawMaterialBody {
   materialName: string;
@@ -55,12 +56,15 @@ const FormContent = ({
   const createRawMaterial = async (
     createRawMaterialReqBody: TRawMaterialSchema,
   ) => {
-    // const
+    const token = await getTokenClient();
     try {
       const createRawMaterialReq = await fetch(`${apiUrl}/raw-material`, {
         method: "POST",
 
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          authorization: token
+        },
         body: JSON.stringify(createRawMaterialReqBody),
       });
 
@@ -81,6 +85,7 @@ const FormContent = ({
     updateRawMaterialBody: IRawMaterialBody,
   ) => {
     console.log(rawMaterialId, updateRawMaterialBody);
+    const token = await getTokenClient();
 
     const updateRawMaterialReq = await fetch(
       `${apiUrl}/raw-material/${rawMaterialId}`,
@@ -88,6 +93,7 @@ const FormContent = ({
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          authorization: token
         },
         body: JSON.stringify(updateRawMaterialBody),
       },
@@ -102,12 +108,14 @@ const FormContent = ({
   };
 
   const deleteRawMaterial = async (rawMaterialId: string) => {
+    const token = await getTokenClient();
     const deletedRawMaterial = await fetch(
       `${apiUrl}/raw-material/${rawMaterialId}`,
       {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
+          authorization: token
         },
       },
     );

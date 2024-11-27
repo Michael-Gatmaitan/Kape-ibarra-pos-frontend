@@ -13,6 +13,7 @@ import { useUserPayload } from '../../../../lib/customHooks';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '../../../../components/ui/select';
 import { useToast } from '../../../../@/hooks/use-toast';
 import { X } from 'lucide-react';
+import { getTokenClient } from '../../../../lib/tokenAPI';
 
 const OrderSection = () => {
   const showOrderSection = useAppSelector(selectShowOrderSection);
@@ -24,10 +25,18 @@ const OrderSection = () => {
 
   useEffect(() => {
     const getLastCustomerNumber = async () => {
-      const req = await fetch(`${apiUrl}/order?lastOrder=true`);
+      const token = await getTokenClient();
+      const req = await fetch(`${apiUrl}/order?lastOrder=true`, {
+        cache: 'no-cache',
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          authorization: token
+        }
+      });
       const result = await req.json();
 
-      if (result) {
+      if (result.length !== 0) {
         setLastCustomerNumber(prev => {
           if (prev !== result[0].customerNumber) {
             return result[0].customerNumber + 1;
@@ -65,6 +74,7 @@ const OrderSection = () => {
   const totalAmount = useAppSelector(selectTotalAmount);
 
   const handleCreateOrder = async () => {
+    const token = await getTokenClient();
     const mappedOrderItems = Object.keys(orderItems).map(key => {
       const { quantity, quantityAmount, productId } = orderItems[key];
       return {
@@ -76,9 +86,10 @@ const OrderSection = () => {
 
     const reqBody = {
       orderBody: {
-        employeeId: payload.employee.id,
+        employeeId: payload.person.id,
         orderStatus: "preparing",
-        orderType: "walk-in"
+        orderType: "walk-in",
+        diningOption,
       },
       orderItemsBody: mappedOrderItems,
       transactionBody: {
@@ -94,14 +105,15 @@ const OrderSection = () => {
     const req = await fetch(`${apiUrl}/order`, {
       method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        authorization: token
       },
       body: JSON.stringify(reqBody)
     });
 
     if (!req.ok) {
       console.log("There was a problem submitting order");
-      toast({ title: "Order failed", description: "Kindly call the developers for reports.", })
+      toast({ variant: "destructive", title: "Order failed", description: "Kindly call the developers for reports.", })
       return;
     }
 

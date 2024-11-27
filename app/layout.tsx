@@ -5,7 +5,7 @@ import { ThemeProvider } from "../components/theme-provider";
 import StoreProvider from "./StoreProvider";
 import { SidebarProvider } from "../components/ui/sidebar";
 import AppSidebar from "../components/AppSidebar";
-// import AppNavbar from "../components/AppNavbar";
+import AppNavbar from "../components/AppNavbar";
 import { Poppins } from 'next/font/google';
 import { Toaster } from "../components/ui/toaster";
 
@@ -53,7 +53,7 @@ export default async function RootLayout({
               <AppSidebar />
 
               {/* <ModeToggle /> */}
-              {/* <AppNavbar /> */}
+              <AppNavbar />
               {/* my-9 mx-4 lg:mx-12 xl:mx-40 */}
               <div className="w-full px-4 my-2 lg:px-4 xl:px-4 2xl:px-2">
                 {children}

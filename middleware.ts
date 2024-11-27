@@ -11,12 +11,13 @@ export async function middleware(req: NextRequest) {
   const token = cookies().get("token")?.value;
 
   // If there's no token, redirect to login
+  console.log(token);
   if (!token) return NextResponse.redirect(new URL("/login", req.url));
 
   try {
     const payload = await verifySession(token);
 
-    console.log(payload.roleName);
+    console.log("middleware rolename: ", payload.roleName);
 
     // If there's no roleId in payload decrypted
     if (!payload.roleName)

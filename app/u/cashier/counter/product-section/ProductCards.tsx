@@ -6,6 +6,7 @@ import { useAppSelector } from '../../../../../lib/hooks';
 import { selectOrderItemsBody } from '../../../../../lib/features/order/orderSlice';
 import { apiUrl } from '../../../../../lib/apiUrl';
 import { Skeleton } from '../../../../../components/ui/skeleton';
+import { getTokenClient } from '../../../../../lib/tokenAPI';
 
 const ProductCard = React.lazy(() => import('./ProductCard'));
 
@@ -15,7 +16,15 @@ const ProductCards = memo(function ProductCards({ active, keyword }: { active: s
 
   useEffect(() => {
     const getProductsFunc = async () => {
-      const getProducts = await fetch(`${apiUrl}/product?categoryName=${active}&productName=${keyword}`, { cache: 'no-cache' });
+      const token = await getTokenClient();
+      const getProducts = await fetch(`${apiUrl}/product?categoryName=${active}&productName=${keyword}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          authorization: token
+        },
+        cache: 'no-cache',
+      });
       if (!getProducts.ok)
         console.log('Something went wrong getting products');
 

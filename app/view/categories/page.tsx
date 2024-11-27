@@ -7,11 +7,20 @@ import { DataTable } from '../data-table';
 import { columns } from './columns';
 import Head from 'next/head';
 import ViewHeaders from '../view-headers';
+import { cookies } from 'next/headers';
 
 export type ICategoryWithProducts = ICategory[] & { products: IProduct[] }
 
 const page = async () => {
-  const categoryReq = await fetch(`${apiUrl}/category`, { cache: 'no-cache' });
+  const token = cookies().get('token')?.value;
+  const categoryReq = await fetch(`${apiUrl}/category`, {
+    method: 'GET',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+      authorization: token
+    }
+  });
 
   if (!categoryReq.ok) {
     return <div>Somthing went wrong getting all categories</div>

@@ -36,6 +36,7 @@ import {
 import { apiUrl } from "../../../lib/apiUrl";
 import { IProduct } from "../../..";
 import { revalidateViewsProduct } from "../../../actions/revalidate";
+import { getTokenClient } from "../../../lib/tokenAPI";
 // import { useToast } from "../../../@/hooks/use-toast";
 
 // UUID
@@ -75,6 +76,7 @@ const FormContent = ({
   const rawMaterials = useRawMaterial();
   const categories = useCategories();
 
+  console.log(categories);
   // const toast = useToast();
 
   // States for confirmation of CREATED & UPDATED
@@ -97,10 +99,14 @@ const FormContent = ({
   const [imageUrl, setImageUrl] = useState<string>('');
 
   const createProduct = async (createProductReqBody: ICreateProductBody) => {
+    const token = await getTokenClient();
     try {
       const createProductReq = await fetch(`${apiUrl}/product`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          authorization: token
+        },
         body: JSON.stringify(createProductReqBody),
       });
 
@@ -128,11 +134,13 @@ const FormContent = ({
     updateProductReqBody: ICreateProductBody,
   ) => {
     console.log("Update product");
+    const token = await getTokenClient();
 
     const updateProductReq = await fetch(`${apiUrl}/product/${productId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        authorization: token
       },
       body: JSON.stringify(updateProductReqBody),
     }).then((res) => res.json());
@@ -143,10 +151,12 @@ const FormContent = ({
   };
 
   const deleteProduct = async (productId: string) => {
+    const token = await getTokenClient();
     const deleteReq = await fetch(`${apiUrl}/product/${productId}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
+        authorization: token
       },
     });
 

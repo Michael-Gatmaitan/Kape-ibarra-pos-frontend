@@ -7,9 +7,19 @@ import { DataTable } from '../data-table';
 import { columns } from './columns';
 import Head from 'next/head';
 import ViewHeaders from '../view-headers';
+import { cookies } from 'next/headers';
 
 const page = async () => {
-  const productsReq = await fetch(`${apiUrl}/product?category=true`, { cache: 'no-cache' });
+  const token = cookies().get('token')?.value;
+  const productsReq = await fetch(`${apiUrl}/product?category=true`,
+    {
+      method: 'GET',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: token
+      }
+    });
 
   if (!productsReq.ok) {
     return <div>Somthing went wrong getting all products</div>

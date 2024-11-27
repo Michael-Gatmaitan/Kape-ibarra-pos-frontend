@@ -4,6 +4,7 @@ import OrderSection from './order-section'
 import { apiUrl } from '../../../../lib/apiUrl'
 import { ICategory } from '../../../..'
 import ShowOrderSectionButton from './product-section/ShowOrderSectionButton'
+import { cookies } from 'next/headers'
 
 export interface IOrderRequirements {
   orderBody: {
@@ -27,7 +28,15 @@ export interface IOrderProcessResult {
 }
 
 const page = async () => {
-  const categoriesReq = await fetch(`${apiUrl}/category`, { cache: 'no-cache' });
+  const token = cookies().get('token')?.value;
+  const categoriesReq = await fetch(`${apiUrl}/category`, {
+    cache: 'no-cache',
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      authorization: token
+    }
+  });
 
   if (!categoriesReq.ok) return <div>Categores in counter not ok</div>
 

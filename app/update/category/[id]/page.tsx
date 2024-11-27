@@ -4,14 +4,31 @@ import { apiUrl } from '../../../../lib/apiUrl';
 import { TCategorySchema } from '../../../../lib/types';
 import { ICategory } from '../../../..';
 import BackLink from '../../../../components/BackLink';
+import { cookies } from 'next/headers';
 
 const page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const id = (await params).id;
 
-  const categoriesReq = await fetch(`${apiUrl}/category`, { cache: 'no-cache' });
+  const token = cookies().get('token')?.value;
+
+  const categoriesReq = await fetch(`${apiUrl}/category`, {
+    method: 'GET',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+      authorization: token
+    }
+  });
   const categories: ICategory[] = await categoriesReq.json();
 
-  const categoryToEdit = await fetch(`${apiUrl}/category/${id}`);
+  const categoryToEdit = await fetch(`${apiUrl}/category/${id}`, {
+    method: 'GET',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+      authorization: token
+    }
+  });
 
   if (!categoryToEdit.ok) return <div>Something went wrong</div>
 

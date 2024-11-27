@@ -2,12 +2,29 @@
 
 import { useEffect, useState } from "react";
 import { apiUrl } from "./apiUrl";
-import { ICategory, IEmployee, IOrder } from "..";
+import { ICategory, ICustomer, IEmployee, IOrder } from "..";
 import { useToast } from "../@/hooks/use-toast";
+import { getTokenClient } from "./tokenAPI";
 
 interface IRole {
   id: number;
   roleName: string;
+}
+
+export function useGetToken() {
+  const [token, setToken] = useState('');
+
+  useEffect(() => {
+    const getToken = async () => {
+      const token = await getTokenClient();
+      console.log(token);
+      setToken(token);
+    }
+
+    getToken();
+  }, []);
+
+  return token;
 }
 
 export function useRoles() {
@@ -15,7 +32,15 @@ export function useRoles() {
 
   useEffect(() => {
     const getRoles = async () => {
-      const result: IRole[] = await fetch(`${apiUrl}/role`).then((res) =>
+      const token = await getTokenClient();
+      const result: IRole[] = await fetch(`${apiUrl}/role`, {
+        method: 'GET',
+        cache: 'no-store',
+        headers: {
+          'Content-Type': 'application/json',
+          authorization: token
+        }
+      }).then((res) =>
         res.json(),
       );
       setRoles(result);
@@ -26,7 +51,7 @@ export function useRoles() {
   return roles;
 }
 interface IUserPayload {
-  employee: IEmployee,
+  person: IEmployee | ICustomer,
   roleName: string;
 }
 
@@ -35,12 +60,12 @@ export function useUserPayload() {
 
   useEffect(() => {
     const getUserPayload = async () => {
-      const result = await fetch(`/api/token`).then((res) => res.json());
+      const result = await fetch(`/api/token?getType=payload`).then((res) => res.json());
 
       if ("error" in result) {
         console.error("No user found in token");
       }
-      console.log(result);
+
       setUserPayload(result);
     };
 
@@ -61,7 +86,15 @@ export function useRawMaterial() {
 
   useEffect(() => {
     const getRawMaterials = async () => {
-      const result = await fetch(`${apiUrl}/raw-material`).then((res) =>
+      const token = await getTokenClient();
+      console.log("RAW", token)
+      const result = await fetch(`${apiUrl}/raw-material`, {
+        cache: 'no-store',
+        headers: {
+          'Content-Type': 'application/json',
+          authorization: token
+        }
+      }).then((res) =>
         res.json(),
       );
       setRawMaterials(result);
@@ -79,9 +112,17 @@ export function useCategories() {
 
   useEffect(() => {
     const getCategories = async () => {
-      const result = await fetch(`${apiUrl}/category`).then((res) =>
-        res.json(),
-      );
+      const token = await getTokenClient();
+      console.log("CAT", token)
+      const req = await fetch(`${apiUrl}/category`, {
+        cache: 'no-store',
+        headers: {
+          'Content-Type': 'application/json',
+          authorization: token
+        }
+      });
+
+      const result = await req.json();
 
       console.log("Categories: ", result);
       setCategories(result);
@@ -106,7 +147,15 @@ export function useGetOrders({ orderStatus }: { orderStatus: string }) {
 
   useEffect(() => {
     const getOrderByStatus = async () => {
-      const req = await fetch(`${apiUrl}/order?orderStatus=${orderStatus}`);
+      const token = await getTokenClient();
+      const req = await fetch(`${apiUrl}/order?orderStatus=${orderStatus}`, {
+        method: 'GET',
+        cache: 'no-store',
+        headers: {
+          'Content-Type': 'application/json',
+          authorization: token
+        }
+      });
       const result: IOrder[] = await req.json();
       setOrders(result);
     }

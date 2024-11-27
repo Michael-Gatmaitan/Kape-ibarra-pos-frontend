@@ -18,15 +18,11 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
-import { useAppDispatch } from "../../lib/hooks";
-import { setLoggedIn, setUserData } from "../../lib/features/auth/authSlice";
-import { verifySession } from "../../lib/session";
 import Link from "next/link";
-// import { redirect } from "next/navigation";
+import { verifySession } from "../../lib/session";
 
 const LoginForm = (props: { loginType: "employee" | "customer", children?: React.ReactNode }) => {
   const { loginType } = props;
-
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
 
@@ -37,8 +33,6 @@ const LoginForm = (props: { loginType: "employee" | "customer", children?: React
       password: "",
     },
   });
-
-  const dispatch = useAppDispatch();
 
   const [loginErr, setLoginErr] = useState<string>("");
 
@@ -75,6 +69,7 @@ const LoginForm = (props: { loginType: "employee" | "customer", children?: React
       }
     }
 
+    console.log(apiUrl);
     const loginReq = await fetch(`${apiUrl}/login?loginType=${loginType}`, {
       method: "POST",
       headers: {
@@ -115,18 +110,16 @@ const LoginForm = (props: { loginType: "employee" | "customer", children?: React
         })();
 
       } else if (loginType === "employee") {
-        console.log("Loginres: ", loginRes.token);
         const payload = await verifySession(loginRes.token);
 
         if (payload.person.id && payload.roleName) {
-          dispatch(setLoggedIn(true));
-          dispatch(setUserData({ person: payload.person, roleName: payload.roleName }));
+          // dispatch(setLoggedIn(true));
+          // dispatch(setUserData({ person: payload.person, roleName: payload.roleName }));
           console.log('redux all set');
         }
 
         // If there's a token in response, set it to locatstorage
         const { token } = loginRes;
-        console.log("Login token:", token);
 
         // Assign token
         (async function () {

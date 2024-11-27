@@ -7,17 +7,18 @@ import { getUserPayloadServer } from '../../actions/serverActions';
 const ProfileCard = async () => {
 
   const payload = await getUserPayloadServer();
+  const { person, roleName } = payload;
 
   return (
     <Card className='p-2 flex gap-2 items-center'>
       <Avatar>
         <AvatarImage src='/img/remvo.png' alt="mama_mo" />
-        <AvatarFallback>{payload.person.lastname}</AvatarFallback>
+        <AvatarFallback>{person.lastname}</AvatarFallback>
       </Avatar>
 
       <div className="infos">
-        <div className="name font-bold">{payload.person.firstname}</div>
-        <Label className="font-medium text">{payload.roleName}</Label>
+        <div className="name font-bold">{person.firstname}</div>
+        <Label className="font-medium text">{roleName}</Label>
       </div>
     </Card>
   )

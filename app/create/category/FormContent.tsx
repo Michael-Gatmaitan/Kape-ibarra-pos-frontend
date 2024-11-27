@@ -18,6 +18,7 @@ import { Button } from "../../../components/ui/button";
 import { ICategory } from "../../..";
 import { apiUrl } from "../../../lib/apiUrl";
 import { revalidateViewsProduct } from "../../../actions/revalidate";
+import { getTokenClient } from "../../../lib/tokenAPI";
 // import { useRouter } from 'next/navigation';
 
 interface CategoryFormContentProps {
@@ -39,10 +40,14 @@ const FormContent = ({
   });
 
   const createCategory = async (createCategoryReqBody: TCategorySchema) => {
+    const token = await getTokenClient();
     try {
       const createProductReq = await fetch(`${apiUrl}/category`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          authorization: token
+        },
         body: JSON.stringify(createCategoryReqBody),
       });
 
@@ -64,12 +69,14 @@ const FormContent = ({
     categoryId: string,
     updateCategoryReqBody: Omit<ICategory, "id">,
   ) => {
+    const token = await getTokenClient();
     console.log("Update product category");
 
     const updateCategoryReq = await fetch(`${apiUrl}/category/${categoryId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        authorization: token
       },
       body: JSON.stringify({ data: updateCategoryReqBody }),
     }).then((res) => res.json());
@@ -79,10 +86,12 @@ const FormContent = ({
   };
 
   const deleteProduct = async (categoryId: string) => {
+    const token = await getTokenClient();
     const deleteReq = await fetch(`${apiUrl}/category/${categoryId}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
+        authorization: token
       },
     });
 
@@ -93,12 +102,14 @@ const FormContent = ({
 
   const onSubmit = async (data: TCategorySchema) => {
     const { categoryName } = data;
+    const token = await getTokenClient();
 
     const validationRequest = await fetch("/api/schema/product-category", {
       method: "POST",
       body: JSON.stringify(data),
       headers: {
         "Content-Type": "application/json",
+        authorization: token
       },
     });
 

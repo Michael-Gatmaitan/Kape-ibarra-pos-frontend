@@ -1,25 +1,48 @@
 "use client";
 import React, { Dispatch, SetStateAction } from 'react'
-// import { apiUrl } from '../../../../lib/apiUrl';
-// import { IOrder } from '../../../..';
-// import { useGetOrders } from '../../../../lib/customHooks';
 import { ITransactionWithOrderAndOrderItems } from './page';
 import TransactionItem from './TransactionItem';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../../components/ui/select';
 
 interface ITransactionStackProps {
   transactions: ITransactionWithOrderAndOrderItems[];
   setActiveTransaction: Dispatch<SetStateAction<ITransactionWithOrderAndOrderItems>>;
+  setOrderStatusFilter: Dispatch<SetStateAction<"preparing" | "ready">>;
 }
 
 const TransactionStack = (props: ITransactionStackProps) => {
-  const { transactions, setActiveTransaction } = props;
+  const { transactions, setActiveTransaction, setOrderStatusFilter } = props;
 
   return (
-    <div className='grid gap-2 grid-cols-autoFitTransaction'>
-      {transactions.map(transaction => (
-        <TransactionItem key={transaction.id} transaction={transaction} setActiveTransaction={setActiveTransaction} />
-      ))}
-    </div>
+    <div>
+      <div className='flex w-full justify-between'>
+        <div className='text-2xl font-bold pb-2'>
+          Manage orders
+        </div>
+
+        {/* Dropdown */}
+        {/* setOrderStatusFilter */}
+        <Select onValueChange={(e: "preparing" | "ready") => {
+          setOrderStatusFilter(e);
+        }}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Preparing" />
+          </SelectTrigger>
+
+          <SelectContent>
+            <SelectItem value="preparing">Preparing</SelectItem>
+            <SelectItem value="ready">Ready</SelectItem>
+          </SelectContent>
+        </Select>
+
+      </div>
+      <div className='grid gap-2 h-min max-h-full grid-cols-autoFitTransaction'>
+        {transactions.length <= 0 ? "No orders pending." : transactions.map(transaction => (
+          <TransactionItem key={transaction.id} transaction={transaction} setActiveTransaction={setActiveTransaction} />
+        ))}
+      </div>
+    </div >
   )
 }
 

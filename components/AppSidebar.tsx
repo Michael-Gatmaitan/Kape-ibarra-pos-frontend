@@ -1,5 +1,5 @@
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarSeparator } from './ui/sidebar'
-import { ChartBarStacked, Home, Logs, LucideProps, Milk, Monitor, NotebookPen, Plus, ShoppingBasket, User, Users } from 'lucide-react'
+import { CalendarClock, ChartBarStacked, Home, Logs, LucideProps, Milk, Monitor, NotebookPen, Plus, ShoppingBasket, User, Users } from 'lucide-react'
 import Link from 'next/link'
 
 import SwitchMode from './SwitchMode'
@@ -21,6 +21,7 @@ interface ISidebarItems {
   create: IItem[],
   cashier: IItem[],
   barista: IItem[],
+  customer: IItem[],
 }
 
 
@@ -53,6 +54,10 @@ const items: ISidebarItems = {
     title: "Transaction",
     url: "/view/transactions",
     icon: NotebookPen
+  }, {
+    title: "Audit log",
+    url: "/view/audit-log",
+    icon: CalendarClock
   }],
 
   create: [{
@@ -80,6 +85,12 @@ const items: ISidebarItems = {
   }],
 
   barista: [{
+    title: "Manage orders",
+    url: '/u/barista/order',
+    icon: Logs
+  }],
+
+  customer: [{
     title: "Manage orders",
     url: '/u/barista/order',
     icon: Logs

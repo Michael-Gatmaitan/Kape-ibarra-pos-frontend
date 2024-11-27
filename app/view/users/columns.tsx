@@ -6,7 +6,7 @@ import { IUserWithRole } from "./page";
 // roleId: string;
 // firstname: string;
 // lastname: string;
-// cpNum: string;
+// phoneNumber: string;
 // username: string;
 // password: string;
 
@@ -39,11 +39,11 @@ export const columns: ColumnDef<IUserWithRole>[] = [
       return <div>{lastname.toString()}</div>
     }
   }, {
-    accessorKey: 'cpNum',
+    accessorKey: 'phoneNumber',
     header: "Role",
     cell: ({ row }) => {
-      const cpNum = row.getValue("cpNum");
-      return <div>{cpNum.toString()}</div>
+      const phoneNumber = row.getValue("phoneNumber");
+      return <div>{phoneNumber.toString()}</div>
     }
   }, {
     accessorKey: 'username',

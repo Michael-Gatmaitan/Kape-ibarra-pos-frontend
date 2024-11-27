@@ -1,7 +1,9 @@
 import React, { Dispatch, SetStateAction } from 'react'
 import { ITransactionWithOrderAndOrderItems } from './page'
-import { Button } from '../../../../components/ui/button';
+// import { Button } from '../../../../components/ui/button';
 import { Badge } from '../../../../components/ui/badge';
+import { Card } from '../../../../components/ui/card';
+import { Label } from '../../../../components/ui/label';
 
 interface ITransactionItemProps {
   transaction: ITransactionWithOrderAndOrderItems;
@@ -11,11 +13,19 @@ interface ITransactionItemProps {
 const TransactionItem = (props: ITransactionItemProps) => {
   const { transaction, setActiveTransaction } = props;
 
+  const date = new Date(transaction.transactionDate);
+
   return (
-    <Button variant='outline' className='p-4 flex justify-between' onClick={() => setActiveTransaction(transaction)}>
-      <div>Order #{transaction.order.customerNumber}</div>
-      <Badge>{transaction.order.orderStatus}</Badge>
-    </Button>
+    <Card className='grid p-2' onClick={() => setActiveTransaction(transaction)}>
+      <div className="flex justify-between w-full">
+
+        <div className='font-bold text-lg'>Order #{transaction.order.customerNumber}</div>
+        <Badge>{transaction.order.orderStatus}</Badge>
+      </div>
+      <Label>
+        {date.toUTCString()}
+      </Label>
+    </Card>
   )
 }
 
