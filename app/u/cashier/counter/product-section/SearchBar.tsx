@@ -24,10 +24,10 @@ const SearchBar = (props: ISearchBarProps) => {
         className='rounded-full my-2 h-12 outline-none'
       />
 
-      <div className="bg-gray-300 m-1 h-10 w-10 rounded-full absolute top-0 right-0 flex justify-center items-center">
+      <div className="m-1 h-10 w-10 rounded-full absolute top-0 right-0 flex justify-center items-center">
         <Search />
       </div>
-    </div>
+    </div >
   )
 }
 

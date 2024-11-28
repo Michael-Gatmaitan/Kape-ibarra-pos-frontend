@@ -102,10 +102,9 @@ const ConfirmAlertDialog = ({ handlerFunc }: { handlerFunc: () => void }) => {
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+          <AlertDialogTitle>Are you sure to mark this as ready?</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
+            Navigate to transaction sections or filter the results to see orders and more informations.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

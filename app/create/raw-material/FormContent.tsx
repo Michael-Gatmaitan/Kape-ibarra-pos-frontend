@@ -8,6 +8,7 @@ import CreateForm from "../CreateForm";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -18,6 +19,11 @@ import { Button } from "../../../components/ui/button";
 import { apiUrl } from "../../../lib/apiUrl";
 import { revalidateViewsProduct } from "../../../actions/revalidate";
 import { getTokenClient } from "../../../lib/tokenAPI";
+import { Popover, PopoverContent, PopoverTrigger } from "../../../components/ui/popover";
+import { cn } from "../../../lib/utils";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
+import { Calendar } from "../../../components/ui/calendar";
 
 interface IRawMaterialBody {
   materialName: string;
@@ -50,6 +56,10 @@ const FormContent = ({
         type === "update"
           ? `${rawMaterialDefaultValues.quantityInUnitPerItem}`
           : "",
+
+      batchQuantity: '',
+      expirationDate: new Date(),
+      reorderLevel: '',
     },
   });
 
@@ -124,6 +134,7 @@ const FormContent = ({
   };
 
   const onSubmit = async (data: TRawMaterialSchema) => {
+    console.log(data);
     const validationRequest = await fetch("/api/schema/raw-material", {
       method: "POST",
       body: JSON.stringify(data),
@@ -217,7 +228,7 @@ const FormContent = ({
             name="quantityInUnitPerItem"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Qunatity</FormLabel>
+                <FormLabel>Quantity</FormLabel>
                 <FormControl>
                   <Input type="number" placeholder="Quantity" {...field} />
                 </FormControl>
@@ -225,6 +236,83 @@ const FormContent = ({
               </FormItem>
             )}
           />
+
+          <FormField
+            control={form.control}
+            name="reorderLevel"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Reorder level</FormLabel>
+                <FormControl>
+                  <Input type="number" placeholder="Quantity of stock to notify you to reorder" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="batchQuantity"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Batch quantity</FormLabel>
+                <FormControl>
+                  <Input type="number" placeholder="Quantity of stock to notify you to reorder" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="expirationDate"
+            render={({ field }) => (
+              <FormItem className="flex flex-col">
+                <FormLabel>Expiration date</FormLabel>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "w-[240px] pl-3 text-left font-normal",
+                          !field.value && "text-muted-foreground"
+                        )}
+                      >
+                        {field.value ? (
+                          format(field.value, "PPP")
+                        ) : (
+                          <span>Pick a date</span>
+                        )}
+                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={field.value}
+                      onSelect={field.onChange}
+                      fromDate={new Date()}
+                      // disabled={(date) =>
+                      //   date > new Date() || date < new Date("1900-01-01")
+                      // }
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+                <FormDescription>
+                  This will be used for monitoring your raw materials
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+
+
 
           <div className="grid gap-2 grid-cols-2 w-full">
             <Button

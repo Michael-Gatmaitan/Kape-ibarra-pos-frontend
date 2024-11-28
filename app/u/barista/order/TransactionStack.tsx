@@ -37,7 +37,8 @@ const TransactionStack = (props: ITransactionStackProps) => {
         </Select>
 
       </div>
-      <div className='grid gap-2 h-min max-h-full grid-cols-autoFitTransaction'>
+      {/* grid-cols-autoFitTransaction */}
+      <div className='grid gap-2 h-min max-h-full'>
         {transactions.length <= 0 ? "No orders pending." : transactions.map(transaction => (
           <TransactionItem key={transaction.id} transaction={transaction} setActiveTransaction={setActiveTransaction} />
         ))}

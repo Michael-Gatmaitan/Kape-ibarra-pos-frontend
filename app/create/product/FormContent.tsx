@@ -37,7 +37,8 @@ import { apiUrl } from "../../../lib/apiUrl";
 import { IProduct } from "../../..";
 import { revalidateViewsProduct } from "../../../actions/revalidate";
 import { getTokenClient } from "../../../lib/tokenAPI";
-// import { useToast } from "../../../@/hooks/use-toast";
+import { useToast } from "../../../@/hooks/use-toast";
+import { useRouter } from "next/navigation";
 
 // UUID
 // import { v4 as uuidv4 } from "uuid";
@@ -75,9 +76,8 @@ const FormContent = ({
 }: ProductFormContentProps) => {
   const rawMaterials = useRawMaterial();
   const categories = useCategories();
-
-  console.log(categories);
-  // const toast = useToast();
+  const router = useRouter();
+  const { toast } = useToast();
 
   // States for confirmation of CREATED & UPDATED
 
@@ -119,6 +119,11 @@ const FormContent = ({
         form.setError("productName", { message: res.error });
         return;
       }
+
+      toast({
+        title: "Product created successfully",
+        description: "Navigate to products page to see the new product"
+      });
 
       // successfully
       form.reset();
@@ -163,6 +168,7 @@ const FormContent = ({
     const res = await deleteReq.json();
     console.log(res);
     revalidateViewsProduct('/view/products');
+    router.back();
   };
 
   const [createSuccess, setCreateSuccess] = useState(false);
@@ -176,6 +182,8 @@ const FormContent = ({
   const onSubmit = async (data: TProductSchema) => {
     const { productName, price, description, categoryId, recipes } = data;
 
+    console.log("from props: ", recipesDefaultValues, "from data:", recipes);
+
     // Validate in api the data before creating it
     const validationRequest = await fetch("/api/schema/product", {
       method: "POST",
@@ -187,6 +195,7 @@ const FormContent = ({
 
     const validationData = await validationRequest.json();
 
+    console.log(validationData);
     if (validationData.errors) {
       const errors = validationData.errors;
 
@@ -235,6 +244,7 @@ const FormContent = ({
       await createProduct(createProductReqBody);
     } else if (type === "update") {
       // Update our product
+      console.log("Updating product")
       await updateProduct(productDefaultValues.id, createProductReqBody);
     }
   };
@@ -480,6 +490,7 @@ const FormContent = ({
           <Button
             onClick={() =>
               append({
+                // id: randomUUID(),
                 rawMaterialId: "",
                 quantityInUnitPcsNeeded: "1",
               })

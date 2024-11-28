@@ -50,10 +50,10 @@ export default async function RootLayout({
             disableTransitionOnChange
           >
             <SidebarProvider>
+              <AppNavbar />
               <AppSidebar />
 
               {/* <ModeToggle /> */}
-              <AppNavbar />
               {/* my-9 mx-4 lg:mx-12 xl:mx-40 */}
               <div className="w-full px-4 my-2 lg:px-4 xl:px-4 2xl:px-2">
                 {children}

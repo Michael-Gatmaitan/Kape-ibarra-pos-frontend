@@ -19,7 +19,7 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
       authorization: token
     }
   });
-  const categories: ICategory[] = await categoriesReq.json();
+  // const categories: ICategory[] = await categoriesReq.json();
 
   const categoryToEdit = await fetch(`${apiUrl}/category/${id}`, {
     method: 'GET',
@@ -38,13 +38,13 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
     <div>
       <BackLink buttonTitle='Category list' href="/view/categories" />
       <FormContent type="update" categoryDefaultValues={res} />
-
-      {categories.map(({ id, categoryName }) => (
+      <div className="">jear ulul</div>
+      {/* {categories.map(({ id, categoryName }) => (
         <div key={id} className='p-4 bg-red-600 text-white rounded-md my-4'>
           <div>{id}</div>
           <div>{categoryName}</div>
         </div>
-      ))}
+      ))} */}
     </div>
   )
 }

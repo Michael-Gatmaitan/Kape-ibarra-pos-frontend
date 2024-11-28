@@ -11,6 +11,7 @@ import { cookies } from 'next/headers';
 
 const page = async () => {
   const token = cookies().get('token')?.value;
+  console.log(token);
   const rawMaterialReq = await fetch(`${apiUrl}/raw-material`, {
     method: 'GET',
     cache: 'no-cache',

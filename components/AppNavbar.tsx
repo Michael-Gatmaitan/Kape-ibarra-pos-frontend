@@ -3,13 +3,15 @@ import React from 'react'
 // import { useSidebar } from './ui/sidebar'
 import Link from 'next/link';
 import { Button } from './ui/button';
+import { useUserPayload } from '../lib/customHooks';
 
 
 const AppNavbar = () => {
   // const { toggleSidebar, open } = useSidebar();
+  const payload = useUserPayload();
 
   return (
-    <nav className="fixed inset-x-0 top-0 z-50 bg-white shadow-sm dark:bg-slate-900 md:hidden">
+    <nav className="fixed inset-x-0 top-0 z-50 bg-secondary border-b shadow-sm md:hidden">
       <div className="w-full max-w-7xl mx-auto px-4">
         <div className="flex justify-between h-14 items-center">
           <Link href="#" className="flex items-center" prefetch={false}>
@@ -46,19 +48,22 @@ const AppNavbar = () => {
               Contact
             </Link>
           </nav>
-          <div className="flex items-center gap-4">
 
-            <Button variant="outline" size="sm" asChild>
-              <Link href='/'>
-                Log in
-              </Link>
-            </Button>
-            <Button size="sm" asChild>
-              <Link href='/'>
-                Sign up
-              </Link>
-            </Button>
-          </div>
+          {!payload?.person?.id ? (
+            <div className="flex items-center gap-4">
+
+              <Button variant="outline" size="sm" asChild>
+                <Link href='/'>
+                  Log in
+                </Link>
+              </Button>
+              <Button size="sm" asChild>
+                <Link href='/'>
+                  Sign up
+                </Link>
+              </Button>
+            </div>
+          ) : null}
         </div>
       </div>
     </nav>

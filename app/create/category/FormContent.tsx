@@ -19,6 +19,7 @@ import { ICategory } from "../../..";
 import { apiUrl } from "../../../lib/apiUrl";
 import { revalidateViewsProduct } from "../../../actions/revalidate";
 import { getTokenClient } from "../../../lib/tokenAPI";
+import { useToast } from "../../../@/hooks/use-toast";
 // import { useRouter } from 'next/navigation';
 
 interface CategoryFormContentProps {
@@ -31,6 +32,7 @@ const FormContent = ({
   categoryDefaultValues,
 }: CategoryFormContentProps) => {
   // const router = useRouter();
+  const { toast } = useToast();
 
   const form = useForm<TCategorySchema>({
     resolver: zodResolver(categorySchema),
@@ -60,6 +62,9 @@ const FormContent = ({
       // Create category successful
       console.log("New Category: ", res);
       revalidateViewsProduct('/view/categories');
+
+      toast({ title: "New category added", description: "You can now use the new category you crated." });
+      form.reset();
     } catch (err) {
       console.log(err);
     }
@@ -83,6 +88,9 @@ const FormContent = ({
 
     console.log("Updated category: ", updateCategoryReq);
     revalidateViewsProduct('/view/categories');
+
+    toast({ title: "Category updated", description: "You can now use the updated category you crated." });
+    form.reset();
   };
 
   const deleteProduct = async (categoryId: string) => {
@@ -102,14 +110,12 @@ const FormContent = ({
 
   const onSubmit = async (data: TCategorySchema) => {
     const { categoryName } = data;
-    const token = await getTokenClient();
 
     const validationRequest = await fetch("/api/schema/product-category", {
       method: "POST",
       body: JSON.stringify(data),
       headers: {
         "Content-Type": "application/json",
-        authorization: token
       },
     });
 
@@ -198,5 +204,15 @@ const FormContent = ({
     </CreateForm>
   );
 };
+
+// "Error in creating transaction: PrismaClientKnownRequestError: 
+// Invalid `prisma.order.create()` invocation in
+// C:\Users\Michael\Desktop\Projects\ibarra_pos\backend\controllers\orders\orderController.ts:63:43
+
+//   60 const { totalAmount, totalTendered, change, paymentMethod } =
+//   61   req.body.transactionBody;
+//   62 
+// → 63 const newOrder = await prisma.order.create(
+// Foreign key constraint violated: `fk_order_employee (index)`"
 
 export default FormContent;

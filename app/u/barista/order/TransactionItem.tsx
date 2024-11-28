@@ -16,7 +16,7 @@ const TransactionItem = (props: ITransactionItemProps) => {
   const date = new Date(transaction.transactionDate);
 
   return (
-    <Card className='grid p-2' onClick={() => setActiveTransaction(transaction)}>
+    <Card className='grid gap-2 p-2' onClick={() => setActiveTransaction(transaction)}>
       <div className="flex justify-between w-full">
 
         <div className='font-bold text-lg'>Order #{transaction.order.customerNumber}</div>

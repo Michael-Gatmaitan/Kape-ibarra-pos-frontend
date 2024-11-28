@@ -87,7 +87,6 @@ export function useRawMaterial() {
   useEffect(() => {
     const getRawMaterials = async () => {
       const token = await getTokenClient();
-      console.log("RAW", token)
       const result = await fetch(`${apiUrl}/raw-material`, {
         cache: 'no-store',
         headers: {
@@ -113,7 +112,6 @@ export function useCategories() {
   useEffect(() => {
     const getCategories = async () => {
       const token = await getTokenClient();
-      console.log("CAT", token)
       const req = await fetch(`${apiUrl}/category`, {
         cache: 'no-store',
         headers: {

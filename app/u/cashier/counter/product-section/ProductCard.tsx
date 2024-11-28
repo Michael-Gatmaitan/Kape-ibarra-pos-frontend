@@ -1,7 +1,7 @@
 "use client";
 
 import { ICategory, IProduct } from "../../../../..";
-import { Card, CardContent, CardHeader } from '../../../../../components/ui/card';
+import { Card, CardContent, CardFooter, CardHeader } from '../../../../../components/ui/card';
 import { AspectRatio } from '@radix-ui/react-aspect-ratio';
 import Image from 'next/image';
 import { Badge } from '../../../../../components/ui/badge';
@@ -36,7 +36,7 @@ const ProductCard = (props: IProductCardProps) => {
   return (
     <Card onClick={handleProductSelect} className={`${selected ? "bg-secondary hover:bg-secondary" : 'hover:bg-popover'}`}>
       <CardHeader className='p-2'>
-        <AspectRatio ratio={1 / 1} className='bg-[#D5DAE0] rounded-md'>
+        <AspectRatio ratio={1 / 1} className='rounded-md'>
           <Image src={imagePath} alt={id} fill className="h-full w-full rounded-md object-cover" />
         </AspectRatio>
       </CardHeader>
@@ -50,8 +50,19 @@ const ProductCard = (props: IProductCardProps) => {
           <div className="text-sm font-medium">₱ {price}</div>
         </div>
       </CardContent>
+      <CardFooter className="p-0"></CardFooter>
     </Card>
   )
 }
 
 export default ProductCard;
+
+// "Error in creating transaction: PrismaClientKnownRequestError:
+// Invalid `prisma.order.create()` invocation in
+// C:\Users\Michael\Desktop\Projects\ibarra_pos\backend\controllers\orders\orderController.ts:63:43
+
+//   60 const { totalAmount, totalTendered, change, paymentMethod } =
+//   61   req.body.transactionBody;
+//   62
+// → 63 const newOrder = await prisma.order.create(
+// Foreign key constraint violated: `fk_order_employee (index)`"

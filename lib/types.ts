@@ -66,9 +66,29 @@ export const rawMaterialSchema = z.object({
     .min(1, "Raw material should have quantity")
     .default(""),
   rawPrice: z.string().min(1, "Raw material should have a price").default(""),
+
+  // reorder, batchQuantity, and expirationDate will be added
+  reorderLevel: z.string().min(1, "Reorder level required"),
+  batchQuantity: z.string().min(1, "Batch quantity required"),
+  // expirationDate: z.date({
+  //   required_error: "Expiration date of the new raw material required",
+  // }),
+  expirationDate: z.coerce.date({
+    required_error: "Expiration date of the new raw material required",
+  }),
 });
 
 export type TRawMaterialSchema = z.infer<typeof rawMaterialSchema>;
+
+export const batchSchema = z.object({
+  rawMaterialId: z.string().min(1, "Raw material needed"),
+  batchQuantity: z.string().min(0, "Batch quantity need"),
+  expirationDate: z.coerce.date({
+    required_error: "Expiration date of the new raw material required",
+  }),
+});
+
+export type TBatchSchema = z.infer<typeof batchSchema>;
 
 // const productData = {
 //   productName: "Example Product",

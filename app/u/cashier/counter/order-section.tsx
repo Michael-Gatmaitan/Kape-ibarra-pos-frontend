@@ -125,6 +125,8 @@ const OrderSection = () => {
       title: "Order successful",
       description: "New order has been recorded.",
     });
+
+    setTotalTendered(0);
     dispatch(clearOrderItems());
   }
 
