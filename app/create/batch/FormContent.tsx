@@ -91,12 +91,12 @@ const FormContent = ({ rawMaterials }: { rawMaterials: IRawMaterial[] }) => {
             name="rawMaterialId"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Select user role</FormLabel>
+                <FormLabel>Select raw material</FormLabel>
 
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select role" />
+                      <SelectValue placeholder="Select raw material" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>

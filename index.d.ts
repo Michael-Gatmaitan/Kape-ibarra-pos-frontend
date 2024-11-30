@@ -10,6 +10,7 @@ export interface IInventory {
   quantityInUnit: number;
   stockQuantity: number;
   isReorderNeeded: boolean;
+  reorderLevel: number;
 }
 
 export interface IOrder {
@@ -49,6 +50,7 @@ export interface IProduct {
   imagePath: string;
   productName: string;
   price: number;
+  isAvailable: boolean;
   description?: string;
   createdAt: string;
 }
@@ -135,4 +137,12 @@ export interface ICustomer {
   gender: string;
   phoneNumber: string | null;
   createdAt: Date;
+}
+
+export interface IAuditLog {
+  id: string;
+  customerId?: string;
+  employeeId?: string;
+  timeIn: Date;
+  timeOut: Date;
 }

@@ -20,6 +20,7 @@ import {
 } from "../ui/form";
 import Link from "next/link";
 import { verifySession } from "../../lib/session";
+import revalidateAction from "../../lib/action";
 
 const LoginForm = (props: { loginType: "employee" | "customer", children?: React.ReactNode }) => {
   const { loginType } = props;
@@ -88,60 +89,42 @@ const LoginForm = (props: { loginType: "employee" | "customer", children?: React
     console.log(loginRes);
 
     if ("token" in loginRes) {
+      (async function () {
+        await fetch("/api/token", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            token: loginRes.token,
+          },
+        });
+      })();
 
-      if (loginType === "customer") {
-        const payload = await verifySession(loginRes.token);
+      const payload = await verifySession(loginRes.token);
+      const createAuditLogReq = await fetch(`${apiUrl}/audit-log`, {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          authorization: loginRes.token
+        },
+        body: JSON.stringify({
+          id: payload.person.id,
+          roleName: payload.roleName
+        })
+      });
 
-        if (payload.person.id) {
-
-        }
-
-        const { token } = loginRes;
-        console.log("Login token:", token);
-
-        (async function () {
-          await fetch("/api/token", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              token: token,
-            },
-          });
-        })();
-
-      } else if (loginType === "employee") {
-        const payload = await verifySession(loginRes.token);
-
-        if (payload.person.id && payload.roleName) {
-          // dispatch(setLoggedIn(true));
-          // dispatch(setUserData({ person: payload.person, roleName: payload.roleName }));
-          console.log('redux all set');
-        }
-
-        // If there's a token in response, set it to locatstorage
-        const { token } = loginRes;
-
-        // Assign token
-        (async function () {
-          await fetch("/api/token", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              token: token,
-            },
-          });
-        })();
-
-      }
-
-      // Route to login section base on role
-      // for now for dev
-      router.push('/');
-      router.refresh();
-    } else {
-      console.log(loginRes.error);
-      setLoginErr(loginRes.error);
+      const auditLogRes = await createAuditLogReq.json();
+      console.log(auditLogRes);
     }
+
+    // Route to login section base on role
+    // for now for dev
+    // revalidatePath('/view/audit-logs');
+    revalidateAction('/view/audit-logs');
+    router.push('/');
+    router.refresh();
+
+    console.log(loginRes.error);
+    setLoginErr(loginRes.error);
   };
 
   return (
@@ -194,7 +177,7 @@ const LoginForm = (props: { loginType: "employee" | "customer", children?: React
           </Button>
         </form>
 
-        {loginErr}
+        {loginErr && loginErr}
       </Form>
 
       <Button type="button" variant="ghost" className="mt-2 w-full" asChild>

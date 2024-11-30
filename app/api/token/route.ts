@@ -16,6 +16,8 @@ export async function POST(req: NextRequest) {
 export async function GET(req: NextRequest) {
   const token = cookies().get("token")?.value;
 
+  if (!token) return Response.json({ error: "No token found" });
+
   // const getType = req.query.getType;
   const getType = req.nextUrl.searchParams.get("getType");
 

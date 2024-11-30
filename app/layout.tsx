@@ -55,7 +55,8 @@ export default async function RootLayout({
 
               {/* <ModeToggle /> */}
               {/* my-9 mx-4 lg:mx-12 xl:mx-40 */}
-              <div className="w-full px-4 my-2 lg:px-4 xl:px-4 2xl:px-2">
+              {/* my-[calc(56px+12px)] */}
+              <div className="w-full px-4 my-[calc(56px+12px)] lg:px-4 xl:px-4 2xl:px-2 md:my-2">
                 {children}
               </div>
 

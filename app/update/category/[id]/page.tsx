@@ -11,14 +11,14 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
 
   const token = cookies().get('token')?.value;
 
-  const categoriesReq = await fetch(`${apiUrl}/category`, {
-    method: 'GET',
-    cache: 'no-cache',
-    headers: {
-      'Content-Type': 'application/json',
-      authorization: token
-    }
-  });
+  // const categoriesReq = await fetch(`${apiUrl}/category`, {
+  //   method: 'GET',
+  //   cache: 'no-cache',
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //     authorization: token
+  //   }
+  // });
   // const categories: ICategory[] = await categoriesReq.json();
 
   const categoryToEdit = await fetch(`${apiUrl}/category/${id}`, {
@@ -38,7 +38,6 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
     <div>
       <BackLink buttonTitle='Category list' href="/view/categories" />
       <FormContent type="update" categoryDefaultValues={res} />
-      <div className="">jear ulul</div>
       {/* {categories.map(({ id, categoryName }) => (
         <div key={id} className='p-4 bg-red-600 text-white rounded-md my-4'>
           <div>{id}</div>

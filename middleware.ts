@@ -49,6 +49,7 @@ export async function middleware(req: NextRequest) {
 
 export const config: MiddlewareConfig = {
   matcher: [
+    "/",
     "/create/((?!general).*)",
     "/update/((?!general).*)",
     "/view/((?!general).*)",

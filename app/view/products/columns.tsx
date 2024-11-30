@@ -7,6 +7,9 @@ import { ArrowUpDown, Edit } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
+import { formatRelative, subDays } from "date-fns";
+import { updateProductAvailabilityAction } from "../../../lib/action";
+
 export const columns: ColumnDef<IProduct>[] = [
   {
     accessorKey: 'id',
@@ -40,6 +43,30 @@ export const columns: ColumnDef<IProduct>[] = [
     }
   },
   {
+    accessorKey: 'isAvailable',
+    header: "Availability",
+    cell: ({ row }) => {
+      const val = row.getValue("isAvailable");
+      const productId = row.getValue("id") as string;
+
+      const updateAvailability = updateProductAvailabilityAction.bind(null, {
+        availability: val,
+        productId
+      });
+
+      return <div className="grid gap-1">
+        <div className="w-full border p-1 rounded-sm text-center">{
+          val ? "Available" : "Not available"
+        }</div>
+        <div className="grid gap-1">
+          <Button variant="outline" className="p-2" onClick={() => updateAvailability({})}>
+            Set as {!val ? `"Available"` : `"Not available"`}
+          </Button>
+        </div>
+      </div>
+    }
+  },
+  {
     accessorKey: "category",
     header: "Category",
     cell: ({ row }) => {
@@ -63,7 +90,7 @@ export const columns: ColumnDef<IProduct>[] = [
         </Button>
       )
     },
-    cell: ({ row }) => <div className="text-left">₱ {row.getValue('price')}</div>
+    cell: ({ row }) => <div className="text-center">₱ {row.getValue('price')}</div>
   }, {
     accessorKey: "description",
     header: "Description"
@@ -72,8 +99,11 @@ export const columns: ColumnDef<IProduct>[] = [
     header: "Created at",
     cell: ({ row }) => {
       const date = new Date(row.getValue('createdAt'));
-      // const formattedDate = ``;
-      return <div>{date.toUTCString()}</div>
+      return (
+        <div className="text-nowrap">
+          {formatRelative(subDays(date, 0), new Date())}
+        </div>
+      )
     }
   }
 ];

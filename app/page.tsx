@@ -1,7 +1,7 @@
 // import { SidebarTrigger } from "../components/ui/sidebar";
 
 import { cookies } from "next/headers";
-import { ModeToggle } from "../components/ModeToggle";
+// import { ModeToggle } from "../components/ModeToggle";
 import SocketSample from "./SocketSample";
 
 export default function Home() {

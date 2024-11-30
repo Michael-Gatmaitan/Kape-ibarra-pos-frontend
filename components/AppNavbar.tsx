@@ -1,24 +1,22 @@
 "use client";
 import React from 'react'
-// import { useSidebar } from './ui/sidebar'
+import { useSidebar } from './ui/sidebar'
 import Link from 'next/link';
 import { Button } from './ui/button';
 import { useUserPayload } from '../lib/customHooks';
+import { Menu } from 'lucide-react';
 
 
 const AppNavbar = () => {
-  // const { toggleSidebar, open } = useSidebar();
+  const { toggleSidebar } = useSidebar();
   const payload = useUserPayload();
 
   return (
-    <nav className="fixed inset-x-0 top-0 z-50 bg-secondary border-b shadow-sm md:hidden">
-      <div className="w-full max-w-7xl mx-auto px-4">
+    <nav className="fixed block bg-card inset-x-0 top-0 z-[100] border-b shadow-sm md:hidden">
+      <div className="w-full max-w-7xl mx-auto px-2">
         <div className="flex justify-between h-14 items-center">
-          <Link href="#" className="flex items-center" prefetch={false}>
-            {/* <MountainIcon className="h-6 w-6" /> */}
-            <span className="sr-only">Acme Inc</span>
-          </Link>
-          <nav className="hidden md:flex gap-4">
+
+          {/* <nav className="hidden md:flex gap-4"
             <Link
               href="#"
               className="font-medium flex items-center text-sm transition-colors hover:underline"
@@ -47,7 +45,11 @@ const AppNavbar = () => {
             >
               Contact
             </Link>
-          </nav>
+          </nav> */}
+
+          <Button onClick={() => toggleSidebar()} variant='outline'>
+            <Menu />
+          </Button>
 
           {!payload?.person?.id ? (
             <div className="flex items-center gap-4">

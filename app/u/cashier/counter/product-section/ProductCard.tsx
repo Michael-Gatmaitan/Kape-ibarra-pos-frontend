@@ -8,13 +8,15 @@ import { Badge } from '../../../../../components/ui/badge';
 import { useAppDispatch } from "../../../../../lib/hooks";
 import { handleOrderItem, OrderItems } from "../../../../../lib/features/order/orderSlice";
 import { useEffect, useState } from "react";
+import { useToast } from "../../../../../@/hooks/use-toast";
 
 interface IProductCardProps { product: IProduct & { category: ICategory }, orderItems: { [key: string]: OrderItems } }
 
 const ProductCard = (props: IProductCardProps) => {
   const dispatch = useAppDispatch();
+  const { toast } = useToast();
   const { product, orderItems } = props;
-  const { id, productName, imagePath, category, price } = product;
+  const { id, productName, imagePath, category, price, isAvailable } = product;
   const { categoryName } = category;
   const [selected, setSelected] = useState<boolean>(false);
 
@@ -32,9 +34,21 @@ const ProductCard = (props: IProductCardProps) => {
     setSelected(!selected);
   }
 
+  const toastProductNotAvailable = () => {
+    toast({ variant: "destructive", title: `${productName} is not available` });
+  }
+
 
   return (
-    <Card onClick={handleProductSelect} className={`${selected ? "bg-secondary hover:bg-secondary" : 'hover:bg-popover'}`}>
+    <Card
+      onClick={!isAvailable ? toastProductNotAvailable : handleProductSelect}
+      className={
+        `
+          ${selected ? "bg-secondary hover:bg-secondary" : 'hover:bg-popover'}
+          ${!isAvailable ? "opacity-45 cursor-default" : "cursor-pointer"}
+        `
+      }
+    >
       <CardHeader className='p-2'>
         <AspectRatio ratio={1 / 1} className='rounded-md'>
           <Image src={imagePath} alt={id} fill className="h-full w-full rounded-md object-cover" />
@@ -56,13 +70,3 @@ const ProductCard = (props: IProductCardProps) => {
 }
 
 export default ProductCard;
-
-// "Error in creating transaction: PrismaClientKnownRequestError:
-// Invalid `prisma.order.create()` invocation in
-// C:\Users\Michael\Desktop\Projects\ibarra_pos\backend\controllers\orders\orderController.ts:63:43
-
-//   60 const { totalAmount, totalTendered, change, paymentMethod } =
-//   61   req.body.transactionBody;
-//   62
-// → 63 const newOrder = await prisma.order.create(
-// Foreign key constraint violated: `fk_order_employee (index)`"

@@ -2,13 +2,6 @@
 
 import { ColumnDef } from "@tanstack/react-table"
 import { IUserWithRole } from "./page";
-// id: string;
-// roleId: string;
-// firstname: string;
-// lastname: string;
-// phoneNumber: string;
-// username: string;
-// password: string;
 
 export const columns: ColumnDef<IUserWithRole>[] = [
   {
@@ -26,35 +19,35 @@ export const columns: ColumnDef<IUserWithRole>[] = [
     }
   }, {
     accessorKey: 'firstname',
-    header: "Role",
+    header: "Firstname",
     cell: ({ row }) => {
       const firstname = row.getValue("firstname");
       return <div>{firstname.toString()}</div>
     }
   }, {
     accessorKey: 'lastname',
-    header: "Role",
+    header: "Lastname",
     cell: ({ row }) => {
       const lastname = row.getValue("lastname");
       return <div>{lastname.toString()}</div>
     }
   }, {
     accessorKey: 'phoneNumber',
-    header: "Role",
+    header: "Phone number",
     cell: ({ row }) => {
       const phoneNumber = row.getValue("phoneNumber");
       return <div>{phoneNumber.toString()}</div>
     }
   }, {
     accessorKey: 'username',
-    header: "Role",
+    header: "Username",
     cell: ({ row }) => {
       const username = row.getValue("username");
       return <div>{username.toString()}</div>
     }
   }, {
     accessorKey: 'password',
-    header: "Role",
+    header: "Password",
     cell: ({ row }) => {
       const password = row.getValue("password");
       return <div>{password.toString()}</div>

@@ -1,8 +1,8 @@
 "use client";
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import socket from '../lib/socket';
-import { Button } from '../components/ui/button';
-import { Calendar } from '../components/ui/calendar';
+// import { Button } from '../components/ui/button';
+// import { Calendar } from '../components/ui/calendar';
 
 import { ChartContainer, ChartLegend, ChartLegendContent, type ChartConfig } from '../components/ui/chart';
 import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts';
@@ -31,8 +31,8 @@ const chartConfig = {
 
 const SocketSample = () => {
 
-  const [num, setNum] = useState(0);
-  const [date, setDate] = useState<Date | undefined>(new Date());
+  // const [num, setNum] = useState(0);
+  // const [date, setDate] = useState<Date | undefined>(new Date());
 
   useEffect(() => {
 
@@ -44,8 +44,6 @@ const SocketSample = () => {
       socket.off("message");
     };
   }, []);
-
-  console.log(date);
 
   return (
     <div className='w-full h-[calc(100vh-16px)] flex justify-center items-center'>

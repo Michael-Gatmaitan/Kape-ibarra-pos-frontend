@@ -1,5 +1,5 @@
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarSeparator } from './ui/sidebar'
-import { BadgeCent, CalendarClock, ChartBarStacked, Logs, LucideProps, Milk, Monitor, NotebookPen, Plus, ShoppingBasket, User, Users, Wallet } from 'lucide-react'
+import { BadgeCent, Box, CalendarClock, ChartBarStacked, Logs, LucideProps, Milk, Monitor, NotebookPen, Plus, ShoppingBasket, User, Users, Wallet } from 'lucide-react'
 import Link from 'next/link'
 
 import SwitchMode from './SwitchMode'
@@ -60,8 +60,12 @@ const items: ISidebarItems = {
     icon: Wallet
   }, {
     title: "Audit log",
-    url: "/view/audit-log",
+    url: "/view/audit-logs",
     icon: CalendarClock
+  }, {
+    title: "Inventory",
+    url: "/view/inventories",
+    icon: Box
   }],
 
   create: [{
@@ -79,6 +83,10 @@ const items: ISidebarItems = {
   }, {
     title: "Create new employee",
     url: "/auth/signup",
+    icon: Plus
+  }, {
+    title: "Create batch",
+    url: "/create/batch",
     icon: Plus
   }],
 
