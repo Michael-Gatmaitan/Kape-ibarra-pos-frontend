@@ -5,9 +5,11 @@ import React from 'react'
 const page = () => {
   return (
     <div className='h-svh flex justify-center items-center'>
-      <Head>
-        <title>Sign up</title>
-      </Head>
+      <head>
+        <Head>
+          <title>Sign up</title>
+        </Head>
+      </head>
 
       <SignupForm />
     </div>

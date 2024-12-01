@@ -28,15 +28,27 @@ export async function middleware(req: NextRequest) {
     // Validate all roles here
     const url = req.url;
 
+    // ** CUSTOMERS ** //
+    // Redirect if user logged in but navigates to login/signup
+    if (url.includes("/login")) {
+      return NextResponse.redirect(new URL("/", url));
+    }
+
+    if (payload.roleName === "customer") {
+      if (url.includes("/view/") || url.includes("/u/")) {
+        return NextResponse.redirect(new URL("/home", url));
+      }
+    }
+
     if (
       url.includes("/view/") &&
       ["Cashier", "Barista"].includes(payload.roleName)
     ) {
       console.log("hes a: ", payload.roleName);
       if (payload.roleName === "Cashier") {
-        return NextResponse.redirect(new URL("/u/cashier/counter", req.url));
+        return NextResponse.redirect(new URL("/u/cashier/counter", url));
       } else if (payload.roleName === "Barista") {
-        return NextResponse.redirect(new URL("/u/barista/orders", req.url));
+        return NextResponse.redirect(new URL("/u/barista/orders", url));
       }
     }
 
