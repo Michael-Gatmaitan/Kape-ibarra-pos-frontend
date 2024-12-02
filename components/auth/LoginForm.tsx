@@ -181,7 +181,7 @@ const LoginForm = (props: { loginType: "employee" | "customer", children?: React
       </Form>
 
       <Button type="button" variant="ghost" className="mt-2 w-full" asChild>
-        <Link href="/signup">
+        <Link href="#">
           Dont have account? Sign up here!
         </Link>
       </Button>

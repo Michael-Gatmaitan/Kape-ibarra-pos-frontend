@@ -1,6 +1,6 @@
 import { MiddlewareConfig, NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
 import { verifySession } from "./lib/session";
+import { getCookieToken } from "./lib/cookieToken";
 
 // This middleware is for checking and validating user's token for log in, automatic login & more.
 
@@ -8,7 +8,7 @@ import { verifySession } from "./lib/session";
 // !!!: JUST FIND OUT THAT im setting it in cookies hehe
 
 export async function middleware(req: NextRequest) {
-  const token = cookies().get("token")?.value;
+  const token = await getCookieToken();
 
   // If there's no token, redirect to login
   console.log(token);
@@ -20,7 +20,7 @@ export async function middleware(req: NextRequest) {
     console.log("middleware rolename: ", payload.roleName);
 
     // If there's no roleId in payload decrypted
-    if (!payload.roleName)
+    if (!payload?.roleName)
       return NextResponse.redirect(new URL("/login", req.url));
 
     // console.log("Payload: ", payload);
@@ -66,6 +66,7 @@ export const config: MiddlewareConfig = {
     "/update/((?!general).*)",
     "/view/((?!general).*)",
     "/u/((?!general).*)",
+    "/c/((?!general).*)", // for customer
     // "/auth/((?!general).*)",
   ],
 };

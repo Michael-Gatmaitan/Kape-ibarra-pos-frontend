@@ -1,8 +1,5 @@
 "use client";
-import React, { useEffect } from 'react'
-import socket from '../lib/socket';
-// import { Button } from '../components/ui/button';
-// import { Calendar } from '../components/ui/calendar';
+import React from 'react'
 
 import { ChartContainer, ChartLegend, ChartLegendContent, type ChartConfig } from '../components/ui/chart';
 import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts';
@@ -31,20 +28,6 @@ const chartConfig = {
 
 const SocketSample = () => {
 
-  // const [num, setNum] = useState(0);
-  // const [date, setDate] = useState<Date | undefined>(new Date());
-
-  useEffect(() => {
-
-    socket.on('count', (data) => {
-      console.log("Hillo", data);
-    });
-
-    return () => {
-      socket.off("message");
-    };
-  }, []);
-
   return (
     <div className='w-full h-[calc(100vh-16px)] flex justify-center items-center'>
       {/* <Button onClick={() => {
@@ -62,7 +45,7 @@ const SocketSample = () => {
         className="rounded-md border"
       /> */}
 
-      <ChartContainer config={chartConfig} className="min-h-[200px] w-full max-w-[600px]">
+      {/* <ChartContainer config={chartConfig} className="min-h-[200px] w-full max-w-[600px]">
         <BarChart accessibilityLayer data={chartData}>
           <CartesianGrid vertical={false} />
           <XAxis
@@ -77,7 +60,7 @@ const SocketSample = () => {
           <Bar dataKey="coffee" fill="var(--color-coffee)" radius={4} />
           <Bar dataKey="nonCoffee" fill="var(--color-nonCoffee)" radius={4} />
         </BarChart>
-      </ChartContainer>
+      </ChartContainer> */}
     </div>
   )
 }

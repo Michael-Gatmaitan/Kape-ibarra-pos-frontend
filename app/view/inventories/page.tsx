@@ -5,12 +5,12 @@ import { apiUrl } from '../../../lib/apiUrl'
 import { IInventory, IRawMaterial } from '../../..'
 import { columns } from './columns'
 import ViewHeaders from '../view-headers'
-import { cookies } from 'next/headers'
+import { getCookieToken } from '../../../lib/cookieToken'
 
 export type InventoryWithRawMaterial = IInventory[] & { rawMaterial: IRawMaterial }
 
 const page = async () => {
-  const token = cookies().get('token')?.value;
+  const token = await getCookieToken()
   const inventoryReq = await fetch(`${apiUrl}/inventory`, {
     method: 'GET',
     cache: 'no-cache',

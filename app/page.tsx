@@ -1,12 +1,9 @@
-// import { SidebarTrigger } from "../components/ui/sidebar";
-
-import { cookies } from "next/headers";
-// import { ModeToggle } from "../components/ModeToggle";
+import { getCookieToken } from "../lib/cookieToken";
 import SocketSample from "./SocketSample";
 
-export default function Home() {
+export default async function Home() {
 
-  const token = cookies().get('token')?.value;
+  const token = await getCookieToken()
   console.log(token);
 
   return <div>

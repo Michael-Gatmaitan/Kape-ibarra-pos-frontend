@@ -4,14 +4,16 @@ import { jwtVerify } from "jose";
 import { ICustomer, IEmployee } from "..";
 
 export const createSession = async (token: string) => {
-  const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+  // const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 
-  cookies().set("token", token, {
+  const cookieStore = await cookies();
+
+  cookieStore.set("token", token, {
     httpOnly: true,
     secure: false,
     sameSite: "lax",
     path: "/",
-    expires: expiresAt,
+    // expires: expiresAt,
   });
 
   // console.log(cookies)
@@ -20,6 +22,7 @@ export const createSession = async (token: string) => {
 };
 
 export const verifySession = async (session: string) => {
+  if (!session) return;
   const SECRET_KEY = process.env.SECRET_KEY;
   const encodeKey = new TextEncoder().encode(SECRET_KEY);
   const {
@@ -31,5 +34,6 @@ export const verifySession = async (session: string) => {
 };
 
 export const logout = async () => {
-  cookies().delete("token");
+  const cookieStore = await cookies();
+  cookieStore.delete("token");
 };

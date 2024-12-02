@@ -34,6 +34,7 @@ interface IRawMaterialBody {
 interface RawMaterialFormContentProps {
   type: "create" | "update";
   rawMaterialDefaultValues?: TRawMaterialSchema & IRawMaterial;
+  initialDateVal: Date
 }
 
 // interface ICreateRawMaterialBody {
@@ -45,6 +46,7 @@ interface RawMaterialFormContentProps {
 const FormContent = ({
   type,
   rawMaterialDefaultValues,
+  initialDateVal
 }: RawMaterialFormContentProps) => {
   const form = useForm<TRawMaterialSchema>({
     resolver: zodResolver(rawMaterialSchema),
@@ -58,7 +60,7 @@ const FormContent = ({
           : "",
 
       batchQuantity: '',
-      expirationDate: new Date(),
+      expirationDate: initialDateVal,
       reorderLevel: '',
     },
   });
@@ -295,7 +297,7 @@ const FormContent = ({
                       mode="single"
                       selected={field.value}
                       onSelect={field.onChange}
-                      fromDate={new Date()}
+                      fromDate={initialDateVal}
                       // disabled={(date) =>
                       //   date > new Date() || date < new Date("1900-01-01")
                       // }

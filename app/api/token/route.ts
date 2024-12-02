@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import { createSession, verifySession } from "../../../lib/session";
-import { cookies } from "next/headers";
+import { getCookieToken } from "../../../lib/cookieToken";
 
 export async function POST(req: NextRequest) {
   const token = req.headers.get("token");
@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET(req: NextRequest) {
-  const token = cookies().get("token")?.value;
+  const token = await getCookieToken();
 
   if (!token) return Response.json({ error: "No token found" });
 

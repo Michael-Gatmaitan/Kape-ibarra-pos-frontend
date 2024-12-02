@@ -1,15 +1,17 @@
-"use client";
 import React from 'react'
-import { useSidebar } from './ui/sidebar'
 import Link from 'next/link';
 import { Button } from './ui/button';
-import { useUserPayload } from '../lib/customHooks';
-import { Menu } from 'lucide-react';
+import ToggleSidebar from './ToggleSidebar';
+// import { cookies } from 'next/headers';
+// import { verifySession } from '../lib/session';
+import { getUserPayloadServer } from '../actions/serverActions';
+// import { cookies } from 'next/headers';
 
 
-const AppNavbar = () => {
-  const { toggleSidebar } = useSidebar();
-  const payload = useUserPayload();
+const AppNavbar = async () => {
+  // const token = cookies().get('token')?.value;
+  // const payload = await verifySession(token);
+  const payload = await getUserPayloadServer();
 
   return (
     <nav className="fixed block bg-card inset-x-0 top-0 z-[100] border-b shadow-sm md:hidden">
@@ -47,10 +49,12 @@ const AppNavbar = () => {
             </Link>
           </nav> */}
 
-          <Button onClick={() => toggleSidebar()} variant='outline'>
+          {/* <Button onClick={() => toggleSidebar()} variant='outline'>
             <Menu />
-          </Button>
+          </Button> */}
+          <ToggleSidebar />
 
+          {/* {!payload?.person?.id ? ( */}
           {!payload?.person?.id ? (
             <div className="flex items-center gap-4">
 

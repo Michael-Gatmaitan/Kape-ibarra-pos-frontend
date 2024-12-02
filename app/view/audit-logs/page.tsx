@@ -1,4 +1,3 @@
-import { cookies } from 'next/headers'
 import React from 'react'
 import { apiUrl } from '../../../lib/apiUrl';
 import Head from 'next/head';
@@ -6,9 +5,10 @@ import ViewHeaders from '../view-headers';
 import { DataTable } from '../data-table';
 import { IAuditLog, ICustomer, IEmployee } from '../../..';
 import { columns } from './columns';
+import { getCookieToken } from '../../../lib/cookieToken';
 
 const page = async () => {
-  const token = cookies().get("token")?.value;
+  const token = await getCookieToken();
 
   const auditLogReq = await fetch(`${apiUrl}/audit-log`, {
     method: 'GET',

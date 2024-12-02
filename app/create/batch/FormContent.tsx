@@ -17,11 +17,11 @@ import { Calendar } from '../../../components/ui/calendar';
 import { cn } from '../../../lib/utils';
 import { format } from 'date-fns';
 
-const FormContent = ({ rawMaterials }: { rawMaterials: IRawMaterial[] }) => {
+const FormContent = ({ rawMaterials, initialDateVal }: { rawMaterials: IRawMaterial[], initialDateVal: Date }) => {
   const form = useForm<TBatchSchema>({
     defaultValues: {
       batchQuantity: '',
-      expirationDate: new Date(),
+      expirationDate: initialDateVal,
       rawMaterialId: '',
     }
   });;

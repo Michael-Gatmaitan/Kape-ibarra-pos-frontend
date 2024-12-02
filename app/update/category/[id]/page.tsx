@@ -4,12 +4,12 @@ import { apiUrl } from '../../../../lib/apiUrl';
 import { TCategorySchema } from '../../../../lib/types';
 import { ICategory } from '../../../..';
 import BackLink from '../../../../components/BackLink';
-import { cookies } from 'next/headers';
+import { getCookieToken } from '../../../../lib/cookieToken';
 
 const page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const id = (await params).id;
 
-  const token = cookies().get('token')?.value;
+  const token = await getCookieToken()
 
   // const categoriesReq = await fetch(`${apiUrl}/category`, {
   //   method: 'GET',

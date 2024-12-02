@@ -1,13 +1,13 @@
 "use server";
-import { cookies } from "next/headers";
 import { apiUrl } from "./apiUrl";
 import { revalidatePath } from "next/cache";
 import { revalidateTag } from "next/cache";
+import { getCookieToken } from "./cookieToken";
 
 // Create category
 export async function createCategoryAction(formData: FormData) {
   const categoryName = formData.get("category-name");
-  const token = cookies().get("token").value;
+  const token = await getCookieToken();
 
   const req = await fetch(`${apiUrl}/category`, {
     method: "POST",
@@ -30,7 +30,7 @@ export const updateProductAvailabilityAction = async ({
 }) => {
   console.log(availability, productId);
 
-  const token = cookies().get("token").value;
+  const token = await getCookieToken();
 
   const updateReq = await fetch(
     `${apiUrl}/product/${productId}?updateAvailability=${(!(

@@ -17,7 +17,7 @@ import {
   CardHeader,
   CardTitle,
 } from "../../../components/ui/card";
-import { useCategories, useRawMaterial } from "../../../lib/customHooks";
+import { useCategories } from "../../../lib/customHooks";
 import {
   Select,
   SelectContent,
@@ -34,7 +34,7 @@ import {
   FormMessage,
 } from "../../../components/ui/form";
 import { apiUrl } from "../../../lib/apiUrl";
-import { IProduct } from "../../..";
+import { IProduct, IRawMaterial } from "../../..";
 import { revalidateViewsProduct } from "../../../actions/revalidate";
 import { getTokenClient } from "../../../lib/tokenAPI";
 import { useToast } from "../../../@/hooks/use-toast";
@@ -62,6 +62,7 @@ interface ICreateProductBody {
 
 interface ProductFormContentProps {
   type: "create" | "update";
+  rawMaterials: IRawMaterial[]
   productDefaultValues?: TProductSchema & IProduct;
   recipesDefaultValues?: {
     rawMaterialId: string;
@@ -71,10 +72,10 @@ interface ProductFormContentProps {
 
 const FormContent = ({
   type,
+  rawMaterials,
   productDefaultValues,
   recipesDefaultValues,
 }: ProductFormContentProps) => {
-  const rawMaterials = useRawMaterial();
   const categories = useCategories();
   const router = useRouter();
   const { toast } = useToast();

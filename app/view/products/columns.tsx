@@ -55,7 +55,7 @@ export const columns: ColumnDef<IProduct>[] = [
       });
 
       return <div className="grid gap-1">
-        <div className="w-full border p-1 rounded-sm text-center">{
+        <div className={`w-full border p-1 rounded-sm text-center ${val ? "bg-transparent" : "bg-destructive"}`}>{
           val ? "Available" : "Not available"
         }</div>
         <div className="grid gap-1">
@@ -98,10 +98,10 @@ export const columns: ColumnDef<IProduct>[] = [
     accessorKey: "createdAt",
     header: "Created at",
     cell: ({ row }) => {
-      const date = new Date(row.getValue('createdAt'));
+      // const date = new Date(row.getValue('createdAt'));
       return (
         <div className="text-nowrap">
-          {formatRelative(subDays(date, 0), new Date())}
+          {/* {formatRelative(subDays(date, 0), new Date())} */}xxx
         </div>
       )
     }
