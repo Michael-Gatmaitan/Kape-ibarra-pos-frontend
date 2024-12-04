@@ -1,12 +1,12 @@
 import React from 'react';
 import FormContent from './FormContent';
-import { cookies } from 'next/headers';
 import { apiUrl } from '../../../lib/apiUrl';
 import { IRawMaterial } from '../../..';
+import { getCookieToken } from '../../../lib/cookieToken';
 // import FormContent from '../category/FormContent';
 
 const page = async () => {
-  const token = cookies().get("token")?.value;
+  const token = await getCookieToken();
   const rawMaterialsReq = await fetch(`${apiUrl}/raw-material`, {
     cache: 'no-cache',
     headers: {
@@ -19,9 +19,11 @@ const page = async () => {
 
   const res: IRawMaterial[] = await rawMaterialsReq.json();
 
+  const d = new Date();
+
   return (
     <div>
-      <FormContent rawMaterials={res} />
+      <FormContent rawMaterials={res} initialDateVal={d} />
     </div>
   )
 }

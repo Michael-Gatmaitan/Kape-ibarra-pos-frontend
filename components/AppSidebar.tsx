@@ -1,15 +1,15 @@
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarSeparator } from './ui/sidebar'
-import { BadgeCent, Box, CalendarClock, ChartBarStacked, Logs, LucideProps, Milk, Monitor, NotebookPen, Plus, ShoppingBasket, User, Users, Wallet } from 'lucide-react'
+import { BadgeCent, Bell, Box, CalendarClock, ChartBarStacked, LayoutList, Logs, LucideProps, Milk, Monitor, NotebookPen, Plus, ShoppingBasket, User, Users, Wallet } from 'lucide-react'
 import Link from 'next/link'
 
 import SwitchMode from './SwitchMode'
 import LogoutButton from './sidebar-items/LogoutButton'
 import React, { ForwardRefExoticComponent, RefAttributes } from 'react'
 import ProfileCard from './sidebar-items/ProfileCard'
-import { getUserPayloadServer } from '../actions/serverActions';
+// import { getUserPayloadServer } from '../actions/serverActions';
 import { ScrollArea } from './ui/scroll-area'
-// import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu'
-// import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './ui/collapsible'
+import { cookies } from 'next/headers'
+import { verifySession } from '../lib/session'
 
 interface IItem {
   title: string,
@@ -56,7 +56,7 @@ const items: ISidebarItems = {
     icon: NotebookPen
   }, {
     title: 'E-wallet',
-    url: "/",
+    url: "/view/e-wallet",
     icon: Wallet
   }, {
     title: "Audit log",
@@ -66,6 +66,20 @@ const items: ISidebarItems = {
     title: "Inventory",
     url: "/view/inventories",
     icon: Box
+  }, {
+    title: "Notification",
+    url: "/view/notifications",
+    icon: Bell
+  }],
+
+  customer: [{
+    title: "Products",
+    url: "/c/products",
+    icon: ShoppingBasket
+  }, {
+    title: "Your orders",
+    url: "/c/orders",
+    icon: LayoutList
   }],
 
   create: [{
@@ -95,7 +109,7 @@ const items: ISidebarItems = {
     url: "/u/cashier/counter",
     icon: Monitor
   }, {
-    title: "List of orders",
+    title: "List of orders (online)",
     url: "/u/cashier/orders",
     icon: Logs
   }],
@@ -106,17 +120,18 @@ const items: ISidebarItems = {
     icon: Logs
   }],
 
-  customer: [{
-    title: "Manage orders",
-    url: '/u/barista/order',
-    icon: Logs
-  }]
+  // customer: [{
+  //   title: "Manage orders",
+  //   url: '/u/barista/order',
+  //   icon: Logs
+  // }]
 }
 
 
 const AppSidebar = async () => {
 
-  const payload = await getUserPayloadServer();
+  // const payload = await getUserPayloadServer();
+  const payload = await verifySession((await cookies()).get('token')?.value);
 
   if (!payload?.person?.id) {
     return (
@@ -157,8 +172,15 @@ const AppSidebar = async () => {
       <SidebarContent>
         <ScrollArea>
 
+          {payload.roleName === "customer" && (
+            <CustomSidebarGroup
+              label="Customer"
+              items={items.customer}
+            />
+          )}
+
           {/* Group for track / ADMIN */}
-          {payload.roleName === "Admin" &&
+          {payload.roleName === "admin" &&
             (
               <React.Fragment>
                 <CustomSidebarGroup
@@ -174,13 +196,13 @@ const AppSidebar = async () => {
           <SidebarSeparator />
 
           {/* Group for CASHIER */}
-          {(payload.roleName === "Admin" || payload.roleName === "Cashier") &&
+          {(payload.roleName === "admin" || payload.roleName === "cashier") &&
             <CustomSidebarGroup label='Cashier' items={items.cashier} />
           }
 
           <SidebarSeparator />
 
-          {(payload.roleName === "Admin" || payload.roleName === "Barista") &&
+          {(payload.roleName === "admin" || payload.roleName === "barista") &&
             <CustomSidebarGroup label='Barista' items={items.barista} />
           }
 
@@ -219,6 +241,7 @@ const CustomSidebarGroup = (props: { label: string, items: IItem[] }) => {
 
 const CustomSideBarMenuButton = (props: { item: IItem }) => {
   const { item } = props;
+
   return (
     <SidebarMenuItem>
       <SidebarMenuButton asChild>

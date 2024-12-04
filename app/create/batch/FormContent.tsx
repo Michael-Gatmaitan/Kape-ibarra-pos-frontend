@@ -12,16 +12,16 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Input } from '../../../components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '../../../components/ui/popover';
 import { Button } from '../../../components/ui/button';
-import { CalendarIcon } from 'lucide-react';
+import { CalendarIcon, Loader2 } from 'lucide-react';
 import { Calendar } from '../../../components/ui/calendar';
 import { cn } from '../../../lib/utils';
 import { format } from 'date-fns';
 
-const FormContent = ({ rawMaterials }: { rawMaterials: IRawMaterial[] }) => {
+const FormContent = ({ rawMaterials, initialDateVal }: { rawMaterials: IRawMaterial[], initialDateVal: Date }) => {
   const form = useForm<TBatchSchema>({
     defaultValues: {
       batchQuantity: '',
-      expirationDate: new Date(),
+      expirationDate: initialDateVal,
       rawMaterialId: '',
     }
   });;
@@ -175,7 +175,12 @@ const FormContent = ({ rawMaterials }: { rawMaterials: IRawMaterial[] }) => {
 
           <div className="grid gap-2 grid-cols-2 w-full">
             <Button type="button" variant='outline' onClick={() => form.reset()}>Clear form</Button>
-            <Button type="submit">Create batch</Button>
+            <Button type="submit" disabled={form.formState.isSubmitting}>
+              {form.formState.isSubmitting ? (
+                <>
+                  <Loader2 className="animate-spin" /> Creating
+                </>) : "Create"}
+            </Button>
           </div>
 
         </form>

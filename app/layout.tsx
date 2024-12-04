@@ -6,10 +6,10 @@ import StoreProvider from "./StoreProvider";
 import { SidebarProvider } from "../components/ui/sidebar";
 import AppSidebar from "../components/AppSidebar";
 import AppNavbar from "../components/AppNavbar";
-import { Poppins } from 'next/font/google';
+// import { Poppins } from 'next/font/google';
 import { Toaster } from "../components/ui/toaster";
 
-const poppins = Poppins({ subsets: ['latin'], weight: ["400", "500", "600", "700", "800", "900"] });
+// const poppins = Poppins({ subsets: ['latin'], weight: ["400", "500", "600", "700", "800", "900"] });
 
 // const geistSans = localFont({
 //   src: "./fonts/GeistVF.woff",
@@ -38,8 +38,8 @@ export default async function RootLayout({
       <body
         // my-40 mx-4 lg:mx-12 xl:mx-40
         // className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        className={`${poppins.className} antialiased`}
-      // className={`antialiased`}
+        // className={`${poppins.className} antialiased`}
+        className={`antialiased`}
       >
         {/* Redux store provider */}
         <StoreProvider>

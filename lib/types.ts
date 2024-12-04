@@ -132,3 +132,10 @@ export const createEmployeeSchema = z
   });
 
 export type TCreateEmployeeSchema = z.infer<typeof createEmployeeSchema>;
+
+export const eWalletSchema = z.object({
+  name: z.string().min(4, "E-wallet name required"),
+  phoneNumber: z.string().min(0, "E-wallet number required."),
+});
+
+export type TEWalletSchema = z.infer<typeof eWalletSchema>;

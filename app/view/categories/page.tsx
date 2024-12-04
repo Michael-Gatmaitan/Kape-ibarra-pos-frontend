@@ -7,12 +7,12 @@ import { DataTable } from '../data-table';
 import { columns } from './columns';
 import Head from 'next/head';
 import ViewHeaders from '../view-headers';
-import { cookies } from 'next/headers';
+import { getCookieToken } from '../../../lib/cookieToken';
 
 export type ICategoryWithProducts = ICategory[] & { products: IProduct[] }
 
 const page = async () => {
-  const token = cookies().get('token')?.value;
+  const token = await getCookieToken()
   const categoryReq = await fetch(`${apiUrl}/category`, {
     method: 'GET',
     cache: 'no-cache',

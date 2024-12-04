@@ -9,12 +9,12 @@ import { DataTable } from '../data-table';
 import { columns } from './columns';
 import Head from 'next/head';
 import ViewHeaders from '../view-headers';
-import { cookies } from 'next/headers';
+import { getCookieToken } from '../../../lib/cookieToken';
 
 export type IUserWithRole = IEmployee[] & { role: IRole };
 
 const page = async () => {
-  const token = cookies().get('token')?.value;
+  const token = await getCookieToken()
   const userReq = await fetch(`${apiUrl}/employee?fullInfo=true`, {
     method: 'GET',
     cache: 'no-cache',

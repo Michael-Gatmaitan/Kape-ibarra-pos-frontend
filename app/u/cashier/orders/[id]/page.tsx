@@ -4,14 +4,14 @@ import { IEmployee, IOrder, IOrderItem, IProduct } from '../../../../..'
 import { isErrorMessage } from '../../../../../lib/types';
 import { Badge } from '../../../../../components/ui/badge';
 import OrderItems from './OrderItems';
-import { cookies } from 'next/headers';
+import { getCookieToken } from '../../../../../lib/cookieToken';
 
 type IOrderResponse =
   (IOrder & { orderItems: (IOrderItem & { product: IProduct })[] }
     & { employee: IEmployee });
 
 const page = async ({ params }: { params: { id: string } }) => {
-  const token = cookies().get('token')?.value;
+  const token = await getCookieToken()
 
   const orderReq = await fetch(`${apiUrl}/order/${params.id}?orderItems=true&employee=true`, {
     cache: 'no-cache',

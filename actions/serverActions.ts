@@ -8,7 +8,8 @@ import { verifySession } from "../lib/session";
 //   { user: IUser; roleName: string } | { error?: string }
 // >
 export const getUserPayloadServer = async () => {
-  const token = cookies().get("token")?.value;
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token")?.value;
   if (!token) {
     console.log("no token found");
     // return { error: "no token found" };

@@ -5,10 +5,10 @@ import { apiUrl } from '../../../lib/apiUrl'
 import { ITransaction } from '../../..'
 import { columns } from './columns'
 import ViewHeaders from '../view-headers'
-import { cookies } from 'next/headers'
+import { getCookieToken } from '../../../lib/cookieToken'
 
 const page = async () => {
-  const token = cookies().get('token')?.value;
+  const token = await getCookieToken()
   const transactionReq = await fetch(`${apiUrl}/transaction`, {
     method: 'GET',
     cache: 'no-cache',
@@ -26,11 +26,6 @@ const page = async () => {
 
   return (
     <div>
-
-      <Head>
-        <title>List of Transactions</title>
-      </Head>
-
       <header>
         <ViewHeaders headerTitle='Transaction List' />
       </header>

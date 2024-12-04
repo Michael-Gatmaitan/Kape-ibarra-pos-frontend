@@ -1,14 +1,14 @@
 'use client';
 
-import React from 'react'
 import { useSidebar } from './ui/sidebar';
 import { Button } from './ui/button';
+import { Menu } from 'lucide-react';
 
 const ToggleSidebar = () => {
-  const { open, setOpen } = useSidebar();
+  const { toggleSidebar } = useSidebar();
   return (
-    <Button onClick={() => setOpen(!open)}>
-      Toggle sidebar
+    <Button onClick={() => toggleSidebar()} variant='outline'>
+      <Menu />
     </Button>
   )
 }

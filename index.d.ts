@@ -146,3 +146,8 @@ export interface IAuditLog {
   timeIn: Date;
   timeOut: Date;
 }
+
+export interface IEWallet {
+  name: string;
+  phoneNumber: string;
+}

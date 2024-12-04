@@ -2,12 +2,12 @@ import React from "react";
 import { apiUrl } from "../../../../lib/apiUrl";
 import BackLink from "../../../../components/BackLink";
 import FormContent from "../../../create/raw-material/FormContent";
-import { cookies } from "next/headers";
+import { getCookieToken } from "../../../../lib/cookieToken";
 
 const page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const id = (await params).id;
 
-  const token = cookies().get('token')?.value;
+  const token = await getCookieToken()
   const rawMaterial = await fetch(`${apiUrl}/raw-material/${id}`, {
     method: 'GET',
     cache: 'no-cache',
@@ -25,12 +25,14 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
   }
 
   console.log(res);
+
+  const d = new Date();
   return (
     <div>
       {id}
       <BackLink href="/view/raw-materials" buttonTitle="Raw material list" />
 
-      <FormContent type="update" rawMaterialDefaultValues={res} />
+      <FormContent type="update" rawMaterialDefaultValues={res} initialDateVal={d} />
     </div>
   );
 };

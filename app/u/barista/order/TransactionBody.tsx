@@ -20,7 +20,7 @@ const TransactionBody = () => {
     const getTransactions = async () => {
       const token = await getTokenClient();
       const req = await fetch(`${apiUrl}/transaction?order=true&orderStatus=${orderStatusFilter}&orderBy=time`, {
-        cache: "no-cache",
+        method: "GET",
         headers: {
           'Content-Tpye': 'application/json',
           authorization: token

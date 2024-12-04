@@ -22,7 +22,7 @@ import { getTokenClient } from "../../../lib/tokenAPI";
 import { Popover, PopoverContent, PopoverTrigger } from "../../../components/ui/popover";
 import { cn } from "../../../lib/utils";
 import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, Loader2 } from "lucide-react";
 import { Calendar } from "../../../components/ui/calendar";
 
 interface IRawMaterialBody {
@@ -34,6 +34,7 @@ interface IRawMaterialBody {
 interface RawMaterialFormContentProps {
   type: "create" | "update";
   rawMaterialDefaultValues?: TRawMaterialSchema & IRawMaterial;
+  initialDateVal: Date
 }
 
 // interface ICreateRawMaterialBody {
@@ -45,6 +46,7 @@ interface RawMaterialFormContentProps {
 const FormContent = ({
   type,
   rawMaterialDefaultValues,
+  initialDateVal
 }: RawMaterialFormContentProps) => {
   const form = useForm<TRawMaterialSchema>({
     resolver: zodResolver(rawMaterialSchema),
@@ -58,7 +60,7 @@ const FormContent = ({
           : "",
 
       batchQuantity: '',
-      expirationDate: new Date(),
+      expirationDate: initialDateVal,
       reorderLevel: '',
     },
   });
@@ -295,7 +297,7 @@ const FormContent = ({
                       mode="single"
                       selected={field.value}
                       onSelect={field.onChange}
-                      fromDate={new Date()}
+                      fromDate={initialDateVal}
                       // disabled={(date) =>
                       //   date > new Date() || date < new Date("1900-01-01")
                       // }
@@ -335,6 +337,7 @@ const FormContent = ({
                   : null}
             </Button>
             <Button type="submit" disabled={form.formState.isSubmitting}>
+              {form.formState.isSubmitting ? <Loader2 className="animate-spin" /> : null}
               {form.formState.isSubmitting && type === "create"
                 ? "Creating"
                 : form.formState.isSubmitting && type === "update"
