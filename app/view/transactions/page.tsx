@@ -26,11 +26,6 @@ const page = async () => {
 
   return (
     <div>
-
-      <Head>
-        <title>List of Transactions</title>
-      </Head>
-
       <header>
         <ViewHeaders headerTitle='Transaction List' />
       </header>

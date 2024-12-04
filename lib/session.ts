@@ -27,7 +27,7 @@ export const verifySession = async (session: string) => {
   const encodeKey = new TextEncoder().encode(SECRET_KEY);
   const {
     payload,
-  }: { payload: { person: IEmployee | ICustomer; roleName: string } } =
+  }: { payload: { person: IEmployee | ICustomer; roleName: 'admin' | 'cashier' | 'barista' | 'customer' } } =
     await jwtVerify(session, encodeKey);
 
   return payload;

@@ -45,9 +45,9 @@ export async function middleware(req: NextRequest) {
       ["Cashier", "Barista"].includes(payload.roleName)
     ) {
       console.log("hes a: ", payload.roleName);
-      if (payload.roleName === "Cashier") {
+      if (payload.roleName === "cashier") {
         return NextResponse.redirect(new URL("/u/cashier/counter", url));
-      } else if (payload.roleName === "Barista") {
+      } else if (payload.roleName === "barista") {
         return NextResponse.redirect(new URL("/u/barista/orders", url));
       }
     }

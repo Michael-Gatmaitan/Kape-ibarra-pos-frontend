@@ -98,10 +98,10 @@ export const columns: ColumnDef<IProduct>[] = [
     accessorKey: "createdAt",
     header: "Created at",
     cell: ({ row }) => {
-      // const date = new Date(row.getValue('createdAt'));
+      const date = new Date(row.getValue('createdAt'));
       return (
         <div className="text-nowrap">
-          {/* {formatRelative(subDays(date, 0), new Date())} */}xxx
+          {formatRelative(subDays(date, 0), new Date())}xxx
         </div>
       )
     }

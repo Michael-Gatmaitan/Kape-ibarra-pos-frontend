@@ -39,6 +39,7 @@ import { revalidateViewsProduct } from "../../../actions/revalidate";
 import { getTokenClient } from "../../../lib/tokenAPI";
 import { useToast } from "../../../@/hooks/use-toast";
 import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
 
 // UUID
 // import { v4 as uuidv4 } from "uuid";
@@ -521,6 +522,7 @@ const FormContent = ({
                   : null}
             </Button>
             <Button type="submit" disabled={form.formState.isSubmitting || (type === "create" && !uploaded)}>
+              {form.formState.isSubmitting ? <Loader2 className="animate-spin" /> : null}
               {form.formState.isSubmitting && type === "create"
                 ? "Creating"
                 : form.formState.isSubmitting && type === "update"

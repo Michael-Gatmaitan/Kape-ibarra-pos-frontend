@@ -148,6 +148,6 @@ export interface IAuditLog {
 }
 
 export interface IEWallet {
-  phoneNumber: string;
   name: string;
+  phoneNumber: string;
 }

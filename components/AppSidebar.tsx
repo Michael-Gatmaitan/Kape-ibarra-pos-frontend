@@ -1,13 +1,15 @@
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarSeparator } from './ui/sidebar'
-import { BadgeCent, Bell, Box, CalendarClock, ChartBarStacked, Logs, LucideProps, Milk, Monitor, NotebookPen, Plus, ShoppingBasket, User, Users, Wallet } from 'lucide-react'
+import { BadgeCent, Bell, Box, CalendarClock, ChartBarStacked, LayoutList, Logs, LucideProps, Milk, Monitor, NotebookPen, Plus, ShoppingBasket, User, Users, Wallet } from 'lucide-react'
 import Link from 'next/link'
 
 import SwitchMode from './SwitchMode'
 import LogoutButton from './sidebar-items/LogoutButton'
 import React, { ForwardRefExoticComponent, RefAttributes } from 'react'
 import ProfileCard from './sidebar-items/ProfileCard'
-import { getUserPayloadServer } from '../actions/serverActions';
+// import { getUserPayloadServer } from '../actions/serverActions';
 import { ScrollArea } from './ui/scroll-area'
+import { cookies } from 'next/headers'
+import { verifySession } from '../lib/session'
 
 interface IItem {
   title: string,
@@ -54,7 +56,7 @@ const items: ISidebarItems = {
     icon: NotebookPen
   }, {
     title: 'E-wallet',
-    url: "/e-wallet",
+    url: "/view/e-wallet",
     icon: Wallet
   }, {
     title: "Audit log",
@@ -74,6 +76,10 @@ const items: ISidebarItems = {
     title: "Products",
     url: "/c/products",
     icon: ShoppingBasket
+  }, {
+    title: "Your orders",
+    url: "/c/orders",
+    icon: LayoutList
   }],
 
   create: [{
@@ -103,7 +109,7 @@ const items: ISidebarItems = {
     url: "/u/cashier/counter",
     icon: Monitor
   }, {
-    title: "List of orders",
+    title: "List of orders (online)",
     url: "/u/cashier/orders",
     icon: Logs
   }],
@@ -124,7 +130,8 @@ const items: ISidebarItems = {
 
 const AppSidebar = async () => {
 
-  const payload = await getUserPayloadServer();
+  // const payload = await getUserPayloadServer();
+  const payload = await verifySession((await cookies()).get('token')?.value);
 
   if (!payload?.person?.id) {
     return (
@@ -234,6 +241,7 @@ const CustomSidebarGroup = (props: { label: string, items: IItem[] }) => {
 
 const CustomSideBarMenuButton = (props: { item: IItem }) => {
   const { item } = props;
+
   return (
     <SidebarMenuItem>
       <SidebarMenuButton asChild>

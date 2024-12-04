@@ -20,6 +20,7 @@ import { apiUrl } from "../../../lib/apiUrl";
 import { revalidateViewsProduct } from "../../../actions/revalidate";
 import { getTokenClient } from "../../../lib/tokenAPI";
 import { useToast } from "../../../@/hooks/use-toast";
+import { Loader2 } from "lucide-react";
 // import { useRouter } from 'next/navigation';
 
 interface CategoryFormContentProps {
@@ -188,6 +189,7 @@ const FormContent = ({
                   : null}
             </Button>
             <Button type="submit" disabled={form.formState.isSubmitting}>
+              {form.formState.isSubmitting ? <Loader2 className="animate-spin" /> : null}
               {form.formState.isSubmitting && type === "create"
                 ? "Creating"
                 : form.formState.isSubmitting && type === "update"

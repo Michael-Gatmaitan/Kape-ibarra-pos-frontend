@@ -1,36 +1,42 @@
 "use client";
 import React, { SyntheticEvent, useDeferredValue, useEffect, useState } from 'react'
-import { Button } from '../../../../components/ui/button';
 import { useAppDispatch, useAppSelector } from '../../../../lib/hooks';
 import { selectShowOrderSection, toggleShowOrderSection } from '../../../../lib/features/state/stateSlice';
-import { Card, CardContent, CardFooter } from '../../../../components/ui/card';
 import OrderItem from './order-section/OrderItem';
 import { clearOrderItems, selectOrderItemsBody, selectTotalAmount } from '../../../../lib/features/order/orderSlice';
+import { apiUrl } from '../../../../lib/apiUrl';
+import { useToast } from '../../../../@/hooks/use-toast';
+import { useForm } from 'react-hook-form';
+import { Copy, X } from 'lucide-react';
+import { IEWallet } from '../../../..';
+import { getUserPayloadServer } from '../../../../actions/serverActions';
+import { Card, CardContent, CardFooter } from '../../../../components/ui/card';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '../../../../components/ui/select';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../../../../components/ui/form';
+import { Button } from '../../../../components/ui/button';
+import { Label } from '../../../../components/ui/label';
 import { Separator } from '../../../../components/ui/separator';
 import { Input } from '../../../../components/ui/input';
-import { apiUrl } from '../../../../lib/apiUrl';
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '../../../../components/ui/select';
-import { useToast } from '../../../../@/hooks/use-toast';
-import { Copy, X } from 'lucide-react';
-import { getUserPayloadServer } from '../../../../actions/serverActions';
-import { IEWallet } from '../../../..';
-import { Label } from '../../../../components/ui/label';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../../../../components/ui/form';
-import { useForm } from 'react-hook-form';
-import Image from 'next/image';
+
+import ViewProofOfPayment from './order-section/ViewProofOfPayment';
 
 interface IOrderSectionProps {
   payload: Awaited<ReturnType<typeof getUserPayloadServer>>;
   token: string; ewallet: IEWallet;
 }
 const OrderSection = ({ payload, token, ewallet }: IOrderSectionProps) => {
-  const showOrderSection = useAppSelector(selectShowOrderSection);
-  const orderItems = useAppSelector(selectOrderItemsBody);
   const dispatch = useAppDispatch();
   const { toast } = useToast();
 
   const [lastCustomerNumber, setLastCustomerNumber] = useState(0);
   const [proofOfPaymentUploaded, setProofOfPaymentUploaded] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState<'gcash' | 'cash'>('cash');
+  const [diningOption, setDiningOption] = useState<'dine-in' | 'take-out'>('dine-in');
+  const [totalTendered, setTotalTendered] = useState(0);
+  const defferedTenderedAmount = useDeferredValue(totalTendered);
+  const totalAmount = useAppSelector(selectTotalAmount);
+  const showOrderSection = useAppSelector(selectShowOrderSection);
+  const orderItems = useAppSelector(selectOrderItemsBody);
 
   useEffect(() => {
     const getLastCustomerNumber = async () => {
@@ -56,14 +62,7 @@ const OrderSection = ({ payload, token, ewallet }: IOrderSectionProps) => {
     }
     getLastCustomerNumber();
 
-  }, [orderItems, token, payload]);
-
-  // const payload = useUserPayload();
-
-  const [paymentMethod, setPaymentMethod] = useState<'gcash' | 'cash'>('cash');
-  const [diningOption, setDiningOption] = useState<'dine-in' | 'take-out'>('dine-in');
-
-  const [totalTendered, setTotalTendered] = useState(0);
+  }, [orderItems, token]);
 
   const form = useForm();
 
@@ -73,10 +72,6 @@ const OrderSection = ({ payload, token, ewallet }: IOrderSectionProps) => {
     const intVal = parseInt(value);
     setTotalTendered(isNaN(intVal) ? 0 : intVal);
   };
-
-  const defferedTenderedAmount = useDeferredValue(totalTendered);
-
-  const totalAmount = useAppSelector(selectTotalAmount);
 
   const handleCreateOrder = async () => {
     const mappedOrderItems = Object.keys(orderItems).map(key => {
@@ -88,7 +83,7 @@ const OrderSection = ({ payload, token, ewallet }: IOrderSectionProps) => {
       };
     });
 
-    let reqBody: { orderBody: { customerId: string; orderStatus: "payment pending" | "preparing"; orderType: "walk-in" | "online"; diningOption: "dine-in" | "take-out"; } | { employeeId: string; orderStatus: "payment pending" | "preparing"; orderType: "walk-in" | "online"; diningOption: "dine-in" | "take-out"; }; orderItemsBody: { productId: string; quantity: number; quantityAmount: number; }[]; transactionBody?: { change: number; totalAmount: number; totalTendered: number; paymentMethod: "gcash" | "cash"; }; };
+    let reqBody: { orderBody: { customerId: string; orderStatus: "payment pending" | "preparing"; orderType: "walk-in" | "online"; diningOption: "dine-in" | "take-out"; proofOfPaymentImg?: string; } | { employeeId: string; orderStatus: "payment pending" | "preparing"; orderType: "walk-in" | "online"; diningOption: "dine-in" | "take-out"; proofOfPaymentImg?: string; }; orderItemsBody: { productId: string; quantity: number; quantityAmount: number; }[]; transactionBody?: { change: number; totalAmount: number; totalTendered: number; paymentMethod: "gcash" | "cash"; }; };
 
     if (payload.roleName === 'customer') {
       reqBody = {
@@ -96,7 +91,8 @@ const OrderSection = ({ payload, token, ewallet }: IOrderSectionProps) => {
           customerId: payload.person.id,
           orderStatus: "payment pending",
           orderType: 'online',
-          diningOption
+          diningOption,
+          proofOfPaymentImg: imageUrl
         },
         orderItemsBody: mappedOrderItems,
         // We dont have transactions for online
@@ -109,6 +105,7 @@ const OrderSection = ({ payload, token, ewallet }: IOrderSectionProps) => {
           orderStatus: "preparing",
           orderType: "walk-in",
           diningOption,
+          proofOfPaymentImg: null
         },
         orderItemsBody: mappedOrderItems,
         transactionBody: {
@@ -119,8 +116,6 @@ const OrderSection = ({ payload, token, ewallet }: IOrderSectionProps) => {
         }
       };
     }
-
-    console.log(reqBody);
 
     if (!reqBody) {
       console.log("Request body from ordering is undefined!");
@@ -182,8 +177,8 @@ const OrderSection = ({ payload, token, ewallet }: IOrderSectionProps) => {
     console.log(result);
 
     if (result.imagePath) {
-      setProofOfPaymentUploaded(true);
       setImageUrl(result.imagePath);
+      console.log(imageUrl);
     } else {
       alert("Something went wrong uplodaing image");
     }
@@ -193,7 +188,9 @@ const OrderSection = ({ payload, token, ewallet }: IOrderSectionProps) => {
     // className='absolute md:static top-0 l-0 w-screen h-screen bg-black'
     <Card className={`
       w-full h-full z-50 p-4 top-0 left-0 rounded-none ${showOrderSection ? "grid" : "hidden"} fixed
-      md:w-full md:h-auto md:min-h-full md:static md:grid md:rounded-md grid-rows-orderSection overflow-auto no-scrollbar`}>
+      md:w-full md:h-auto md:min-h-full md:static md:grid md:rounded-md grid-rows-orderSection overflow-auto no-scrollbar
+      pt-[72px] md:pt-0
+      `}>
       <Form {...form}>
 
         <div className="mb-2 flex justify-between md:justify-center items-center text-center text-xl font-bold md:text-2xl">
@@ -203,18 +200,6 @@ const OrderSection = ({ payload, token, ewallet }: IOrderSectionProps) => {
           <div>No. #{lastCustomerNumber}</div>
           <div className="w-10 h-10 md:hidden"></div>
         </div>
-
-        {/* <header className='flex w-full'>
-        <div className=""></div>
-        <Button onClick={() => dispatch(toggleShowOrderSection(false))}>
-          <EyeClosed />
-        </Button>
-      </header> */}
-
-        {/* <header className="w-full py-4 bg-red-500">
-        Hello
-      </header> */}
-
         <CardContent className='p-0 flex flex-col gap-2'>
           {Object.keys(orderItems).length <= 0 ? (
             <div className='pt-4 text-center'>No product selected.</div>
@@ -223,20 +208,10 @@ const OrderSection = ({ payload, token, ewallet }: IOrderSectionProps) => {
           ))}
         </CardContent>
 
-        {/* <Separator /> */}
-
         <CardFooter className='p-0 pt-14 grid'>
           <Separator />
 
           <div className='py-4 grid gap-2 w-full'>
-            {/* <div className="flex justify-between">
-            <div className="font-medium text-lg">Vatable sales</div>
-            <div className="font-medium text-lg">₱ 200</div>
-          </div>
-          <div className="flex justify-between">
-            <div className="font-medium text-lg">Vat amount</div>
-            <div className="font-medium text-lg">₱ 200</div>
-          </div> */}
             <div className="flex justify-between">
               <div className="font-medium text-lg">Total amount</div>
               <div className="font-medium text-lg">₱ {totalAmount}</div>
@@ -261,50 +236,49 @@ const OrderSection = ({ payload, token, ewallet }: IOrderSectionProps) => {
           <Separator />
 
           {payload.roleName === 'customer' ? (
-            // <React.Fragment>
-            //   <div className="w-full py-4">
-            //     <div className="font-medium text-lg">Gcash payment</div>
-            //     <div className="flex gap-1">
-            //       <Copy className='w-6 h-6' />
-            //       <div className="grid gap-1">
-            //         <div className="font-medium">{ewallet.phoneNumber}</div>
-            //         <Label className="font-medium">{ewallet.name}</Label>
-            //       </div>
-            //     </div>
+            <React.Fragment>
+              <div className="w-full py-4">
+                <div className="font-medium text-lg">Gcash payment</div>
+                <div className="flex gap-1">
+                  <Copy className='w-6 h-6' />
+                  <div className="grid gap-1">
+                    <div className="font-medium">{ewallet.phoneNumber}</div>
+                    <Label className="font-medium">{ewallet.name}</Label>
+                  </div>
+                </div>
 
-            //     {/* <Form */}
+                {/* <Form */}
 
-            //     <FormField
-            //       // control={form.control}
-            //       name="productImage"
-            //       render={({ field: { onChange } }) => (
-            //         <FormItem>
-            //           <FormLabel>Product image</FormLabel>
-            //           <FormControl>
-            //             <Input
-            //               // className="bg-neutral-900"
-            //               type="file"
-            //               // {...fieldProps}
-            //               accept="image/png, image/jpeg, image/jpg"
+                <FormField
+                  // control={form.control}
+                  name="productImage"
+                  render={({ field: { onChange } }) => (
+                    <FormItem>
+                      <FormLabel>Product image</FormLabel>
+                      <FormControl>
+                        <Input
+                          // className="bg-neutral-900"
+                          type="file"
+                          // {...fieldProps}
+                          accept="image/png, image/jpeg, image/jpg"
 
-            //               onChange={(event) => {
-            //                 onChange(event.target.files && event.target.files[0])
-            //                 console.log(event.target.files && event.target.files[0]);
-            //                 setFile(event.target.files && event.target.files[0])
-            //               }
-            //               }
-            //             />
-            //           </FormControl>
-            //           <FormMessage />
-            //           <Button onClick={handleUploadImage}>Upload</Button>
-            //         </FormItem>
-            //       )}
-            //     />
-            //   </div>
-            //   <Separator />
-            //   <Image src={imageUrl} height={50} width={50} alt='mama_mo' />
-            // </React.Fragment>
-            <div>ASD</div>
+                          onChange={(event) => {
+                            onChange(event.target.files && event.target.files[0])
+                            console.log(event.target.files && event.target.files[0]);
+                            setFile(event.target.files && event.target.files[0])
+                          }
+                          }
+                        />
+                      </FormControl>
+                      <FormMessage />
+                      {!!file ? <Button onClick={handleUploadImage}>Upload</Button> : null}
+                    </FormItem>
+                  )}
+                />
+                {imageUrl !== '' ? <ViewProofOfPayment imageUrl={imageUrl} type='preview' /> : null}
+              </div>
+              <Separator />
+            </React.Fragment>
           ) : null}
 
           <div className="w-full flex gap-2 justify-between py-4">
@@ -339,10 +313,10 @@ const OrderSection = ({ payload, token, ewallet }: IOrderSectionProps) => {
             </Button>
             <Button
               disabled={
-                Object.keys(orderItems).length <= 0
-                || (defferedTenderedAmount <= 0 && payload.roleName !== 'customer')
-                || (defferedTenderedAmount < totalAmount && payload.roleName !== 'customer')
-                && (payload.roleName === 'customer' && proofOfPaymentUploaded)
+                Object.keys(orderItems).length <= 0 ||
+                (payload.roleName !== 'customer' ? (defferedTenderedAmount <= 0)
+                  || (defferedTenderedAmount < totalAmount) :
+                  !(payload.roleName === 'customer' && (imageUrl !== '' || proofOfPaymentUploaded)))
               }
               onClick={handleCreateOrder}
             >
