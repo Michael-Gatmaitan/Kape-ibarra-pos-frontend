@@ -13,20 +13,11 @@ import {
 } from '../../../../../components/ui/alert-dialog';
 import Image from 'next/image';
 import { Button } from '../../../../../components/ui/button';
-import { apiUrl } from '../../../../../lib/apiUrl';
-import { getTokenClient } from '../../../../../lib/tokenAPI';
-import { getUserPayloadServer } from '../../../../../actions/serverActions';
 import { useToast } from '../../../../../@/hooks/use-toast';
 import { updateOrderToPreparing } from '../../../../../lib/action';
 
 const ViewProofOfPayment = ({ imageUrl, type, orderId, customerNumber }: { imageUrl: string; type: "preview" | "process-order", orderId?: string, customerNumber?: number }) => {
   const { toast } = useToast();
-
-  const handleUpdateOrderToPreparing = updateOrderToPreparing.bind(null, {
-    type,
-    orderId,
-    customerNumber
-  });
 
   const onSubmit = async () => {
     const handleUpdateOrderToPreparing = updateOrderToPreparing.bind(null, {

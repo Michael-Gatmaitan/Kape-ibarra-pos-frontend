@@ -3,14 +3,14 @@ import React, { useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../../../components/ui/card';
 import { IOrderWithCustomerAndOI } from './page';
 import { Badge } from '../../../../components/ui/badge';
-import OrderItem from '../counter/order-section/OrderItem';
+// import OrderItem from '../counter/order-section/OrderItem';
 import { Button } from '../../../../components/ui/button';
 import { Expand, Minimize2 } from 'lucide-react';
-import { IOrderItem, IProduct } from '../../../..';
+// import { IOrderItem, IProduct } from '../../../..';
 import ViewProofOfPayment from '../counter/order-section/ViewProofOfPayment';
 
 const PendingOrderCard = ({ order }: { order: IOrderWithCustomerAndOI }) => {
-  const { customerNumber, customer, orderStatus, proofOfPaymentImg } = order;
+  const { customerNumber, customer } = order;
   const { firstname, lastname } = customer;
 
   const [expanded, setExpanded] = useState(false);

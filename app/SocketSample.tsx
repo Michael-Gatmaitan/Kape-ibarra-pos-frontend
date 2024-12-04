@@ -1,30 +1,30 @@
 "use client";
 import React from 'react'
 
-import { ChartContainer, ChartLegend, ChartLegendContent, type ChartConfig } from '../components/ui/chart';
-import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts';
-import { ChartTooltip, ChartTooltipContent } from '../components/ui/chart';
+// import { ChartContainer, ChartLegend, ChartLegendContent, type ChartConfig } from '../components/ui/chart';
+// import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts';
+// import { ChartTooltip, ChartTooltipContent } from '../components/ui/chart';
 
 
-const chartData = [
-  { month: "January", coffee: 186, nonCoffee: 80 },
-  { month: "February", coffee: 305, nonCoffee: 200 },
-  { month: "March", coffee: 237, nonCoffee: 120 },
-  { month: "April", coffee: 73, nonCoffee: 190 },
-  { month: "May", coffee: 209, nonCoffee: 130 },
-  { month: "June", coffee: 214, nonCoffee: 140 },
-]
+// const chartData = [
+//   { month: "January", coffee: 186, nonCoffee: 80 },
+//   { month: "February", coffee: 305, nonCoffee: 200 },
+//   { month: "March", coffee: 237, nonCoffee: 120 },
+//   { month: "April", coffee: 73, nonCoffee: 190 },
+//   { month: "May", coffee: 209, nonCoffee: 130 },
+//   { month: "June", coffee: 214, nonCoffee: 140 },
+// ]
 
-const chartConfig = {
-  coffee: {
-    label: "Coffee",
-    color: "#2563eb",
-  },
-  nonCoffee: {
-    label: "Non-coffee",
-    color: "#60a5fa",
-  },
-} satisfies ChartConfig
+// const chartConfig = {
+//   coffee: {
+//     label: "Coffee",
+//     color: "#2563eb",
+//   },
+//   nonCoffee: {
+//     label: "Non-coffee",
+//     color: "#60a5fa",
+//   },
+// } satisfies ChartConfig
 
 const SocketSample = () => {
 

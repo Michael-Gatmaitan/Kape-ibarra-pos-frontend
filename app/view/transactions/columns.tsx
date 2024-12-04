@@ -4,6 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ITransaction } from "../../..";
 import Link from "next/link";
 import { Button } from "../../../components/ui/button";
+import { formatRelative, subDays } from "date-fns";
 
 export const columns: ColumnDef<ITransaction>[] = [
   {
@@ -41,6 +42,15 @@ export const columns: ColumnDef<ITransaction>[] = [
     accessorKey: 'totalTendered',
     header: "Total tendered",
     cell: ({ row }) => <div>{row.getValue('totalTendered')}</div>
+  }, {
+    accessorKey: 'transactionDate',
+    header: "Transaction date",
+    cell: ({ row }) => {
+      const date: Date = row.getValue("transactionDate");
+      return (
+        <div>{formatRelative(subDays(date, 0), new Date())}</div>
+      )
+    }
   }
   // }, {
   //   accessorKey: 'vatAmount',

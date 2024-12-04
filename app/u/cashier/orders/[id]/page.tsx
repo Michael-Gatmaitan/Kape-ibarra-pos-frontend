@@ -10,10 +10,12 @@ type IOrderResponse =
   (IOrder & { orderItems: (IOrderItem & { product: IProduct })[] }
     & { employee: IEmployee });
 
-const page = async ({ params }: { params: { id: string } }) => {
-  const token = await getCookieToken()
+const page = async ({ params }: { params: Promise<{ id: string }> }) => {
+  const token = await getCookieToken();
 
-  const orderReq = await fetch(`${apiUrl}/order/${params.id}?orderItems=true&employee=true`, {
+  const { id } = await params;
+
+  const orderReq = await fetch(`${apiUrl}/order/${id}?orderItems=true&employee=true`, {
     cache: 'no-cache',
     headers: {
       'Content-Type': 'application/json',

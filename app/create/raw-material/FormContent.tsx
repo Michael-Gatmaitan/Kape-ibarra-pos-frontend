@@ -24,6 +24,7 @@ import { cn } from "../../../lib/utils";
 import { format } from "date-fns";
 import { CalendarIcon, Loader2 } from "lucide-react";
 import { Calendar } from "../../../components/ui/calendar";
+import { useToast } from "../../../@/hooks/use-toast";
 
 interface IRawMaterialBody {
   materialName: string;
@@ -64,6 +65,7 @@ const FormContent = ({
       reorderLevel: '',
     },
   });
+  const { toast } = useToast();
 
   const createRawMaterial = async (
     createRawMaterialReqBody: TRawMaterialSchema,
@@ -86,6 +88,7 @@ const FormContent = ({
         form.setError("materialName", { message: res.error });
       }
       console.log("Raw material created successfully");
+      toast({ title: "Raw material created succesfuly" });
       revalidateViewsProduct('/view/raw-materials');
     } catch (err) {
       console.log(err);

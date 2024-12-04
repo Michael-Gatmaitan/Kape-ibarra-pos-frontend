@@ -39,6 +39,8 @@ const page = async () => {
       <header>
         <ViewHeaders
           headerTitle='User / employee list'
+          buttonUrl='/auth/signup'
+          buttonTitle='Create employee'
         />
       </header>
 

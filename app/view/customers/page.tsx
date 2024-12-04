@@ -1,17 +1,15 @@
 import Head from 'next/head'
 import React from 'react'
-import { DataTable } from '../data-table'
-import { apiUrl } from '../../../lib/apiUrl'
-import { IInventory, IRawMaterial } from '../../..'
-import { columns } from './columns'
 import ViewHeaders from '../view-headers'
+import { DataTable } from '../data-table'
 import { getCookieToken } from '../../../lib/cookieToken'
-
-export type InventoryWithRawMaterial = IInventory[] & { rawMaterial: IRawMaterial }
+import { apiUrl } from '../../../lib/apiUrl'
+import { ICustomer } from '../../..'
+import { columns } from './columns'
 
 const page = async () => {
   const token = await getCookieToken()
-  const inventoryReq = await fetch(`${apiUrl}/inventory`, {
+  const customerReq = await fetch(`${apiUrl}/customer`, {
     method: 'GET',
     cache: 'no-cache',
     headers: {
@@ -20,25 +18,23 @@ const page = async () => {
     }
   });
 
-  if (!inventoryReq.ok) {
+  if (!customerReq.ok) {
     return <div>Something went wrong gettgin all transaction</div>
   }
 
-  const inventories: InventoryWithRawMaterial[] = await inventoryReq.json();
+  const customers: ICustomer[] = await customerReq.json();
 
   return (
     <div>
-
       <Head>
-        <title>Inventory</title>
+        <title>I</title>
       </Head>
 
       <header>
-        <ViewHeaders headerTitle='Inventory' />
+        <ViewHeaders headerTitle='Customers' />
       </header>
 
-      <DataTable data={inventories} columns={columns} />
-
+      <DataTable data={customers} columns={columns} />
     </div>
   )
 }

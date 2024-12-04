@@ -1,5 +1,5 @@
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarSeparator } from './ui/sidebar'
-import { BadgeCent, Bell, Box, CalendarClock, ChartBarStacked, LayoutList, Logs, LucideProps, Milk, Monitor, NotebookPen, Plus, ShoppingBasket, User, Users, Wallet } from 'lucide-react'
+import { BadgeCent, Bell, Box, CalendarClock, ChartBarStacked, LayoutList, Logs, LucideProps, Milk, Monitor, NotebookPen, Plus, ShoppingBasket, User, UserRoundPlus, Users, Wallet } from 'lucide-react'
 import Link from 'next/link'
 
 import SwitchMode from './SwitchMode'
@@ -10,6 +10,9 @@ import ProfileCard from './sidebar-items/ProfileCard'
 import { ScrollArea } from './ui/scroll-area'
 import { cookies } from 'next/headers'
 import { verifySession } from '../lib/session'
+import { Card } from './ui/card'
+import Image from 'next/image'
+import { LogIn } from 'lucide-react'
 
 interface IItem {
   title: string,
@@ -17,6 +20,7 @@ interface IItem {
   icon: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>,
 }
 interface ISidebarItems {
+  notLoggedIn: IItem[],
   admin: IItem[],
   create: IItem[],
   cashier: IItem[],
@@ -26,9 +30,19 @@ interface ISidebarItems {
 
 
 const items: ISidebarItems = {
+  notLoggedIn: [{
+    title: "Login",
+    url: "/login",
+    icon: LogIn
+  }, {
+    title: "Signup",
+    url: "/customer-signup",
+    icon: UserRoundPlus
+  }],
+
   admin: [{
     title: "Sales report",
-    url: "/",
+    url: "/view/sales",
     icon: BadgeCent
   }, {
     title: "Products",
@@ -133,12 +147,12 @@ const AppSidebar = async () => {
   // const payload = await getUserPayloadServer();
   const payload = await verifySession((await cookies()).get('token')?.value);
 
-  if (!payload?.person?.id) {
-    return (
-      // <nav>Nav for not logged in</nav>
-      null
-    )
-  }
+  // if (!payload?.person?.id) {
+  //   return (
+  //     // <nav>Nav for not logged in</nav>
+  //     null
+  //   )
+  // }
 
   return (
     // <Sidebar>
@@ -154,68 +168,62 @@ const AppSidebar = async () => {
     //   {/* <SidebarFooter /> */}
     // </Sidebar>
     <Sidebar className='z-50' variant='sidebar'>
-      <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            {/* <ToggleSidebar /> */}
-            <ProfileCard />
-          </SidebarMenuItem>
-        </SidebarMenu>
+      {payload?.person?.id ? (
+        <SidebarHeader>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              {/* <ToggleSidebar /> */}
+              <ProfileCard />
+            </SidebarMenuItem>
+          </SidebarMenu>
 
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SwitchMode />
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarHeader>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SwitchMode />
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarHeader>
+      ) : (
+        <SidebarHeader>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              {/* <ToggleSidebar /> */}
+              {/* <ProfileCard /> */}
+              <Card className='p-2 bg-'>
+                <Image src="/assets/KapeIbarraLogo.png" width={1000} height={1000} className='w-full h-[80px]' alt="main-logo" />
+              </Card>
+            </SidebarMenuItem>
+          </SidebarMenu>
+
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SwitchMode />
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarHeader>
+      )}
 
       <SidebarContent>
         <ScrollArea>
 
-          {payload.roleName === "customer" && (
+          {!payload?.person?.id ? (
             <CustomSidebarGroup
-              label="Customer"
-              items={items.customer}
+              label="Navigations"
+              items={items.notLoggedIn}
             />
-          )}
+          ) : <SideBarContentLoggedIn payload={payload} items={items} />}
 
-          {/* Group for track / ADMIN */}
-          {payload.roleName === "admin" &&
-            (
-              <React.Fragment>
-                <CustomSidebarGroup
-                  label="Admin / Track"
-                  items={items.admin}
-                />
-                <CustomSidebarGroup label='Create' items={items.create} />
-              </React.Fragment>)
-          }
-
-          {/* Section for creating */}
-
-          <SidebarSeparator />
-
-          {/* Group for CASHIER */}
-          {(payload.roleName === "admin" || payload.roleName === "cashier") &&
-            <CustomSidebarGroup label='Cashier' items={items.cashier} />
-          }
-
-          <SidebarSeparator />
-
-          {(payload.roleName === "admin" || payload.roleName === "barista") &&
-            <CustomSidebarGroup label='Barista' items={items.barista} />
-          }
 
         </ScrollArea>
       </SidebarContent>
 
-      <SidebarFooter>
+      {payload?.person?.id ? <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
             <LogoutButton />
           </SidebarMenuItem>
         </SidebarMenu>
-      </SidebarFooter>
+      </SidebarFooter> : null}
     </Sidebar>
   )
 }
@@ -244,13 +252,53 @@ const CustomSideBarMenuButton = (props: { item: IItem }) => {
 
   return (
     <SidebarMenuItem>
-      <SidebarMenuButton asChild>
+      <SidebarMenuButton tooltip={item.title} asChild>
         <Link href={item.url}>
           <item.icon />
           <span>{item.title}</span>
         </Link>
       </SidebarMenuButton>
     </SidebarMenuItem>
+  )
+}
+
+const SideBarContentLoggedIn = ({ payload, items }) => {
+  return (
+    <>
+      {payload.roleName === "customer" && (
+        <CustomSidebarGroup
+          label="Customer"
+          items={items.customer}
+        />
+      )}
+
+      {/* Group for track / ADMIN */}
+      {payload.roleName === "admin" &&
+        (
+          <React.Fragment>
+            <CustomSidebarGroup
+              label="Admin / Track"
+              items={items.admin}
+            />
+            <CustomSidebarGroup label='Create' items={items.create} />
+          </React.Fragment>)
+      }
+
+      {/* Section for creating */}
+
+      <SidebarSeparator />
+
+      {/* Group for CASHIER */}
+      {(payload.roleName === "admin" || payload.roleName === "cashier") &&
+        <CustomSidebarGroup label='Cashier' items={items.cashier} />
+      }
+
+      <SidebarSeparator />
+
+      {(payload.roleName === "admin" || payload.roleName === "barista") &&
+        <CustomSidebarGroup label='Barista' items={items.barista} />
+      }
+    </>
   )
 }
 

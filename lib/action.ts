@@ -89,6 +89,7 @@ export const updateOrderToPreparing = async ({
   type: string;
 }) => {
   if (type !== "process-order") return;
+  console.log("Updating to preprading order #:", customerNumber);
 
   const token = await getCookieToken();
   const payload = await getUserPayloadServer();

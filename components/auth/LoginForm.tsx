@@ -20,12 +20,13 @@ import {
 } from "../ui/form";
 import Link from "next/link";
 import { verifySession } from "../../lib/session";
-import revalidateAction from "../../lib/action";
+// import { useToast } from "../../@/hooks/use-toast";
 
 const LoginForm = (props: { loginType: "employee" | "customer", children?: React.ReactNode }) => {
   const { loginType } = props;
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
+  // const { toast } = useToast();
 
   const form = useForm<TLoginSchema>({
     resolver: zodResolver(loginSchema),
@@ -119,11 +120,12 @@ const LoginForm = (props: { loginType: "employee" | "customer", children?: React
     // Route to login section base on role
     // for now for dev
     // revalidatePath('/view/audit-logs');
-    revalidateAction('/view/audit-logs');
+    // revalidateAction('/view/audit-logs');
     router.push('/');
     router.refresh();
 
-    console.log(loginRes.error);
+    // console.log(loginRes.error);
+    // toast({ title: "Invalid username or password" });
     setLoginErr(loginRes.error);
   };
 
@@ -181,7 +183,7 @@ const LoginForm = (props: { loginType: "employee" | "customer", children?: React
       </Form>
 
       <Button type="button" variant="ghost" className="mt-2 w-full" asChild>
-        <Link href="#">
+        <Link href="/customer-signup">
           Dont have account? Sign up here!
         </Link>
       </Button>

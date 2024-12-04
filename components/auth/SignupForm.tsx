@@ -11,12 +11,16 @@ import { useRouter } from 'next/navigation';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 import { Select, SelectContent, SelectTrigger, SelectItem, SelectValue } from '../ui/select';
 import { apiUrl } from '../../lib/apiUrl';
-import { useRoles, useUserPayload } from '../../lib/customHooks';
+import { useUserPayload } from '../../lib/customHooks';
+import { useToast } from '../../@/hooks/use-toast';
+import { IRole } from '../..';
+import { Loader2 } from 'lucide-react';
 
-const SignupForm = () => {
+const SignupForm = ({ roles }: { roles: IRole[] }) => {
   const payload = useUserPayload();
-  const roles = useRoles();
+  // const roles = useRoles();
   const router = useRouter();
+  const { toast } = useToast();
 
   const form = useForm<TCreateEmployeeSchema>({
     resolver: zodResolver(createEmployeeSchema),
@@ -31,10 +35,12 @@ const SignupForm = () => {
     }
   });
 
+  console.log(roles);
+
   const onSubmit = async (data: TCreateEmployeeSchema) => {
     console.log(data);
 
-    const validationRequest = await fetch('/api/schema/signup', {
+    const validationRequest = await fetch('/api/schema/create-employee', {
       method: "POST",
       body: JSON.stringify(data),
       headers: {
@@ -89,6 +95,12 @@ const SignupForm = () => {
 
     console.log(createAccountReq, confirmPassword);
 
+    if ('message' in createAccountReq) {
+      form.setError('username', createAccountReq.message);
+    }
+
+    alert()
+    toast({ title: "Accout created successly" })
     router.replace("/login");
     // reset();
   }
@@ -164,7 +176,7 @@ const SignupForm = () => {
           )} />
 
           {/* ROLE */}
-          {payload?.roleName !== undefined && (payload.roleName === "Admin") ? (
+          {payload?.roleName !== undefined && (payload.roleName === "admin") ? (
             <React.Fragment>
               <FormField control={form.control} name="roleId" render={({ field }) => (
                 <FormItem>
@@ -178,9 +190,6 @@ const SignupForm = () => {
                     </FormControl>
                     <SelectContent>
                       {roles?.map(role => {
-                        if (payload.roleName === "Branch Admin" && role.roleName === "System Admin") {
-                          return;
-                        }
                         return (
                           <SelectItem key={role.id} value={`${role.id}`}>{role.roleName}</SelectItem>
                         )
@@ -194,7 +203,13 @@ const SignupForm = () => {
             </React.Fragment>
           ) : null}
 
-          <Button type='submit' disabled={form.formState.isSubmitting}>Create account</Button>
+          <Button type='submit' disabled={form.formState.isSubmitting}>
+            {form.formState.isSubmitting ? (
+              <>
+                <Loader2 className="animate-spin" /> Creating
+              </>) : "Create account"
+            }
+          </Button>
         </form>
       </Form>
     </AuthForm>

@@ -80,7 +80,13 @@ export interface IRecipe {
 }
 export interface IRole {
   id: string;
-  rolename: string;
+  roleName: string;
+}
+
+export interface ISale {
+  id: string;
+  date: Date;
+  dailySales: number;
 }
 export interface ITotalExpensesPerDay {
   id: string;

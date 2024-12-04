@@ -35,7 +35,7 @@ const page = async () => {
 
       <div className="grid grid-cols-2 gap-2">
         {orders.length === 0 ? (
-          <div>There's no order requests yet.</div>
+          <div>There&apos;s no order requests yet.</div>
         ) : orders.map(order => (
           <PendingOrderCard order={order} key={order.id} />
         ))}

@@ -28,6 +28,16 @@ export async function middleware(req: NextRequest) {
     // Validate all roles here
     const url = req.url;
 
+    console.log(url);
+
+    if (
+      url.includes("/login") ||
+      url.includes("/customer-signup") ||
+      url.includes("/auth/login")
+    ) {
+      return NextResponse.redirect(new URL("/", req.url));
+    }
+
     // ** CUSTOMERS ** //
     // Redirect if user logged in but navigates to login/signup
     if (url.includes("/login")) {

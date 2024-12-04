@@ -9,12 +9,13 @@ export const signupSchema = z
     password: z.string().min(10, "Password is must be at least 10 characters."),
     email: z.string().optional(),
     confirmPassword: z.string().min(10, "Please confirm your password."),
-    gender: z.string().min(1, "Gender required"),
+    gender: z.enum(["male", "female"], {
+      required_error: "You need to select a gender.",
+    }),
     phoneNumber: z
       .string()
       .min(11, "Phone number must be 11 characters long.")
-      .max(11, "Phone number must be 11 characters long.")
-      .optional(),
+      .max(11, "Phone number must be 11 characters long."),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Password must match",

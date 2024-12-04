@@ -498,7 +498,7 @@ const FormContent = ({
               })
             }
           >
-            Add raw material
+            Add recipe
           </Button>
 
           <div className="grid gap-2 grid-cols-2 w-full">

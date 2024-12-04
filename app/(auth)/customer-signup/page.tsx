@@ -1,15 +1,12 @@
-import Head from 'next/head'
-import SignupForm from '../../../components/auth/SignupForm'
 import React from 'react'
+import CustomerSignUpForm from '../../../components/auth/CustomerSignUpForm'
 
 const page = () => {
   return (
     <div className='h-svh flex justify-center items-center'>
-      <Head>
-        <title>Sign up</title>
-      </Head>
 
-      <SignupForm />
+      {/* <SignupForm /> */}
+      <CustomerSignUpForm />
     </div>
   )
 }

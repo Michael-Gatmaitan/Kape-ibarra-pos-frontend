@@ -1,4 +1,3 @@
-import Head from 'next/head'
 import React from 'react'
 import { DataTable } from '../data-table'
 import { apiUrl } from '../../../lib/apiUrl'
