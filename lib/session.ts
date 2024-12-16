@@ -24,6 +24,7 @@ export const createSession = async (token: string) => {
 export const verifySession = async (session: string) => {
   if (!session) return;
   const SECRET_KEY = process.env.SECRET_KEY;
+  console.log(SECRET_KEY);
   const encodeKey = new TextEncoder().encode(SECRET_KEY);
   const {
     payload,

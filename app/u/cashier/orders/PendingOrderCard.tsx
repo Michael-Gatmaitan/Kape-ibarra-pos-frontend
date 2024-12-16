@@ -8,6 +8,7 @@ import { Button } from '../../../../components/ui/button';
 import { Expand, Minimize2 } from 'lucide-react';
 // import { IOrderItem, IProduct } from '../../../..';
 import ViewProofOfPayment from '../counter/order-section/ViewProofOfPayment';
+import { IOrderItem, IProduct } from '../../../..';
 
 const PendingOrderCard = ({ order }: { order: IOrderWithCustomerAndOI }) => {
   const { customerNumber, customer } = order;
@@ -46,18 +47,25 @@ const PendingOrderCard = ({ order }: { order: IOrderWithCustomerAndOI }) => {
 const ExpandedView = ({ order }: { order: IOrderWithCustomerAndOI }) => {
   const { orderItems } = order;
 
+  console.log(orderItems);
+
   return (
     <div className='grid gap-2 pt-1'>
       <div className="grid p-1 bg-fuchsia-800">
         {orderItems.map(orderItem => (
-          <div key={orderItem.id}>
-            <div>{orderItem.product.productName}</div>
-          </div>
+          <Product_ListOfOrder key={orderItem.id} orderItem={orderItem} />
         ))}
       </div>
       <ViewProofOfPayment imageUrl={order.proofOfPaymentImg} type='process-order' orderId={order.id} customerNumber={order.customerNumber} />
     </div>
   )
+}
+
+const Product_ListOfOrder = ({ orderItem }: { orderItem: IOrderItem & { product: IProduct } }) => {
+return (
+
+  <div>{orderItem.product.productName}</div>
+)
 }
 
 export default PendingOrderCard

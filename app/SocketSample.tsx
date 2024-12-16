@@ -1,67 +1,88 @@
 "use client";
 import React from 'react'
 
-// import { ChartContainer, ChartLegend, ChartLegendContent, type ChartConfig } from '../components/ui/chart';
-// import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts';
-// import { ChartTooltip, ChartTooltipContent } from '../components/ui/chart';
+import { TrendingUp } from "lucide-react"
+import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
 
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../components/ui/card";
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "../components/ui/chart";
 
-// const chartData = [
-//   { month: "January", coffee: 186, nonCoffee: 80 },
-//   { month: "February", coffee: 305, nonCoffee: 200 },
-//   { month: "March", coffee: 237, nonCoffee: 120 },
-//   { month: "April", coffee: 73, nonCoffee: 190 },
-//   { month: "May", coffee: 209, nonCoffee: 130 },
-//   { month: "June", coffee: 214, nonCoffee: 140 },
-// ]
+const chartConfig = {
+  desktop: {
+    label: "Sale",
+    color: "hsl(var(--chart-1))",
+  },
+} satisfies ChartConfig
 
-// const chartConfig = {
-//   coffee: {
-//     label: "Coffee",
-//     color: "#2563eb",
-//   },
-//   nonCoffee: {
-//     label: "Non-coffee",
-//     color: "#60a5fa",
-//   },
-// } satisfies ChartConfig
+const SocketSample = ({ saleData }: { saleData: { month: string, sale: number }[] }) => {
 
-const SocketSample = () => {
+  console.log(saleData);
 
   return (
-    <div className='w-full h-[calc(100vh-16px)] flex justify-center items-center'>
-      {/* <Button onClick={() => {
-        setNum(prev => prev + 1);
-        socket.emit('count', num, (response) => {
-          console.log(response);
-        });
-      }}>Counter {num}</Button>
-
-      <Calendar
-        mode='single'
-        selected={date}
-        onSelect={setDate}
-        fromDate={new Date()}
-        className="rounded-md border"
-      /> */}
-
-      {/* <ChartContainer config={chartConfig} className="min-h-[200px] w-full max-w-[600px]">
-        <BarChart accessibilityLayer data={chartData}>
-          <CartesianGrid vertical={false} />
-          <XAxis
-            dataKey="month"
-            tickLine={false}
-            tickMargin={10}
-            axisLine={false}
-            tickFormatter={(value) => value.slice(0, 3)}
-          />
-          <ChartTooltip content={<ChartTooltipContent />} />
-          <ChartLegend content={<ChartLegendContent />} />
-          <Bar dataKey="coffee" fill="var(--color-coffee)" radius={4} />
-          <Bar dataKey="nonCoffee" fill="var(--color-nonCoffee)" radius={4} />
-        </BarChart>
-      </ChartContainer> */}
-    </div>
+    <Card>
+      <CardHeader>
+        <CardTitle>Daily sales</CardTitle>
+        <CardDescription>
+          {`Showing total sales (overall)`}
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <ChartContainer config={chartConfig}>
+          <AreaChart
+            accessibilityLayer
+            data={saleData}
+            margin={{
+              left: 12,
+              right: 12,
+            }}
+          >
+            <CartesianGrid vertical={false} />
+            <XAxis
+              dataKey="month"
+              tickLine={false}
+              axisLine={false}
+              tickMargin={8}
+            // tickFormatter={(value) => value.slice(0, 3)}
+            />
+            <ChartTooltip
+              cursor={false}
+              content={<ChartTooltipContent indicator="line" />}
+            />
+            <Area
+              dataKey="sale"
+              type="natural"
+              fill="var(--color-desktop)"
+              fillOpacity={0.4}
+              stroke="var(--color-desktop)"
+            />
+          </AreaChart>
+        </ChartContainer>
+      </CardContent>
+      <CardFooter>
+        <div className="flex w-full items-start gap-2 text-sm">
+          <div className="grid gap-2">
+            <div className="flex items-center gap-2 font-medium leading-none">
+              Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+            </div>
+            <div className="flex items-center gap-2 leading-none text-muted-foreground">
+              January - June 2024
+            </div>
+          </div>
+        </div>
+      </CardFooter>
+    </Card>
   )
 }
 

@@ -18,15 +18,17 @@ export default async function Home() {
 
   const sales: ISale[] = await salesReq.json();
 
-  return <div>
-    <div className="w-full h-24">
-      {/* {token ? token.toString() : "Undefined token"}
-      <ModeToggle /> */}
-      <SocketSample />
+  const saleData = sales.map(sale => {
+    const date = new Date(sale.date);
+    return {
+      month: `${date.getMonth() + 1} / ${date.getDate()} / ${date.getFullYear()}`,
+      sale: sale.dailySales
+    }
+  });
 
-      {sales.map(sale => (
-        <div key={sale.id}>{sale.dailySales}</div>
-      ))}
-    </div>
-  </div>
+  console.log(saleData);
+
+  return (
+    <SocketSample saleData={saleData} />
+  )
 }
