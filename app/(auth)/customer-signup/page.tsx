@@ -3,7 +3,7 @@ import CustomerSignUpForm from '../../../components/auth/CustomerSignUpForm'
 
 const page = () => {
   return (
-    <div className='h-svh flex justify-center items-center'>
+    <div>
 
       {/* <SignupForm /> */}
       <CustomerSignUpForm />

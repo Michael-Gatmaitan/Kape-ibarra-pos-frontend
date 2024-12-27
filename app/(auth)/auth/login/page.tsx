@@ -3,7 +3,7 @@ import React from 'react'
 
 const page = () => {
   return (
-    <div className='h-svh flex justify-center items-center'>
+    <div className='flex justify-center items-start'>
       <LoginForm loginType='employee' />
     </div>
   )

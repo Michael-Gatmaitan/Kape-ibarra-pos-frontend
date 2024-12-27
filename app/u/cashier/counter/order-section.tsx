@@ -187,7 +187,7 @@ const OrderSection = ({ payload, token, ewallet }: IOrderSectionProps) => {
   return (
     // className='absolute md:static top-0 l-0 w-screen h-screen bg-black'
     <Card className={`
-      w-full h-full z-50 p-4 top-0 left-0 rounded-none ${showOrderSection ? "grid" : "hidden"} fixed
+      w-full h-full z-50 p-4 top-0 left-0 rounded-none ${showOrderSection ? "grid" : "hidden"} fixed z-0
       md:w-full md:h-auto md:min-h-full md:static md:grid md:rounded-md grid-rows-orderSection overflow-auto no-scrollbar
       pt-[72px] md:pt-0
       `}>

@@ -15,9 +15,11 @@ const ToggleSidebar = () => {
   }, [pathname, setOpenMobile]);
 
   return (
-    <Button onClick={() => toggleSidebar()} variant='outline'>
-      <Menu />
-    </Button>
+    <div className="flex items-center lg:hidden">
+      <Button onClick={() => toggleSidebar()} variant='ghost' className='p-0 rounded-none m-0'>
+        <Menu size={40} />
+      </Button>
+    </div>
   )
 }
 

@@ -5,9 +5,8 @@ import Link from 'next/link'
 
 const page = () => {
   return (
-    <div className='h-svh flex justify-center items-center'>
+    <div className='flex justify-center items-start'>
       <LoginForm loginType='customer'>
-
         <Button variant='outline' className='w-full' asChild>
           <Link href="/auth/login">
             Login as employee

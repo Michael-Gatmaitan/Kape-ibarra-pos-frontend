@@ -5,11 +5,14 @@ import { ThemeProvider } from "../components/theme-provider";
 import StoreProvider from "./StoreProvider";
 import { SidebarProvider } from "../components/ui/sidebar";
 import AppSidebar from "../components/AppSidebar";
-import AppNavbar from "../components/AppNavbar";
-// import { Poppins } from 'next/font/google';
+// import AppNavbar from "../components/AppNavbar";
+import { Playfair_Display, Poppins } from 'next/font/google';
 import { Toaster } from "../components/ui/toaster";
+import AppNavbar from "../components/AppNavbar";
+import Footer from "../components/Footer";
 
-// const poppins = Poppins({ subsets: ['latin'], weight: ["400", "500", "600", "700", "800", "900"] });
+const poppins = Poppins({ subsets: ['latin'], weight: ["400", "500", "600", "700", "800", "900"] });
+const playfairDisplay = Playfair_Display({ subsets: ['latin'], weight: ["400", "500", "600", "700", "800", "900"] });
 
 // const geistSans = localFont({
 //   src: "./fonts/GeistVF.woff",
@@ -38,8 +41,8 @@ export default async function RootLayout({
       <body
         // my-40 mx-4 lg:mx-12 xl:mx-40
         // className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        // className={`${poppins.className} antialiased`}
-        className={`antialiased`}
+        className={`${poppins.className} ${playfairDisplay.style} antialiased`}
+      // className={`antialiased`}
       >
         {/* Redux store provider */}
         <StoreProvider>
@@ -50,14 +53,20 @@ export default async function RootLayout({
             disableTransitionOnChange
           >
             <SidebarProvider>
-              <AppNavbar />
               <AppSidebar />
 
               {/* <ModeToggle /> */}
               {/* my-9 mx-4 lg:mx-12 xl:mx-40 */}
               {/* my-[calc(56px+12px)] */}
-              <div className="w-full px-4 my-[calc(56px+12px)] lg:px-4 xl:px-4 2xl:px-2 md:my-2">
-                {children}
+              {/* my-[calc(72px+12px)] */}
+              {/* md:my-2 */}
+              <div className="grid relative w-full">
+                <AppNavbar />
+
+                <div className="w-full mt-2 lg:mt-12 mb-32 px-4 lg:px-8 xl:px-12 2xl:px-36">
+                  {children}
+                </div>
+                <Footer />
               </div>
 
               <Toaster />

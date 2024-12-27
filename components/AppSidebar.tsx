@@ -167,7 +167,7 @@ const AppSidebar = async () => {
     //   </SidebarContent>
     //   {/* <SidebarFooter /> */}
     // </Sidebar>
-    <Sidebar className='z-50' variant='sidebar'>
+    <Sidebar className='z-[1000]' variant='sidebar'>
       {payload?.person?.id ? (
         <SidebarHeader>
           <SidebarMenu>

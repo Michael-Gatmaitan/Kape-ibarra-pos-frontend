@@ -22,7 +22,7 @@ const page = async () => {
   const roles: IRole[] = await rolesReq.json();
 
   return (
-    <div className='h-svh flex justify-center items-center'>
+    <div className='flex justify-center items-center'>
       <SignupForm roles={roles} />
     </div>
   )

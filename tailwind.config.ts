@@ -16,6 +16,10 @@ const config: Config = {
         orderItem: "minmax(auto, 100px) auto",
         autoFitProduct: "repeat(auto-fill, minmax(150px, 1fr))",
         autoFitTransaction: "repeat(auto-fill, minmax(250px, 1fr))",
+        home_card: "30% 1fr",
+        home_card_reverse: "1fr 30%",
+        tech_stack: "repeat(auto-fill, minmax(200px, 1fr))",
+        developer_card: "repeat(auto-fill, minmax(300px, 1fr))",
       },
       gridTemplateRows: {
         orderSection: "auto 1fr auto",
@@ -76,6 +80,10 @@ const config: Config = {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      fontFamily: {
+        body: ["Poppins", "sans-serif"],
+        playfair: ["Playfair Display", "serif"],
       },
     },
   },

@@ -62,6 +62,10 @@ export async function middleware(req: NextRequest) {
       }
     }
 
+    if (url.includes("/auth/singup") && payload.roleName !== "admin") {
+      return NextResponse.redirect(new URL("/", url));
+    }
+
     return NextResponse.next();
   } catch (error) {
     console.log(error);
@@ -71,7 +75,6 @@ export async function middleware(req: NextRequest) {
 
 export const config: MiddlewareConfig = {
   matcher: [
-    "/",
     "/create/((?!general).*)",
     "/update/((?!general).*)",
     "/view/((?!general).*)",

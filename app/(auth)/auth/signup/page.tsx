@@ -15,6 +15,9 @@ const page = async () => {
     }
   });
 
+  if (rolesReq.status === 403) {
+  }
+
   if (!rolesReq.ok) {
     return <div>Getting roles error in signup employee</div>
   }
@@ -22,7 +25,7 @@ const page = async () => {
   const roles: IRole[] = await rolesReq.json();
 
   return (
-    <div className='h-svh flex justify-center items-center'>
+    <div className='flex justify-center items-start'>
 
       <SignupForm roles={roles} />
     </div>

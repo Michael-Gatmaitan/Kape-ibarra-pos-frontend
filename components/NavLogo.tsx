@@ -15,7 +15,8 @@ const NavLogo = () => {
   }, [theme]);
 
   return (
-    <div className="logo w-8 absolute left-[50%] translate-x-[-50%]">
+    // <div className="logo w-8 absolute left-[50%] translate-x-[-50%]">
+    <div>
       <Image src={logo} width={34} height={36} alt="logo" />
     </div>
   )
