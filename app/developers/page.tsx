@@ -104,7 +104,7 @@ const tech_stacks = [{
 {
   name: 'Figma',
   description: "Design tool for UI/UX prototyping",
-  url: 'htpps://reactjs.org'
+  url: 'https://figma.org'
 },
 ]
 
@@ -130,21 +130,27 @@ const page = () => {
 
         <div className="grid gap-2 grid-cols-developer_card mt-5 w-full">
           {developers.map((dev, i) => (
-            <div className="rounded-md overflow-hidden bg-cover bg-center relative" key={i} style={{
-              backgroundImage: `url(${dev.img})`
-            }}>
+            <div className="group rounded-md overflow-hidden relative h-[420px] md:h-auto" key={i}>
 
-              <div className="p-8 lg:p-10 w-full h-full top-0 left-0 bg-black bg-opacity-50 flex flex-col justify-center items-center text-white">
-                <div className="font-bold text-xl lg:text-3xl">{dev.name}</div>
-                <div className="font-medium text-sm md:text-[16px]">{dev.role}</div>
+              <div className="bg-cover bg-center absolute -z-10 group-hover:scale-110 transition w-full h-full" style={{
+                backgroundImage: `url(${dev.img})`
+              }} />
 
-                <div className='md:text-lg mt-3 lg:mt-4'>
+              <div className='absolute w-full flex justify-center bottom-3'>
+                <div className='w-12 h-3 bg-white rounded-full group-hover:opacity-0 transition' />
+              </div>
+
+              <div className="p-8 lg:p-10 w-full h-full top-0 left-0 bg-black bg-opacity-50 flex flex-col justify-center items-center text-white opacity-0 group-hover:opacity-100 transition">
+                <div className="group-hover:opacity-100 transition delay-75 font-bold text-xl lg:text-3xl opacity-0">{dev.name}</div>
+                <div className="group-hover:opacity-100 transition delay-100 font-medium text-sm md:text-[16px] opacity-0">{dev.role}</div>
+
+                <div className='group-hover:opacity-100 transition delay-150 opacity-0 md:text-lg mt-3 lg:mt-4'>
                   {dev.description}
                 </div>
 
-                <div className='flex justify-start mt-3 lg:mt-4 gap-2'>
+                <div className='flex justify-start mt-3 lg:mt-4 gap-2 group-hover:opacity-100 transition delay-200 opacity-0'>
                   {dev.links.map((link, i) => (
-                    <a href={link.url} key={i} className='text-blue-500 hover:underline p-1 bg-white rounded-full'>
+                    <a href={link.url} key={i} className='text-blue-500 hover:bg-slate-700 transition p-1 bg-white rounded-full'>
                       <Image src={`/assets/svg-icons/${link.name}.svg`} alt={link.name} width={30} height={30} className='lg:w-10 lg:h-10' />
                     </a>
                   ))}
@@ -176,13 +182,18 @@ const page = () => {
                 </Link>
               </div>
 
-              <Separator />
-              <div className='lg:text-lg p-2'>
+              <Separator className="px-2" />
+
+              <div className='lg:text-lg pb-2'>
                 {/* {tech.url} */}
                 {tech.description}
               </div>
             </div>
           ))}
+        </div>
+
+        <div className='mt-5 max-w-[900px] md:text-lg'>
+          A tech stack is a collection of technologies used to build and run a software application, website, or project. This collections of tools are used by the programmer of the team to make this system possible.
         </div>
       </div>
     </div >

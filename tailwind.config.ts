@@ -9,6 +9,12 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      backgroundPosition: {
+        zoom_developer_card: "50% 50%",
+      },
+      backgroundSize: {
+        zoom_developer_card_size: "200%",
+      },
       gridTemplateColumns: {
         // 'order': 'minmax(600px, 1fr)'
         order: "60% 1fr",

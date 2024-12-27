@@ -21,9 +21,9 @@ const AppNavbar = async () => {
           <ToggleSidebar />
           {/* // ) : <div />} */}
 
-          <div className="flex-1 flex justify-center lg:flex-none">
+          <Link href="/" className="flex-1 flex justify-center lg:flex-none">
             <NavLogo />
-          </div>
+          </Link>
 
           <div className="items-center gap-2 hidden md:flex">
             <Button variant="ghost" size="sm" asChild>
