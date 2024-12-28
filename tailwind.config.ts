@@ -26,6 +26,7 @@ const config: Config = {
         home_card_reverse: "1fr 30%",
         tech_stack: "repeat(auto-fill, minmax(200px, 1fr))",
         developer_card: "repeat(auto-fill, minmax(300px, 1fr))",
+        testimony_card: "repeat(auto-fill, minmax(250px, 1fr))",
       },
       gridTemplateRows: {
         orderSection: "auto 1fr auto",

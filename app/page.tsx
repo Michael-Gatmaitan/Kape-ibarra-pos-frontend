@@ -5,6 +5,7 @@
 
 import Image from "next/image";
 import { Button } from "../components/ui/button";
+import TestimonyCarousel from "../components/pages/home/TestimonyCarousel";
 
 export default async function Home() {
 
@@ -36,19 +37,6 @@ export default async function Home() {
     "/img/home/coffees/coffees3.jpg",
     "/img/home/coffees/coffees4.jpg",
     "/img/home/coffees/coffees5.jpg",
-  ];
-
-  const testimonials = [
-    {
-      img: "/img/home/testimonials/testimonial1.jpg",
-      text: "I love the taste of their coffee, it's so good and the aroma is so relaxing.",
-      name: "John Doe"
-    },
-    {
-      img: "/img/home/testimonials/testimonial2.jpg",
-      text: "The coffee is so good, I can't stop drinking it. I love it!",
-      name: "Jane Doe"
-    }
   ];
 
   return (
@@ -106,11 +94,19 @@ export default async function Home() {
       </div>
 
       {/* Testimonials */}
-      <div className="grid grid-cols-developer_card gap-2 lg:gap-3 mt-24">
+      <div className="flex align-center flex-col gap-3 text-center mt-12">
+        <div className="font-playfair font-bold text-4xl lg:text-6xl">Testimonials</div>
+        <div className="opacity-60 font-medium text-[14px] lg:text-[24px]">Customer feedbacks</div>
+      </div>
+
+      {/* <div className="grid grid-cols-testimony_card gap-2 lg:gap-3 mt-12">
         {testimonials.map((testimonial, i) => (
           <Testimonial key={i} {...testimonial} />
         ))}
-      </div>
+      </div> */}
+
+      <TestimonyCarousel />
+
     </div>
   )
 }
@@ -124,24 +120,6 @@ const Card = ({ img, text }: { img?: string, text: string }) => {
       <div className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 ease-in-out transform group-hover:scale-110" style={img ? { backgroundImage: `url(${img})` } : null}></div>
       <div className="h-full w-full absolute top-0 left-0 bg-black bg-opacity-60 text-white flex justify-center items-center text-center font-playfair font-bold text-2xl lg:text-3xl p-11">
         {text}
-      </div>
-    </div>
-  )
-}
-
-const Testimonial = ({ img, text, name }: { img: string, text: string, name: string }) => {
-  return (
-    <div className="grid gap-2 lg:gap-3 rounded-md overflow-hidden">
-      <div className="flex justify-center gap-2">
-        <div className="rounded-full overflow-hidden bg-red-500">
-          <Image src={img} alt={img} width={150} height={150} />
-        </div>
-
-        <div className="grid gap-1"></div>
-      </div>
-      <div className="flex flex-col justify-center items-center text-center">
-        <div className="font-playfair font-bold text-2xl lg:text-3xl">{text}</div>
-        <div className="font-medium text-lg lg:text-xl opacity-60">{name}</div>
       </div>
     </div>
   )
