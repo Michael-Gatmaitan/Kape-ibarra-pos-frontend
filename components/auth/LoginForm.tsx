@@ -20,13 +20,13 @@ import {
 } from "../ui/form";
 import Link from "next/link";
 import { verifySession } from "../../lib/session";
-// import { useToast } from "../../@/hooks/use-toast";
+import { useToast } from "../../@/hooks/use-toast";
 
 const LoginForm = (props: { loginType: "employee" | "customer", children?: React.ReactNode }) => {
   const { loginType } = props;
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
-  // const { toast } = useToast();
+  const { toast } = useToast();
 
   const form = useForm<TLoginSchema>({
     resolver: zodResolver(loginSchema),
@@ -35,8 +35,6 @@ const LoginForm = (props: { loginType: "employee" | "customer", children?: React
       password: "",
     },
   });
-
-  const [loginErr, setLoginErr] = useState<string>("");
 
   const onSubmit = async (data: TLoginSchema) => {
     // Just validate the schema on backend lol
@@ -115,18 +113,18 @@ const LoginForm = (props: { loginType: "employee" | "customer", children?: React
 
       const auditLogRes = await createAuditLogReq.json();
       console.log(auditLogRes);
+
+      // Route to login section base on role
+      // for now for dev
+      // revalidatePath('/view/audit-logs');
+      // revalidateAction('/view/audit-logs');
+      toast({ title: `Welcome ${payload.person.firstname}!`, description: "Enjoy your coffee!" });
+      router.push('/');
+      router.refresh();
+    } else {
+      // console.log(loginRes.error);
+      toast({ title: "Login error", description: "Invalid username or password", variant: "destructive" });
     }
-
-    // Route to login section base on role
-    // for now for dev
-    // revalidatePath('/view/audit-logs');
-    // revalidateAction('/view/audit-logs');
-    router.push('/');
-    router.refresh();
-
-    // console.log(loginRes.error);
-    // toast({ title: "Invalid username or password" });
-    setLoginErr(loginRes.error);
   };
 
   return (
@@ -178,8 +176,6 @@ const LoginForm = (props: { loginType: "employee" | "customer", children?: React
             Submit
           </Button>
         </form>
-
-        {loginErr && loginErr}
       </Form>
 
       <Button type="button" variant="ghost" className="mt-2 w-full" asChild>
