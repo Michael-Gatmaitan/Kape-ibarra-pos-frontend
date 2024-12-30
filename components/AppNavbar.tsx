@@ -32,18 +32,13 @@ const AppNavbar = async () => {
               </Link>
             </Button>
             <Button variant="ghost" size="sm" asChild>
-              <Link href='/menu'>
-                Shop
-              </Link>
-            </Button>
-            <Button variant="ghost" size="sm" asChild>
               <Link href='/about'>
-                Coffee
+                About us
               </Link>
             </Button>
             <Button variant="ghost" size="sm" asChild>
-              <Link href='/contact'>
-                About
+              <Link href='/developers'>
+                Developers
               </Link>
             </Button>
           </div>

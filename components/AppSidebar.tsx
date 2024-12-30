@@ -1,5 +1,5 @@
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarSeparator } from './ui/sidebar'
-import { BadgeCent, Bell, Box, CalendarClock, ChartBarStacked, LayoutList, Logs, LucideProps, Milk, Monitor, NotebookPen, Plus, ShoppingBasket, User, UserRoundPlus, Users, Wallet } from 'lucide-react'
+import { BadgeCent, Bell, Box, CalendarClock, ChartBarStacked, CodeXml, House, Info, LayoutList, Logs, LucideProps, Milk, Monitor, NotebookPen, Plus, ShoppingBasket, User, UserRoundPlus, Users, Wallet } from 'lucide-react'
 import Link from 'next/link'
 
 import SwitchMode from './SwitchMode'
@@ -26,6 +26,7 @@ interface ISidebarItems {
   cashier: IItem[],
   barista: IItem[],
   customer: IItem[],
+  navigation: IItem[],
 }
 
 
@@ -134,6 +135,20 @@ const items: ISidebarItems = {
     icon: Logs
   }],
 
+  navigation: [{
+    title: "Home",
+    url: "/",
+    icon: House
+  }, {
+    title: "About us",
+    url: "/about",
+    icon: Info
+  }, {
+    title: "Developers",
+    url: "/developers",
+    icon: CodeXml
+  }]
+
   // customer: [{
   //   title: "Manage orders",
   //   url: '/u/barista/order',
@@ -205,6 +220,8 @@ const AppSidebar = async () => {
 
       <SidebarContent>
         <ScrollArea>
+
+          <CustomSidebarGroup label='Navigate' items={items.navigation} />
 
           {!payload?.person?.id ? (
             <CustomSidebarGroup

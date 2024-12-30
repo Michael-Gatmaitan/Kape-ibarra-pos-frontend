@@ -24,7 +24,6 @@ const page = async () => {
   const categories: ICategory[] = await categoriesReq.json();
 
   const ewalletReq = await fetch(`${apiUrl}/e-wallet`, {
-    cache: 'no-cache',
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

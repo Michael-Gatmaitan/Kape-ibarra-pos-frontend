@@ -8,17 +8,11 @@ const Footer = () => {
     label: "facebook",
     iconSrc: '/assets/svg-icons/facebook.svg',
     alt: "facebook",
-    linkUrl: "https://www.facebook.com/kapeibarra"
-  }, {
-    label: "instagram",
-    iconSrc: '/assets/svg-icons/instagram.svg',
-    alt: "instagram",
-    linkUrl: "https://www.instagram.com/kapeibarra"
+    linkUrl: "https://www.facebook.com/profile.php?id=61554711652051"
   }];
 
   const footerLinks = [
     { text: "About us", linkUrl: "/about" },
-    { text: "Our story", linkUrl: "/menu" },
     { text: "Developers", linkUrl: "/developers" },
   ];
 
@@ -41,6 +35,7 @@ const Footer = () => {
         <div className="text-2xl md:text-3xl font-bold mb-1">Contact Us</div>
         <div className="text-sm md:text-base">Sta. Rosa 1, Marilao, Bulacan, PH</div>
         <div className="text-sm md:text-base">(+63) 923-413-2544</div>
+        <div className="text-sm md:text-base">teacherydacalvar15@gmail.com</div>
       </div>
 
       <EmailForm />
