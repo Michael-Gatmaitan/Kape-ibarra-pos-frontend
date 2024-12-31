@@ -40,7 +40,7 @@ const TransactionBody = () => {
 
   return (
     // <div className='w-full h-full grid gap-2 grid-cols-1 md:grid-cols-order'>
-    <div className='block md:grid h-[calc(100vh-16px)] grid-cols-order gap-4'>
+    <div className='block md:grid grid-cols-order gap-4'>
 
       <TransactionStack transactions={transactions} setActiveTransaction={setActiveTransaction} setOrderStatusFilter={setOrderStatusFilter} />
       <TransactionInfos transaction={activeTransaction} />

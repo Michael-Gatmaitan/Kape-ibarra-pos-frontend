@@ -9,7 +9,7 @@ const ProductSection = ({ categories }: { categories: ICategory[] }) => {
 
   return (
     // <div>
-    <div className='md:h-[calc(100vh-16px)] overflow-auto pb-2 rounded-sm no-scrollbar'>
+    <div className='overflow-auto pb-2 rounded-sm no-scrollbar'>
       {/* <div className="text-2xl font-bold">Categories</div> */}
       <DisplayCategories active={active} setActive={setActive} categories={categories} />
       <DisplayProducts active={active} />

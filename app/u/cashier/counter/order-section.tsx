@@ -142,7 +142,7 @@ const OrderSection = ({ payload, token, ewallet }: IOrderSectionProps) => {
 
     // Toast for submitting order
     toast({
-      title: "Order successful",
+      title: `Order #${result.customerNumber} successful`,
       description: "Your order has been recorded.",
     });
 

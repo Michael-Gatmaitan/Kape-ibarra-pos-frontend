@@ -69,7 +69,7 @@ const TransactionInfos = ({ transaction }: { transaction: ITransactionWithOrderA
   };
 
   return (
-    <Card className='p-4 grid grid-rows-orderSection h-full md:h-auto md:min-h-full overflow-auto no-scrollbar'>
+    <Card className='p-4 grid grid-rows-orderSection h-full md:h-min overflow-auto no-scrollbar'>
       <CardHeader className='py-4 text-center'>
         <CardTitle className='font-bold'>Order #{transaction.order.customerNumber}</CardTitle>
         {/* <CardDescription>{transaction.id}</CardDescription> */}

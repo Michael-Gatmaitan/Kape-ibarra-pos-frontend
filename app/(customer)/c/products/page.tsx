@@ -40,7 +40,7 @@ const page = async () => {
   }
 
   return (
-    <div className='block md:grid h-[calc(100vh-16px)] grid-cols-order gap-4'>
+    <div className='block md:grid grid-cols-order gap-4'>
       <ProductSection categories={categories} />
       <OrderSection payload={payload} token={token} ewallet={ewalletRes} />
 

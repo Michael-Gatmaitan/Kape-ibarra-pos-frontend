@@ -44,7 +44,7 @@ const page = async () => {
 
   const categories: ICategory[] = await categoriesReq.json();
 
-  const ewalletReq = await fetch(`${apiUrl}/e-wallet`, {
+  const ewalletReq = await fetch(`${apiUrl}/ewallet`, {
     cache: 'no-cache',
     method: 'GET',
     headers: {
@@ -53,13 +53,15 @@ const page = async () => {
     }
   });
 
+  console.log(ewalletReq);
+
   if (!ewalletReq.ok) return <div>Error in getting e-wallet information</div>
 
   const ewalletRes = await ewalletReq.json();
 
   return (
     // <div className="md:grid-cols-order md:gap-4">
-    <div className='block md:grid h-[calc(100vh-16px)] grid-cols-order gap-4'>
+    <div className='block md:grid grid-cols-order gap-4'>
       <ProductSection categories={categories} />
       <OrderSection payload={payload} token={token} ewallet={ewalletRes} />
 
