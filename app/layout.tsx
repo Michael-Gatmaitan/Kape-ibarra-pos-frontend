@@ -6,13 +6,20 @@ import StoreProvider from "./StoreProvider";
 import { SidebarProvider } from "../components/ui/sidebar";
 import AppSidebar from "../components/AppSidebar";
 // import AppNavbar from "../components/AppNavbar";
-import { Playfair_Display, Poppins } from 'next/font/google';
+import { Playfair_Display, Poppins } from "next/font/google";
 import { Toaster } from "../components/ui/toaster";
 import AppNavbar from "../components/AppNavbar";
 import Footer from "../components/Footer";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
-const poppins = Poppins({ subsets: ['latin'], weight: ["400", "500", "600", "700", "800", "900"] });
-const playfairDisplay = Playfair_Display({ subsets: ['latin'], weight: ["400", "500", "600", "700", "800", "900"] });
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800", "900"],
+});
+const playfairDisplay = Playfair_Display({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800", "900"],
+});
 
 // const geistSans = localFont({
 //   src: "./fonts/GeistVF.woff",
@@ -35,14 +42,13 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
   return (
     <html lang="en">
       <body
         // my-40 mx-4 lg:mx-12 xl:mx-40
         // className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         className={`${poppins.className} ${playfairDisplay.style} antialiased`}
-      // className={`antialiased`}
+        // className={`antialiased`}
       >
         {/* Redux store provider */}
         <StoreProvider>
@@ -73,6 +79,7 @@ export default async function RootLayout({
             </SidebarProvider>
           </ThemeProvider>
         </StoreProvider>
+        <SpeedInsights />
       </body>
     </html>
   );
