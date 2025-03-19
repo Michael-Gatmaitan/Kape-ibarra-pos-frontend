@@ -1,8 +1,8 @@
 "use client";
 
-import React, { SyntheticEvent, useState } from "react";
+import React, { useState } from "react";
 import CreateForm from "../CreateForm";
-// import Image from "next/image";
+import Image from "next/image";
 
 import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -40,6 +40,7 @@ import { getTokenClient } from "../../../lib/tokenAPI";
 import { useToast } from "../../../@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
+import { CldUploadWidget } from "next-cloudinary";
 
 // UUID
 // import { v4 as uuidv4 } from "uuid";
@@ -48,8 +49,8 @@ interface IProductBody {
   productName: string;
   price: string;
   description?: string;
-  categoryId: string,
-  imagePath: string
+  categoryId: string;
+  imagePath: string;
 }
 
 interface IRecipeBody {
@@ -63,7 +64,7 @@ interface ICreateProductBody {
 
 interface ProductFormContentProps {
   type: "create" | "update";
-  rawMaterials: IRawMaterial[]
+  rawMaterials: IRawMaterial[];
   productDefaultValues?: TProductSchema & IProduct;
   recipesDefaultValues?: {
     rawMaterialId: string;
@@ -83,22 +84,27 @@ const FormContent = ({
 
   // States for confirmation of CREATED & UPDATED
 
+  const pName = type === "update" ? `${productDefaultValues.productName}` : "";
+  const price = type === "update" ? `${productDefaultValues.price}` : "";
+  const description =
+    type === "update" && productDefaultValues.description !== null
+      ? `${productDefaultValues.description}`
+      : "";
+  const recipes = type === "update" ? recipesDefaultValues : [];
+  const categoryId = type === "update" ? productDefaultValues.categoryId : "";
+
   const form = useForm<TProductSchema>({
     resolver: zodResolver(productSchema),
     defaultValues: {
-      productName:
-        type === "update" ? `${productDefaultValues.productName}` : "",
-      price: type === "update" ? `${productDefaultValues.price}` : "",
-      description:
-        type === "update" && productDefaultValues.description !== null
-          ? `${productDefaultValues.description}`
-          : "",
-      recipes: type === "update" ? recipesDefaultValues : [],
-      categoryId: type === "update" ? productDefaultValues.categoryId : ""
+      productName: pName,
+      price: price,
+      description: description,
+      recipes: recipes,
+      categoryId: categoryId,
     },
   });
 
-  const [imageUrl, setImageUrl] = useState<string>('');
+  const [imageUrl, setImageUrl] = useState<string>("");
 
   const createProduct = async (createProductReqBody: ICreateProductBody) => {
     const token = await getTokenClient();
@@ -107,7 +113,7 @@ const FormContent = ({
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          authorization: token
+          authorization: token,
         },
         body: JSON.stringify(createProductReqBody),
       });
@@ -124,13 +130,13 @@ const FormContent = ({
 
       toast({
         title: "Product created successfully",
-        description: "Navigate to products page to see the new product"
+        description: "Navigate to products page to see the new product",
       });
 
       // successfully
       form.reset();
       // router.back();
-      revalidateViewsProduct('/view/products');
+      revalidateViewsProduct("/view/products");
     } catch (err) {
       console.log(err);
     }
@@ -147,14 +153,14 @@ const FormContent = ({
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        authorization: token
+        authorization: token,
       },
       body: JSON.stringify(updateProductReqBody),
     }).then((res) => res.json());
 
     console.log("Updated product: ", updateProductReq);
     // revalidatePath('/views/product');
-    revalidateViewsProduct('/view/products');
+    revalidateViewsProduct("/view/products");
   };
 
   const deleteProduct = async (productId: string) => {
@@ -163,13 +169,13 @@ const FormContent = ({
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
-        authorization: token
+        authorization: token,
       },
     });
 
     const res = await deleteReq.json();
     console.log(res);
-    revalidateViewsProduct('/view/products');
+    revalidateViewsProduct("/view/products");
     router.back();
   };
 
@@ -235,7 +241,7 @@ const FormContent = ({
         price,
         description,
         categoryId,
-        imagePath: imageUrl
+        imagePath: imageUrl,
       },
       recipeBody: recipes,
     };
@@ -246,44 +252,14 @@ const FormContent = ({
       await createProduct(createProductReqBody);
     } else if (type === "update") {
       // Update our product
-      console.log("Updating product")
+      console.log("Updating product");
       await updateProduct(productDefaultValues.id, createProductReqBody);
     }
   };
 
   // Handle uploading image
-  const handleUploadImage = async (e: SyntheticEvent) => {
-    e.preventDefault();
+  //const handleCloudinaryUploadSuccess =
 
-    const formData = new FormData();
-    formData.append("file", file);
-
-    console.log(file, formData);
-
-    const response = await fetch("/api/upload", {
-      method: "POST",
-      body: formData,
-    });
-
-    if (response.ok) {
-      console.log("File uploaded successfully!");
-      setUploaded(true);
-    } else {
-      console.error("File upload failed");
-    }
-
-    const result = await response.json();
-    console.log(result);
-
-    if (result.imagePath) {
-      setUploaded(true);
-      setImageUrl(result.imagePath);
-    } else {
-      alert("Something went wrong uplodaing image");
-    }
-  };
-
-  const [file, setFile] = useState(null);
   const [uploaded, setUploaded] = useState(false);
 
   return (
@@ -291,17 +267,23 @@ const FormContent = ({
       cardTitle={`${type === "create" ? "Create" : "Update"} Product`}
       cardDescription={`${type === "create" ? "Create" : "Update"} Product`}
     >
-
       {/* <Image src="/uploads/1731163041423IMG_20240302_111608.jpg" alt="AS" width={50} height={50} /> */}
 
       <Form {...form}>
         {/* <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4 grid-cols-2"> */}
         <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
-
-          {/* PRODUCT NAME */}
-
+          {/* PRODUCT IMAGE */}
           <div className="w-full grid gap-2">
-            <FormField
+            {imageUrl !== "" ? (
+              <Image
+                src={imageUrl}
+                alt="Product image"
+                width={50}
+                height={50}
+                className="object-fit"
+              />
+            ) : null}
+            {/*<FormField
               // control={form.control}
               name="productImage"
               render={({ field: { onChange } }) => (
@@ -313,13 +295,13 @@ const FormContent = ({
                       type="file"
                       // {...fieldProps}
                       accept="image/png, image/jpeg, image/jpg"
-
                       onChange={(event) => {
-                        onChange(event.target.files && event.target.files[0])
-                        console.log(event.target.files && event.target.files[0]);
-                        setFile(event.target.files && event.target.files[0])
-                      }
-                      }
+                        onChange(event.target.files && event.target.files[0]);
+                        console.log(
+                          event.target.files && event.target.files[0],
+                        );
+                        setFile(event.target.files && event.target.files[0]);
+                      }}
                     />
                   </FormControl>
                   <FormMessage />
@@ -327,9 +309,37 @@ const FormContent = ({
               )}
             />
 
-            <Button type="button" onClick={handleUploadImage} disabled={type === "create" && uploaded || !file}>Upload</Button>
+            <Button
+              type="button"
+              onClick={handleUploadImage}
+              disabled={(type === "create" && uploaded) || !file}
+            >
+              Upload
+            </Button>
+            */}
+            <CldUploadWidget
+              //uploadPreset="my-preset"
+              signatureEndpoint="/api/sign-image/"
+              onSuccess={(result) => {
+                if (
+                  typeof result.info !== "string" &&
+                  result.info.secure_url &&
+                  result.info.secure_url !== ""
+                ) {
+                  //const url: string = result.info.secure_url;
+
+                  setImageUrl(result.info.secure_url);
+                  setUploaded(true);
+                }
+              }}
+            >
+              {({ open }) => {
+                return <button onClick={() => open()}>Upload an Image</button>;
+              }}
+            </CldUploadWidget>
           </div>
 
+          {/* PRODUCT NAME */}
           <FormField
             control={form.control}
             name="productName"
@@ -521,8 +531,15 @@ const FormContent = ({
                   ? "Delete"
                   : null}
             </Button>
-            <Button type="submit" disabled={form.formState.isSubmitting || (type === "create" && !uploaded)}>
-              {form.formState.isSubmitting ? <Loader2 className="animate-spin" /> : null}
+            <Button
+              type="submit"
+              disabled={
+                form.formState.isSubmitting || (type === "create" && !uploaded)
+              }
+            >
+              {form.formState.isSubmitting ? (
+                <Loader2 className="animate-spin" />
+              ) : null}
               {form.formState.isSubmitting && type === "create"
                 ? "Creating"
                 : form.formState.isSubmitting && type === "update"

@@ -15,7 +15,7 @@ export const columns: ColumnDef<ICustomer>[] = [
   },
   {
     accessorKey: "firstname",
-    header: "Quantity in unit",
+    header: "Firstname",
     cell: ({ row }) => {
       const firstname = row.getValue("firstname");
       return <div>{firstname.toString()}</div>;
@@ -23,7 +23,7 @@ export const columns: ColumnDef<ICustomer>[] = [
   },
   {
     accessorKey: "lastname",
-    header: "Stock quantity",
+    header: "Lastname",
     cell: ({ row }) => {
       const lastName = row.getValue("lastname");
       return <div>{lastName.toString()}</div>;
@@ -39,7 +39,7 @@ export const columns: ColumnDef<ICustomer>[] = [
   },
   {
     accessorKey: "gender",
-    header: "Is reorder needed",
+    header: "Gender",
     cell: ({ row }) => {
       const gender = row.getValue("gender");
       console.log(gender);
@@ -48,7 +48,7 @@ export const columns: ColumnDef<ICustomer>[] = [
   },
   {
     accessorKey: "createdAt",
-    header: "Date created",
+    header: "Created at",
     cell: ({ row }) => {
       const d: Date = row.getValue("createdAt");
       console.log(d);
@@ -56,4 +56,3 @@ export const columns: ColumnDef<ICustomer>[] = [
     },
   },
 ];
-

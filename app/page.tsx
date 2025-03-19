@@ -42,7 +42,7 @@ export default async function Home() {
     // <SocketSample saleData={saleData} />
     <div>
       {/* Header */}
-      <div className="flex align-center flex-col gap-3 text-center">
+      <div className="flex align-center flex-col gap-3 text-center ">
         <div className="font-playfair font-bold text-4xl lg:text-6xl">
           Kape saglit then,
           <br />
@@ -150,4 +150,3 @@ const Card = ({ img, text }: { img?: string; text: string }) => {
     </div>
   );
 };
-
