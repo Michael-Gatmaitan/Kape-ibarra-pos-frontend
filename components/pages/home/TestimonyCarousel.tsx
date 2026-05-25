@@ -68,8 +68,8 @@ const TestimonyCarousel = () => {
         ))}
       </CarouselContent>
       <div className='relative'>
-        <CarouselPrevious className='absolute left-[2rem] transform -translate-y-1/2 z-10' />
-        <CarouselNext className='absolute right-[2rem] transform -translate-y-1/2 z-10' />
+        <CarouselPrevious className='absolute left-8 transform -translate-y-1/2 z-10' />
+        <CarouselNext className='absolute right-8 transform -translate-y-1/2 z-10' />
       </div>
 
     </Carousel>

@@ -23,7 +23,7 @@ const SearchBar = (props: ISearchBarProps) => {
         value={keyword}
         onChange={handleInputChange}
         placeholder='Search something sweet in your mind...'
-        className='rounded-full my-2 h-12 outline-none'
+        className='rounded-full my-2 h-12 outline-hidden'
       />
 
       <div className="m-1 h-10 w-10 rounded-full absolute top-0 right-0 flex justify-center items-center">

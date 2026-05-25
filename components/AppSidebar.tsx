@@ -182,7 +182,7 @@ const AppSidebar = async () => {
     //   </SidebarContent>
     //   {/* <SidebarFooter /> */}
     // </Sidebar>
-    <Sidebar className='z-[1000]' variant='sidebar'>
+    <Sidebar className='z-1000' variant='sidebar'>
       {payload?.person?.id ? (
         <SidebarHeader>
           <SidebarMenu>
@@ -205,7 +205,7 @@ const AppSidebar = async () => {
               {/* <ToggleSidebar /> */}
               {/* <ProfileCard /> */}
               <Card className='p-2 bg-'>
-                <Image src="/assets/KapeIbarraLogo.png" width={1000} height={1000} className='w-full h-[80px]' alt="main-logo" />
+                <Image src="/assets/KapeIbarraLogo.png" width={1000} height={1000} className='w-full h-20' alt="main-logo" />
               </Card>
             </SidebarMenuItem>
           </SidebarMenu>
@@ -269,12 +269,13 @@ const CustomSideBarMenuButton = (props: { item: IItem }) => {
 
   return (
     <SidebarMenuItem>
-      <SidebarMenuButton tooltip={item.title} asChild>
-        <Link href={item.url}>
+
+      <Link href={item.url}>
+        <SidebarMenuButton tooltip={item.title}>
           <item.icon />
           <span>{item.title}</span>
-        </Link>
-      </SidebarMenuButton>
+        </SidebarMenuButton>
+      </Link>
     </SidebarMenuItem>
   )
 }

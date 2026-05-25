@@ -10,7 +10,7 @@ import { Playfair_Display, Poppins } from "next/font/google";
 import { Toaster } from "../components/ui/toaster";
 import AppNavbar from "../components/AppNavbar";
 import Footer from "../components/Footer";
-import { SpeedInsights } from "@vercel/speed-insights/next";
+// import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -43,28 +43,28 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         // my-40 mx-4 lg:mx-12 xl:mx-40
         // className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         className={`${poppins.className} ${playfairDisplay.style} antialiased`}
-        // className={`antialiased`}
+      // className={`antialiased`}
       >
         {/* Redux store provider */}
-        <StoreProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="light"
-            enableSystem
-            disableTransitionOnChange
-          >
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <StoreProvider>
             <SidebarProvider>
               <AppSidebar />
 
               {/* <ModeToggle /> */}
               {/* my-9 mx-4 lg:mx-12 xl:mx-40 */}
-              {/* my-[calc(56px+12px)] */}
-              {/* my-[calc(72px+12px)] */}
+              {/* my-[68px] */}
+              {/* my-[84px] */}
               {/* md:my-2 */}
               <div className="grid relative w-full">
                 <AppNavbar />
@@ -77,9 +77,9 @@ export default async function RootLayout({
 
               <Toaster />
             </SidebarProvider>
-          </ThemeProvider>
-        </StoreProvider>
-        <SpeedInsights />
+          </StoreProvider>
+        </ThemeProvider>
+        {/* <SpeedInsights /> */}
       </body>
     </html>
   );

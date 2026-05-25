@@ -16,7 +16,7 @@ const DisplayCategories = (props: { active: string, setActive: React.Dispatch<Se
         <Button className='p-14' variant={active === '' ? 'default' : 'outline'} onClick={() => setActive("")}>
           All
         </Button>
-        {categories?.map(category => (
+        {categories && categories.length > 0 && categories?.map(category => (
           <Button className='p-14' variant={active === category.categoryName ? 'default' : 'outline'} key={category.id} onClick={() => setActive(category.categoryName)}>
             {category.categoryName}
           </Button>

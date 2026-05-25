@@ -51,7 +51,13 @@ const ProductCard = (props: IProductCardProps) => {
     >
       <CardHeader className='p-2'>
         <AspectRatio ratio={1 / 1} className='rounded-md'>
-          <Image src={imagePath} alt={id} fill className="h-full w-full rounded-md object-cover" />
+          {!imagePath ? (
+            <div className="bg-muted h-full w-full rounded-md flex items-center justify-center p-2">
+              <span className="text-muted-foreground text-sm">Image not available</span>
+            </div>
+          ) : (
+            <Image src={imagePath} alt={id} fill className="h-full w-full rounded-md object-cover" />
+          )}
         </AspectRatio>
       </CardHeader>
 

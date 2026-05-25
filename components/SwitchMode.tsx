@@ -1,5 +1,5 @@
 "use client"
-import { useTheme } from 'next-themes'
+import { useTheme } from '@teispace/next-themes'
 import React from 'react'
 import { Switch } from './ui/switch';
 import { Label } from './ui/label';

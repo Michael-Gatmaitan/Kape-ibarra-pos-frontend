@@ -50,7 +50,7 @@ const OrderSection = ({ payload, token, ewallet }: IOrderSectionProps) => {
       });
       const result = await req.json();
 
-      if (result.length !== 0) {
+      if (result.length !== 0 && result[0]?.customerNumber) {
         setLastCustomerNumber(prev => {
           if (prev !== result[0].customerNumber) {
             return result[0].customerNumber + 1;
@@ -189,7 +189,7 @@ const OrderSection = ({ payload, token, ewallet }: IOrderSectionProps) => {
     <Card className={`
       w-full h-full z-50 p-4 top-0 left-0 rounded-none ${showOrderSection ? "grid" : "hidden"} fixed z-0
       md:w-full md:h-auto md:min-h-full md:static md:grid md:rounded-md grid-rows-orderSection overflow-auto no-scrollbar
-      pt-[72px] md:pt-0
+      pt-18 md:pt-0
       `}>
       <Form {...form}>
 

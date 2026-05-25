@@ -38,7 +38,7 @@ export const columns: ColumnDef<IProduct>[] = [
     cell: ({ row }) => {
       const rowVal = row.getValue("imagePath");
       return <div className="w-10 h-10 overflow-hidden rounded-full">
-        <Image src={rowVal.toString()} alt="product_img" height={40} width={40} />
+        {!rowVal ? <div>No Image</div> : <Image src={rowVal.toString()} alt="product_img" height={40} width={40} />}
       </div>
     }
   },
@@ -101,7 +101,7 @@ export const columns: ColumnDef<IProduct>[] = [
       const date = new Date(row.getValue('createdAt'));
       return (
         <div className="text-nowrap">
-          {formatRelative(subDays(date, 0), new Date())}xxx
+          {formatRelative(subDays(date, 0), new Date())}
         </div>
       )
     }

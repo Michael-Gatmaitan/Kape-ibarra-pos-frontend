@@ -406,11 +406,17 @@ const FormContent = ({
                   </FormControl>
 
                   <SelectContent>
-                    {categories?.map((category) => (
-                      <SelectItem key={category.id} value={`${category.id}`}>
-                        {category.categoryName}
+                    {categories && categories.length > 0 ? (
+                      categories.map((category) => (
+                        <SelectItem key={category.id} value={`${category.id}`}>
+                          {category.categoryName}
+                        </SelectItem>
+                      ))
+                    ) : (
+                      <SelectItem disabled value=".">
+                        No categories available
                       </SelectItem>
-                    ))}
+                    )}
                   </SelectContent>
                 </Select>
                 <FormMessage />

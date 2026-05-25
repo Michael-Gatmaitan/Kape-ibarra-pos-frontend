@@ -138,7 +138,7 @@ const Card = ({ img, text }: { img?: string; text: string }) => {
   return (
     <div
       style={img ? { backgroundImage: `url(${img})` } : null}
-      className="bg-black bg-cover bg-center rounded-md h-[230px] md:h-[300px] lg:h-[350px] overflow-hidden relative shadow-sm group"
+      className="bg-black bg-cover bg-center rounded-md h-[230px] md:h-[300px] lg:h-[350px] overflow-hidden relative shadow-xs group"
     >
       <div
         className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 ease-in-out transform group-hover:scale-110"
