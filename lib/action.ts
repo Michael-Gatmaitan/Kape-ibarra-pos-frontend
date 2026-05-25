@@ -43,7 +43,7 @@ export const updateProductAvailabilityAction = async ({
         "Content-Type": "application/json",
         authorization: token,
       },
-    }
+    },
   );
   const result = await updateReq.json();
   console.log(result);
@@ -76,7 +76,7 @@ export const updateEWallet = async ({
 };
 
 export default async function revalidateAction(path: string) {
-  revalidateTag(path);
+  revalidateTag(path, { expire: 0 });
 }
 
 export const updateOrderToPreparing = async ({
@@ -105,7 +105,7 @@ export const updateOrderToPreparing = async ({
       body: JSON.stringify({
         employeeId: payload.person.id,
       }),
-    }
+    },
   );
 
   if (!acceptedOrderReq.ok) {
@@ -130,7 +130,7 @@ export const updateOrderToPreparing = async ({
         orderId,
         change: 0,
       }),
-    }
+    },
   );
 
   const newTransactionRes = await newTransaction.json();
